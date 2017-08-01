@@ -62,36 +62,36 @@ private:
 
 public:
 	// elementary column operations
-	static void colSwap(boost::numeric::ublas::matrix<T>* m, unsigned int i, unsigned int j);						// swap columns i and j
-	static void colAddMultiple(boost::numeric::ublas::matrix<T>* m, unsigned int i, unsigned int j, T t);			// column i = column i + t * column j
-	static void colMultiply(boost::numeric::ublas::matrix<T>* m, unsigned int i, T t);								// col i = t * col i
-	static std::valarray<T> getColumn(const boost::numeric::ublas::matrix<T>* m, unsigned int i);					// returns the i-th column of m
-	static std::valarray<T> getColumn(const boost::numeric::ublas::symmetric_matrix<T>* m, unsigned int i);			// returns the i-th column of m
+	static void colSwap(boost::numeric::ublas::matrix<T>* m, const unsigned int i, const unsigned int j);				// swap columns i and j
+	static void colAddMultiple(boost::numeric::ublas::matrix<T>* m, const unsigned int i, const unsigned int j, T t);	// column i = column i + t * column j
+	static void colMultiply(boost::numeric::ublas::matrix<T>* m, const unsigned int i, const T t);						// col i = t * col i
+	static std::valarray<T> getColumn(const boost::numeric::ublas::matrix<T>* const m, const unsigned int i);			// returns the i-th column of m
+	static std::valarray<T> getColumn(const boost::numeric::ublas::symmetric_matrix<T>* const m, const unsigned int i);	// returns the i-th column of m
 
 	// elementary row operations
-	static void rowAddMultiple(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m, unsigned int i, unsigned int j, T t);	// row i = row i + T * row j
-	static void rowMultiply(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m, unsigned int i, T t);						// row i *= t
-	static void rowAddMultiple(boost::numeric::ublas::matrix<T>* m, unsigned int i, unsigned int j, T t);			// row i = row i + t * row j
+	static void rowAddMultiple(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m, const unsigned int i, const unsigned int j, T t);	// row i = row i + T * row j
+	static void rowMultiply(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m, const unsigned int i, const T t);						// row i *= t
+	static void rowAddMultiple(boost::numeric::ublas::matrix<T>* m, const unsigned int i, const unsigned int j, const T t);										// row i = row i + t * row j
 
 	// base change for gram matrices
-	static void baseSwap(boost::numeric::ublas::symmetric_matrix<T>* g, unsigned int i, unsigned int j);			// swap base vectors i and j
-	static void baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>* g, unsigned int i, unsigned int j, T t);// b_i = b_i + q * b_j
+	static void baseSwap(boost::numeric::ublas::symmetric_matrix<T>* g, unsigned int i, unsigned int j);						// swap base vectors i and j
+	static void baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>* g, const unsigned int i, const unsigned int j, T t);// b_i = b_i + q * b_j
 
 	// general utility functions for base or gram matrices
-	static void baseDelZeroes(boost::numeric::ublas::matrix<T>* b, unsigned int rk);								// delete zero columns of m
-	static void setColumn(boost::numeric::ublas::matrix<T>* b, std::valarray<T>* col, unsigned int i);				// sets column i of m to col
+	static void baseDelZeroes(boost::numeric::ublas::matrix<T>* b, const unsigned int rk);								// delete zero columns of m
+	static void setColumn(boost::numeric::ublas::matrix<T>* b, std::valarray<T>* col, const unsigned int i);			// sets column i of m to col
 
 	// check properties
-	static bool isOrthogonal(const boost::numeric::ublas::matrix<T>* m, const boost::numeric::ublas::symmetric_matrix<T>* g = nullptr);	// returns true iff m^t*m=id or m^t*g*m=g
+	static bool isOrthogonal(const boost::numeric::ublas::matrix<T>* const m, const boost::numeric::ublas::symmetric_matrix<T>* const g = nullptr);	// returns true iff m^t*m=id or m^t*g*m=g
 
 	// compare
-	static bool areEqual(const boost::numeric::ublas::matrix<T>* m1, const boost::numeric::ublas::matrix<T>* m2);	// returns true iff m1 == m2
+	static bool areEqual(const boost::numeric::ublas::matrix<T>* const m1, const boost::numeric::ublas::matrix<T>* const m2);	// returns true iff m1 == m2
 
 	// input and output
-	static void printMatrix(const boost::numeric::ublas::matrix<T>* m);					// print matrix in tn format
-	static void printMatrix(const boost::numeric::ublas::symmetric_matrix<T>* m);		// print symmetric matrix in tn format
-	static void printMatrix(const boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m); // print upper triangular matrx in tn format
-	static void printDiagonalVector(const std::valarray<T>* d);							// print diagonal vector
+	static void printMatrix(const boost::numeric::ublas::matrix<T>* const m);											// print matrix in tn format
+	static void printMatrix(const boost::numeric::ublas::symmetric_matrix<T>* const m);									// print symmetric matrix in tn format
+	static void printMatrix(const boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m); 	// print upper triangular matrx in tn format
+	static void printDiagonalVector(const std::valarray<T>* const d);													// print diagonal vector
 };
 
 
@@ -99,7 +99,7 @@ public:
 
 // base change for matrices
 template<class T>
-void MatrixHelper<T>::colSwap(boost::numeric::ublas::matrix<T>* m, unsigned int i, unsigned int j)
+void MatrixHelper<T>::colSwap(boost::numeric::ublas::matrix<T>* m, const unsigned int i, const unsigned int j)
 {
 	assert(i<m->size2() && j<m->size2());
 
@@ -110,7 +110,7 @@ void MatrixHelper<T>::colSwap(boost::numeric::ublas::matrix<T>* m, unsigned int 
 }
 
 template<class T>
-void MatrixHelper<T>::colAddMultiple(boost::numeric::ublas::matrix<T>* m, unsigned int i, unsigned int j, T t)
+void MatrixHelper<T>::colAddMultiple(boost::numeric::ublas::matrix<T>* m, const unsigned int i, const unsigned int j, const T t)
 {
 	assert(i < m->size2() && j < m->size2());
 
@@ -124,7 +124,7 @@ void MatrixHelper<T>::colAddMultiple(boost::numeric::ublas::matrix<T>* m, unsign
 }
 
 template<class T>
-void MatrixHelper<T>::colMultiply(boost::numeric::ublas::matrix<T>* m, unsigned int i, T t)
+void MatrixHelper<T>::colMultiply(boost::numeric::ublas::matrix<T>* m, const unsigned int i, const T t)
 {
 	assert(i < m->size2());
 
@@ -138,7 +138,7 @@ void MatrixHelper<T>::colMultiply(boost::numeric::ublas::matrix<T>* m, unsigned 
 
 // base change for triangular matrices
 template<class T>
-void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m, unsigned int i, unsigned int j, T t)
+void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m, const unsigned int i, const unsigned int j, const T t)
 {
 	assert(i < m->size1() && j < m->size1());
 	unsigned int n = m->size1();
@@ -158,7 +158,7 @@ void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::triangular_matrix<T,
 }
 
 template<class T>
-void MatrixHelper<T>::rowMultiply(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m, unsigned int i, T t)
+void MatrixHelper<T>::rowMultiply(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* m, const unsigned int i, const T t)
 {
 	unsigned int n = m->size1();
 	assert(i < n);
@@ -203,7 +203,7 @@ void MatrixHelper<T>::baseSwap(boost::numeric::ublas::symmetric_matrix<T>* g, un
 }
 
 template<class T>
-void MatrixHelper<T>::baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>* g, unsigned int i, unsigned int j, T t)
+void MatrixHelper<T>::baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>* g, const unsigned int i, const unsigned int j, T t)
 {	assert(i < g->size1() && j < g->size1());
 
 	// temporarily save needed entries
@@ -224,7 +224,7 @@ void MatrixHelper<T>::baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>
 
 // row changes
 template<class T>
-void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::matrix<T>* m, unsigned int i, unsigned int j, T t)
+void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::matrix<T>* m, const unsigned int i, const unsigned int j, T t)
 {
 	assert(i < m->size1() && j < m->size1());
 
@@ -239,7 +239,7 @@ void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::matrix<T>* m, unsign
 
 // general utility functions for base and gram matrices
 template<class T>
-void MatrixHelper<T>::baseDelZeroes(boost::numeric::ublas::matrix<T>* b, unsigned int rk)
+void MatrixHelper<T>::baseDelZeroes(boost::numeric::ublas::matrix<T>* b, const unsigned int rk)
 {
 	// delete zero columns - expects the first n-rk columns to be zero!
 	assert(rk <= b->size2());
@@ -259,7 +259,7 @@ void MatrixHelper<T>::baseDelZeroes(boost::numeric::ublas::matrix<T>* b, unsigne
 }
 
 template<class T>
-void MatrixHelper<T>::setColumn(boost::numeric::ublas::matrix<T>* b, std::valarray<T>* col, unsigned int i)
+void MatrixHelper<T>::setColumn(boost::numeric::ublas::matrix<T>* b, std::valarray<T>* col, const unsigned int i)
 {
 	// set column i of b to col
 	assert(i < b->size2());
@@ -270,7 +270,7 @@ void MatrixHelper<T>::setColumn(boost::numeric::ublas::matrix<T>* b, std::valarr
 
 // check properties
 template<class T>
-bool MatrixHelper<T>::isOrthogonal(const boost::numeric::ublas::matrix<T>* m, const boost::numeric::ublas::symmetric_matrix<T>* g)
+bool MatrixHelper<T>::isOrthogonal(const boost::numeric::ublas::matrix<T>* const m, const boost::numeric::ublas::symmetric_matrix<T>* const g)
 {
 	if(g == nullptr)
 	{
@@ -301,7 +301,7 @@ bool MatrixHelper<T>::isOrthogonal(const boost::numeric::ublas::matrix<T>* m, co
 
 // getters
 template<class T>
-std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::matrix<T>* m, unsigned int i)
+std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::matrix<T>* const m, const unsigned int i)
 {
 	assert(i<m->size2());
 
@@ -317,7 +317,7 @@ std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::matrix<
 }
 
 template<class T>
-std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::symmetric_matrix<T>* m, unsigned int i)
+std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::symmetric_matrix<T>* const m, const unsigned int i)
 {
 	assert(i<m->size2());
 
@@ -335,7 +335,7 @@ std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::symmetr
 
 // compare
 template<class T>
-bool MatrixHelper<T>::areEqual(const boost::numeric::ublas::matrix<T>* m1, const boost::numeric::ublas::matrix<T>* m2)
+bool MatrixHelper<T>::areEqual(const boost::numeric::ublas::matrix<T>* const m1, const boost::numeric::ublas::matrix<T>* const m2)
 {
 	bool res = true;
 	assert(m1->size1() == m2->size1() && m1->size2() == m2->size2());
@@ -350,7 +350,7 @@ bool MatrixHelper<T>::areEqual(const boost::numeric::ublas::matrix<T>* m1, const
 
 // input and output
 template<class T>
-void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::matrix<T>* m)
+void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::matrix<T>* const m)
 {
 	for(typename boost::numeric::ublas::matrix<T>::const_iterator1 it1 = m->begin1(); it1 != m->end1(); it1++)
 	{
@@ -361,7 +361,7 @@ void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::matrix<T>* m)
 }
 
 template<class T>
-void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::symmetric_matrix<T> *m)
+void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::symmetric_matrix<T>* const m)
 {
 	for(typename boost::numeric::ublas::symmetric_matrix<T>::const_iterator1 it1 = m->begin1(); it1 != m->end1(); it1++)
 	{
@@ -372,7 +372,7 @@ void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::symmetric_matrix<
 }
 
 template<class T>
-void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper> *m)
+void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m)
 {
 	unsigned int n = m->size1();
 	for(typename boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>::const_iterator1 it1 = m->begin1(); it1 != m->end1(); it1++)
@@ -384,7 +384,7 @@ void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::triangular_matrix
 }
 
 template<class T>
-void MatrixHelper<T>::printDiagonalVector(const std::valarray<T>* d)
+void MatrixHelper<T>::printDiagonalVector(const std::valarray<T>* const d)
 {
 	for(unsigned int i=0; i<d->size(); i++)
 		std::cout << (*d)[i] << " ";

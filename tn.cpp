@@ -58,7 +58,7 @@
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
 
 // classes
-class HN
+class TwoNeighbours
 {
 private:
 	bool hasStarted;						// true iff the application was successfuly started
@@ -69,8 +69,8 @@ private:
 
 public:
 	// constructor
-	HN();
-	~HN();
+	TwoNeighbours();
+	~TwoNeighbours();
 
 	util::Expected<void> init(int argc, char** argv);		// initializes the application; creates and registers services
 	void shutdown(util::Expected<void>* result = NULL);		// release memory and shut the application down
@@ -83,8 +83,8 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
-	HN hn;
-	util::Expected<void> initialization = hn.init(argc, argv);
+	TwoNeighbours tn;
+	util::Expected<void> initialization = tn.init(argc, argv);
 	if(initialization.wasSuccessful())
 	{
 		// run HN
@@ -100,7 +100,7 @@ int main(int argc, char** argv)
 		L.print(util::ServiceLocator::getProgOpts()->verboseLevel);
 
 		// shut down
-		hn.shutdown();
+		tn.shutdown();
 
 		// return success
 		return 0;
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 	else
 	{
 		// shut down with error message
-		hn.shutdown(&initialization);
+		tn.shutdown(&initialization);
 		return -1;
 	}
 }
@@ -116,12 +116,12 @@ int main(int argc, char** argv)
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Initialization ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-HN::HN() : hasStarted(false), hasFileLogger(false)
+TwoNeighbours::TwoNeighbours() : hasStarted(false), hasFileLogger(false)
 {
 
 }
 
-util::Expected<void> HN::init(int argc, char** argv)
+util::Expected<void> TwoNeighbours::init(int argc, char** argv)
 {
 	// register file logger service
 	try
@@ -159,7 +159,7 @@ util::Expected<void> HN::init(int argc, char** argv)
 ////////////////////////////// Starting Log /////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 // write start log
-void HN::printStartingLog()
+void TwoNeighbours::printStartingLog()
 {
 	// get CPU info and write starting message
 	std::stringstream cpuStream;
@@ -241,16 +241,15 @@ void HN::printStartingLog()
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Shutdown /////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-HN::~HN()
+TwoNeighbours::~TwoNeighbours()
 {}
 
-void HN::shutdown(util::Expected<void>* result)
+void TwoNeighbours::shutdown(util::Expected<void>* result)
 {
 	// check for error message
 	if(result != NULL && !result->isValid())
 	{
-		// the application encountered an error
-		// try to clean up and to log the error message
+		// the application encountered an error -> try to clean up and to log the error message
 		try
 		{
 			// clean up
