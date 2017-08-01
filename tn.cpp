@@ -16,9 +16,14 @@
  *			- 07/10/2016: added file logger service
  *			- 13/10/2016: program options added
  *			- 01/08/2017: tabula rasa
- *			- 01/08/2017: Expected class for better error handling
- *			- 01/08/2017: file logger service
- *			- 01/08/2017: program options
+ *			- 01/08/2017: Expected class for better error handling was added (expected.h)
+ *			- 01/08/2017: added a service locator (seriveLocator.h)
+ *			- 01/08/2017: file logger service was added (log.h)
+ *			- 01/08/2017: program options were added (programOptions.h)
+ *			- 01/08/2017: support for boost matrices was added (matrix.h)
+ *			- 01/08/2017: linear algebra class added (linearAlgebra.h), most important algorithms: LLL and short vectors
+ *			- 01/08/2017: general lattice class was added (lattice.h)
+ *
  *
  * ToDo: everything :(
  */
@@ -47,9 +52,8 @@
 
 // mathematics
 //#include "Headers/Mathematics/matrix.h"						// matrix helper
-//#include "Headers/Mathematics/linearAlgebra.h"				// linear algebra algorithms
-//#include "Headers/Mathematics/isomAutom.h"					// automorphism groups and isometry tests
-//#include "Headers/Mathematics/lattices.h"					// definition of lattices
+#include "Headers/Mathematics/linearAlgebra.h"				// linear algebra algorithms
+#include "Headers/Mathematics/lattice.h"					// definition of lattices
 
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
 
@@ -86,14 +90,14 @@ int main(int argc, char** argv)
 		// run HN
 
 		// read gram matrix of starting lattice
-		//boost::numeric::ublas::symmetric_matrix<mpz_class> A(1,1);
-		//std::cin >> A;
+		boost::numeric::ublas::symmetric_matrix<mpz_class> A(1,1);
+		std::cin >> A;
 
 		// create lattice from gramian
-		//mathematics::Lattice L(&A);
+		mathematics::Lattice L(&A);
 
 		// print starting lattice
-		//L.print(util::ServiceLocator::getProgOpts()->verboseLevel);
+		L.print(util::ServiceLocator::getProgOpts()->verboseLevel);
 
 		// shut down
 		hn.shutdown();
@@ -259,11 +263,11 @@ void HN::shutdown(util::Expected<void>* result)
 			if(hasFileLogger)
 			{
 				std::stringstream errorMessage;
-				errorMessage << "HN is shutting down with a critical error: " << e.what();
+				errorMessage << "TwoNeighbours was shut down: " << e.what();
 				util::ServiceLocator::getFileLogger()->print<util::SeverityType::error>(std::stringstream(errorMessage.str()));
 			}
 			else
-				std::cerr << "HN is shutting down with a critical error: " << e.what();
+				std::cerr << "TwoNeighbours is shutting down: " << e.what() << "\n";
 			return;
 		}
 	}

@@ -3,17 +3,10 @@
 // c++ includes
 #include <set>
 
-// bell0bytes includes
+// bell0bytes mathematics
 #include "../../Headers/Mathematics/linearAlgebra.h"
 #include "../../Headers/Utilities/serviceLocator.h"
 #include "../../Headers/Mathematics/matrix.h"
-
-
-// boost includes
-#include <boost/timer/timer.hpp>
-
-// openMP includes
-#include <omp.h>
 #include "../../Headers/Mathematics/lattice.h"
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////
@@ -86,6 +79,8 @@ void Lattice::dual()
 	for(unsigned int i=0; i<dim; i++)
 		for(unsigned int j=0; j<dim; j++)
 			dualGram(i,j) = this->determinant * dualGramCopy(i,j);
+
+	LALA::lllGram(&dualGram);
 }
 
 void Lattice::successiveMinima()

@@ -74,7 +74,7 @@ private:
 
 public:
 	// constructors and destructor
-	Lattice(const boost::numeric::ublas::symmetric_matrix<mpz_class>* gram);	// create lattice from gramian
+	Lattice(const boost::numeric::ublas::symmetric_matrix<mpz_class>* gram);	// creates lattice from gramian
 	Lattice(const Lattice&);													// copy constructor
 	~Lattice();
 
@@ -87,9 +87,6 @@ public:
 
 	// utilities
 	void print(unsigned int flags = 0);
-
-	friend class IsomAutom;
-	friend class Isom;
 };
 
 }
