@@ -42,9 +42,5 @@ public:
 	// output
 	int outputPrec;			// boost output precision
 	int mpfrPrec;			// precision to use for mpfr
-
-	// isom autom
-	int automAlgo;			// 0: Plesken-Souvignier ; 1: Regev-Oded
-	int isomAlgo;			// 0: Plesken-Souvignier ; 1: Regev-Oded
 };
 }

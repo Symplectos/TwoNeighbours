@@ -16,6 +16,9 @@
  *			- 07/10/2016: added file logger service
  *			- 13/10/2016: program options added
  *			- 01/08/2017: tabula rasa
+ *			- 01/08/2017: Expected class for better error handling
+ *			- 01/08/2017: file logger service
+ *			- 01/08/2017: program options
  *
  * ToDo: everything :(
  */
@@ -119,7 +122,7 @@ util::Expected<void> HN::init(int argc, char** argv)
 	// register file logger service
 	try
 	{
-		std::shared_ptr<util::Logger<util::FileLogPolicy> > fileLogger(new util::Logger<util::FileLogPolicy>("../Logs/bell0engine.log"));
+		std::shared_ptr<util::Logger<util::FileLogPolicy> > fileLogger(new util::Logger<util::FileLogPolicy>("../Logs/TwoNeighbours.log"));
 		util::ServiceLocator::provideFileLoggingService(fileLogger);
 		util::ServiceLocator::getFileLogger()->setThreadName("mainThread");
 	}
@@ -156,7 +159,7 @@ void HN::printStartingLog()
 {
 	// get CPU info and write starting message
 	std::stringstream cpuStream;
-	cpuStream << "TN++ / HN++ has started running on:\n";
+	cpuStream << "TwoNeighbours has started running on:\n";
 	std::ifstream cpuInfo("/proc/cpuinfo");
 	std::string readFile;
 
@@ -191,7 +194,7 @@ void HN::printStartingLog()
 
 	// write status of loaded libraries
 	std::stringstream streamlib;
-	streamlib << "TN++ / HN++ successfully loaded the following libraries:\n";
+	streamlib << "The following libraries were loaded successfully:\n";
 	streamlib << "\n\t\t\t\t\t\t* GNU MP " << __GNU_MP_VERSION << "." << __GNU_MP_VERSION_MINOR << "." << __GNU_MP_VERSION_PATCHLEVEL;
 	streamlib << "\n\t\t\t\t\t\t* MPFR " << MPFR_VERSION_STRING << " (prec: " << mpfr::bits2digits(mpfr::mpreal::get_default_prec()) << ")";
 	streamlib << "\n\t\t\t\t\t\t* Boost uBlas " << BOOST_LIB_VERSION;
@@ -266,6 +269,6 @@ void HN::shutdown(util::Expected<void>* result)
 	}
 
 	// no error -> clean up and shut down normally
-	util::ServiceLocator::getFileLogger()->print<util::SeverityType::info>("TN++ / HN++ was successfully shut down!");
+	util::ServiceLocator::getFileLogger()->print<util::SeverityType::info>("TwoNeighbours was successfully shut down!");
 }
 

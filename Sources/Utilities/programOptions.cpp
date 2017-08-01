@@ -9,7 +9,7 @@
 
 namespace util
 {
-ProgramOptions::ProgramOptions(int argc, char** argv) : verboseLevel(0), debugMode(false), useCUDA(false), outputPrec(10), mpfrPrec(10), automAlgo(0), isomAlgo(0)
+ProgramOptions::ProgramOptions(int argc, char** argv) : verboseLevel(0), debugMode(false), useCUDA(false), outputPrec(10), mpfrPrec(10)
 {
 	if(!this->createCommandLineParameters(argc, argv).wasSuccessful())
 		throw std::runtime_error("Unable to create program options!");
@@ -31,11 +31,6 @@ Expected<void> ProgramOptions::createCommandLineParameters(int argc, char** argv
 			    		("debug", "debug mode")
 						("outputPrec", boost::program_options::value<int>(), "sets arg (int) as output precision - default: 10");
 
-
-		boost::program_options::options_description descMath("Mathematical options and settings");
-		descMath.add_options()("automAlgo", boost::program_options::value<int>(), "0: Plesken-Souvignier (default) ; 1: Regev-Oded")
-							("isomAlgo", boost::program_options::value<int>(), "0: Plesken-Souvignier (default) ; 1: Regev-Oded");
-
 		boost::program_options::options_description descLib("Library options and settings");
 		descLib.add_options()	("mpfrPrec", boost::program_options::value<int>(), "sets arg (int) as the precision for mpfr - default: 10")
 								("cuda", "enable CUDA algorithms - default: false");
@@ -43,13 +38,11 @@ Expected<void> ProgramOptions::createCommandLineParameters(int argc, char** argv
 		// declare all options instance which will include all the visible options
 		boost::program_options::options_description visible("All allowed options");
 		visible.add(descMain);
-		visible.add(descMath);
 		visible.add(descLib);
 
 		// declare options instance which will also include hidden options
 		boost::program_options::options_description all("All allowed options");
 		all.add(descMain);
-		all.add(descMath);
 		all.add(descLib);
 
 		boost::program_options::variables_map vm;
@@ -88,13 +81,6 @@ Expected<void> ProgramOptions::createCommandLineParameters(int argc, char** argv
 		}
 		else
 			std::cout.precision(this->outputPrec);
-
-		// set automorphism group and isometry options
-		if(vm.count("automAlgo"))
-			this->automAlgo = vm["automAlgo"].as<int>();
-		if(vm.count("isomAlgo"))
-			this->isomAlgo = vm["isomAlgo"].as<int>();
-
 	}
 	catch (...)
 	{
