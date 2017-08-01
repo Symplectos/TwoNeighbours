@@ -33,6 +33,7 @@
  *			- 20/01/2017: added orthoginality check with inner product
  *			- 20/01/2017: added comparison function
  *			- 21/01/2017: moved rank, det and inverse function to the linear algebra class
+ *			- 01/08/2017: added const declarations
  *
  * ToDo: everything :(
  */
@@ -79,7 +80,7 @@ public:
 
 	// general utility functions for base or gram matrices
 	static void baseDelZeroes(boost::numeric::ublas::matrix<T>* b, const unsigned int rk);								// delete zero columns of m
-	static void setColumn(boost::numeric::ublas::matrix<T>* b, std::valarray<T>* col, const unsigned int i);			// sets column i of m to col
+	static void setColumn(boost::numeric::ublas::matrix<T>* b, const std::valarray<T>* const col, const unsigned int i);// sets column i of m to col
 
 	// check properties
 	static bool isOrthogonal(const boost::numeric::ublas::matrix<T>* const m, const boost::numeric::ublas::symmetric_matrix<T>* const g = nullptr);	// returns true iff m^t*m=id or m^t*g*m=g
@@ -259,7 +260,7 @@ void MatrixHelper<T>::baseDelZeroes(boost::numeric::ublas::matrix<T>* b, const u
 }
 
 template<class T>
-void MatrixHelper<T>::setColumn(boost::numeric::ublas::matrix<T>* b, std::valarray<T>* col, const unsigned int i)
+void MatrixHelper<T>::setColumn(boost::numeric::ublas::matrix<T>* b, const std::valarray<T>* const col, const unsigned int i)
 {
 	// set column i of b to col
 	assert(i < b->size2());

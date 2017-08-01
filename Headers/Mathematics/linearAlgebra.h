@@ -90,7 +90,6 @@ namespace mathematics
 class LALA
 {
 private:
-
 	// fudge variable
 	static constexpr double SHVEC_ELLIPSOID_EPSILON = 0.0000000001;
 
