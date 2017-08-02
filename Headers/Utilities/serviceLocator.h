@@ -1,6 +1,6 @@
 #pragma once
 
-/***************************************************************************************
+/**************************************************************************************
 * Author: Gilles Bellot
 * Date:  13/09/2016 - Lenningen - Luxembourg
 *
@@ -19,21 +19,27 @@
 namespace util
 {
 // CLASSES //////////////////////////////////////////////////////////////////////////////
+/** \addtogroup Utility
+ *  Utility classes are nice little helper classes to make life a tiny little bit easier.
+ *  @{
+ */
+//! Registers and provides services to the entire program.
 
+//! See <a href="http://gameprogrammingpatterns.com/service-locator.html">Game Programming Patterns</a>, by R. Nystrom for further details.
 class ServiceLocator
 {
 private:
-	static std::shared_ptr<Logger<FileLogPolicy> > fileLogger;	// the file logger
-	static std::shared_ptr<ProgramOptions> progOpts;			// program options
+	static std::shared_ptr<Logger<FileLogPolicy> > fileLogger;	//!< The file logger.
+	static std::shared_ptr<ProgramOptions> progOpts;			//!< The program options.
 
 public:
 	// file logging
-	static Logger<FileLogPolicy>* getFileLogger() { return fileLogger.get(); };
-	static void provideFileLoggingService(const std::shared_ptr<Logger<FileLogPolicy> > providedFileLogger);
+	static Logger<FileLogPolicy>* getFileLogger() { return fileLogger.get(); }									//!< Returns the file logger.
+	static void provideFileLoggingService(const std::shared_ptr<Logger<FileLogPolicy> > providedFileLogger);	//!< Registers the file logging service.
 
 	// program options
-	static ProgramOptions* getProgOpts() { return progOpts.get(); };
-	static void provideProgramOptions(const std::shared_ptr<ProgramOptions> providedProgramOptions);
+	static ProgramOptions* getProgOpts() { return progOpts.get(); }												//!< Gets the program options.
+	static void provideProgramOptions(const std::shared_ptr<ProgramOptions> providedProgramOptions);			//!< Registers the program options as a service.
 };
-
+/** @}*/
 }

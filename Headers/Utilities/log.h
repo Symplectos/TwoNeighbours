@@ -28,13 +28,23 @@
 
 namespace util
 {
+/** \addtogroup Utility
+ *  Utility classes are nice little helper classes to make life a tiny little bit easier.
+ *  @{
+ */
 	// CLASSES //////////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////// LOG POLICIES //////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////
 
-	// virtual abstract class - interface to open and close streams (and to write to them)
+	//! Virtual abstract class to act as an interface to open and close streams (and to write to them).
+
+	//! Customizability is achieved by a purely abstract class called logging policy. A logging policy defines where messages will be printed to.
+	//! Now, for example, to create a file logger policy, it is enough to simply inherit from LogPolicyInterface and to specify a file on the hard drive to write out to.
+	//! Check <a href="https://bell0bytes.eu/thread-safe-logger/">my personal website</a> for further details.
+
+
 	class LogPolicyInterface
 	{
 	public:
@@ -46,7 +56,7 @@ namespace util
 	};
 	inline LogPolicyInterface::~LogPolicyInterface() {}
 
-	// implementation of a policy to write to a file on the hard drive
+	//! Implementation of a policy to write to a file on the hard drive.
 	class FileLogPolicy : public LogPolicyInterface
 	{
 	private:
@@ -57,9 +67,9 @@ namespace util
 		~FileLogPolicy() { };
 
 		// member functions
-		bool openOutputStream(const std::string& filename) override;
-		void closeOutputStream() override;
-		void write(const std::string& msg) override;
+		bool openOutputStream(const std::string& filename) override;	//!< Opens the file given by filename on the hard drive.
+		void closeOutputStream() override;								//!< Closes the file.
+		void write(const std::string& msg) override;					//!< Writes the message stored in msg to the output stream.
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////////
@@ -68,13 +78,7 @@ namespace util
 
 	// message types
 	enum SeverityType
-	{
-		info = 0,
-		debug,
-		warning,
-		error,
-		config
-	};
+	{ info = 0, debug, warning, error, config };
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////// LOGGER ///////////////////////////////////////////////
@@ -84,7 +88,12 @@ namespace util
 	template<typename LogPolicy>
 	class Logger;
 
-	// create the actual logging daemon
+	//! The logging daemon.
+
+	//! To output the contents of a stream buffer, the logger class uses a daemon: The running thread is locked and as long as the daemon is alive, it outputs the elements of the stream buffer.
+	//! To start, the timed_mutex, timedMutex (a timed_mutex protects shared data from being simultaneously accessed by multiple threads) of the Logger class is locked by using the unique_lock with defer_lock, that is, the mutex is not immediately locked on construction, but it will be locked soon.
+	//! The currently running thread is then put to sleep by the sleep_for function, which simply blocks the execution of the current thread for at least the specified duration.
+	//! Once the thread is fast asleep, and there is actually data on the log buffer, attempts to lock the mutex are started. The mutex will be blocked for the length of its supposed slumber, or until the lock is acquired. If a lock can not be acquired at the moment, the thread is allowed to wake and continue safely on its journey (until captured again). If the lock succeeds, the content of the log buffer is written using the specified logging policy.
 	template<typename LogPolicy>
 	void loggingDaemon(Logger<LogPolicy >* logger)
 	{
@@ -105,36 +114,38 @@ namespace util
 		} while (logger->isStillRunning.test_and_set() || logger->logBuffer.size());	// do this while while the logger is still active
 	}
 
-	// the actual logger class to be instantiated with a specific log policy
+	//! The actual logger class.
+
+	//! This class is to be instantiated with a specific log policy.
 	template<typename LogPolicy>
 	class Logger
 	{
 	private:
-		unsigned int logLineNumber;							// used to write line numbers
-		std::map<std::thread::id, std::string> threadName;	// give a human readable name to each thread
-		LogPolicy policy;									// the log policy (i.e. write to file, ...)
-		std::timed_mutex writeMutex;						// mutual exclusive writer
-		std::vector<std::string> logBuffer;					// the log buffer
-		std::thread daemon;									// the actual logging daemon
-		std::atomic_flag isStillRunning{ ATOMIC_FLAG_INIT };// lock-free boolean to check whether our daemon is still running or not
+		unsigned int logLineNumber;							//!< Used to write line numbers.
+		std::map<std::thread::id, std::string> threadName;	//!< A human readable name to each thread.
+		LogPolicy policy;									//!< The log policy (i.e. write to file, ...).
+		std::timed_mutex writeMutex;						//!< The mutual exclusive writer.
+		std::vector<std::string> logBuffer;					//!< The log buffer.
+		std::thread daemon;									//!< The logging daemon.
+		std::atomic_flag isStillRunning{ ATOMIC_FLAG_INIT };//!< Lock-free boolean to check whether our daemon is still running or not.
 
 
 	public:
 		// constructor and destructor
-		Logger(const std::string& name);
-		~Logger();
+		Logger(const std::string& name);				//!< The constructor creates a logger to write to the specified file.
+		~Logger();										//!< The destructor destroys!
 
-		void setThreadName(const std::string& name);	// set human-readable name for the current thread
+		void setThreadName(const std::string& name);	//!< Sets a human-readable name for the current thread.
 
 		template<SeverityType severity>
-		void print(std::stringstream stream);			// print a message (varies based on the severity level)
+		void print(std::stringstream stream);			//!< Prints a message (varies based on the severity level).
 		template<SeverityType severity>
-		void print(std::string msg);
+		void print(std::string msg);					//!< Prints a message (varies based on the severity level).
 
 		template<typename Policy>
-		friend void loggingDaemon(Logger<Policy>* logger);
+		friend void loggingDaemon(Logger<Policy>* logger);	//!< The logging deamon is obviously a friend of loggers.
 	};
-
+	/** @}*/
 	template<typename LogPolicy>
 	Logger<LogPolicy>::Logger(const std::string& name) : logLineNumber(0), threadName(), policy(), writeMutex(), logBuffer()
 	{

@@ -2,27 +2,30 @@
  * File:   hn.cpp
  * Author: Gilles Bellot
  * Date:   23/07/2012 - Dortmund - Germany
+ * Description:
+ */
+/*!
+ * \mainpage TwoNeighbours is an attempt to rewrite TN and HN in modern C++
  *
- * Description: TwoNeighbours is an attempt to rewrite TN and HN in modern C++
- *
- * History:	- 24/07/2012: program options added
- *			- 25/07/2012: mpfr precision can now be set with --precision arg
- *			- 22/01/2013: new timer added
- *			- 22/03/2013: mpfr is now thread safe
- *			- 25/04/2014: added crude console menu functionality
- *			- 02/11/2015: tabula rasa
- *			- 02/11/2015: added openMP support
- *			- 06/10/2016: tabula rasa
- *			- 07/10/2016: added file logger service
- *			- 13/10/2016: program options added
- *			- 01/08/2017: tabula rasa
- *			- 01/08/2017: Expected class for better error handling was added (expected.h)
- *			- 01/08/2017: added a service locator (seriveLocator.h)
- *			- 01/08/2017: file logger service was added (log.h)
- *			- 01/08/2017: program options were added (programOptions.h)
- *			- 01/08/2017: support for boost matrices was added (matrix.h)
- *			- 01/08/2017: linear algebra class added (linearAlgebra.h), most important algorithms: LLL and short vectors
- *			- 01/08/2017: general lattice class was added (lattice.h)
+ * History:
+ * - 24/07/2012: program options added
+ * - 25/07/2012: mpfr precision can now be set with --precision arg
+ * - 22/01/2013: new timer added
+ * - 22/03/2013: mpfr is now thread safe
+ * - 25/04/2014: added crude console menu functionality
+ * - 02/11/2015: tabula rasa
+ * - 02/11/2015: added openMP support
+ * - 06/10/2016: tabula rasa
+ * - 07/10/2016: added file logger service
+ * - 13/10/2016: program options added
+ * - 01/08/2017: tabula rasa
+ * - 01/08/2017: Expected class for better error handling was added (expected.h)
+ * - 01/08/2017: added a service locator (serviceLocator.h)
+ * - 01/08/2017: file logger service was added (log.h)
+ * - 01/08/2017: program options were added (programOptions.h)
+ * - 01/08/2017: support for boost matrices was added (matrix.h)
+ * - 01/08/2017: linear algebra class added (linearAlgebra.h), most important algorithms: LLL and short vectors
+ * - 01/08/2017: general lattice class was added (lattice.h)
  *
  *
  * ToDo: everything :(
@@ -51,7 +54,7 @@
 #include "Headers/Utilities/expected.h"						// expected error handling
 
 // mathematics
-//#include "Headers/Mathematics/matrix.h"						// matrix helper
+//#include "Headers/Mathematics/matrix.h"					// matrix helper
 #include "Headers/Mathematics/linearAlgebra.h"				// linear algebra algorithms
 #include "Headers/Mathematics/lattice.h"					// definition of lattices
 
@@ -61,10 +64,10 @@
 class TwoNeighbours
 {
 private:
-	bool hasStarted;						// true iff the application was successfuly started
-	bool hasFileLogger;						// true iff a file logger is available
+	bool hasStarted;						//!< true iff the application was successfuly started
+	bool hasFileLogger;						//!< true iff a file logger is available
 
-	void printStartingLog();				// prints a starting log
+	void printStartingLog();				//!< prints a starting log
 
 
 public:
@@ -72,8 +75,8 @@ public:
 	TwoNeighbours();
 	~TwoNeighbours();
 
-	util::Expected<void> init(int argc, char** argv);		// initializes the application; creates and registers services
-	void shutdown(util::Expected<void>* result = NULL);		// release memory and shut the application down
+	util::Expected<void> init(int argc, char** argv);		//!< initializes the application; creates and registers services
+	void shutdown(util::Expected<void>* result = NULL);		//!< release memory and shut the application down
 };
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////

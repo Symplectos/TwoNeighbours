@@ -22,25 +22,33 @@
 
 namespace util
 {
+/** \addtogroup Utility
+ *  Utility classes are nice little helper classes to make life a tiny little bit easier.
+ *  @{
+ */
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
+//! The ProgramOptions define the behaviour of TwoNeighbours.
 class ProgramOptions
 {
 private:
-	Expected<void> createCommandLineParameters(int argc, char** argv);
+	Expected<void> createCommandLineParameters(int argc, char** argv);	//!< Called from the default constructor, this function creates the program options from the passed command line parameters.
 
 public:
-	ProgramOptions(int argc, char** argv);
-	~ProgramOptions();
+	ProgramOptions(int argc, char** argv);	//!< The constructor sets all members to their default values and then calls the createCommandLineParameters function.
+	~ProgramOptions();						//!< The destructor does what destructors do, it destroys!
 
 	// general options
-	int verboseLevel;		// verbose mode - slower, shows additional information on the standard output stream
-	bool debugMode;			// debug mode - slower, shows debug information and computes internal tests to ensure correctness of algorithms
+	int verboseLevel;		//!< This flag defines the verbose mode. The higher the number, the more information will be shown on the default output stream. Default: 0 (off).
+	bool debugMode;			//!< True if and only if the debug mode is activated. Default: false.
+
+							//!< The debug mode is obviously slower, shows debug information and computes internal tests to ensure correctness of algorithms.
 
 	// cuda
-	bool useCUDA;			// true iff we want to use CUDA algorithms
+	bool useCUDA;			//!< True if and only if CUDA algorithms should be prioritized.
 
 	// output
-	int outputPrec;			// boost output precision
-	int mpfrPrec;			// precision to use for mpfr
+	int outputPrec;			//!< Defines the output precision of BOOST.
+	int mpfrPrec;			//!< Defines the precision to use for calculations involving mpfr.
 };
+/** @}*/
 }
