@@ -97,89 +97,91 @@ private:
 	static bool comparePairValarrayLong(const std::pair<mpz_class, std::valarray<mpz_class> >& a, const std::pair<mpz_class, std::valarray<mpz_class> >& b);
 
 	// rational cholesky decomposition for positive definite forms
-	static void choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::triangular_matrix<mpq_class, boost::numeric::ublas::upper>* r, std::valarray<mpq_class>* d);
+	static void choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::triangular_matrix<mpq_class, boost::numeric::ublas::upper>* const r, std::valarray<mpq_class>* const d);
 
 	// scalar products
-	static mpfr::mpreal lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>* b, unsigned int i, unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct=nullptr);															// computes the scalar product of the i-th and j-th column of the matrix b
-	static mpfr::mpreal lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, unsigned int i, unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct = nullptr);	// computes the scalar product of the i-th column of b and j-th column of bStar
-	static mpz_class lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* b, unsigned int i, unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct=nullptr);																// computes the scalar product of the i-th and j-th column of the matrix b
-	static mpfr::mpreal lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, unsigned int i, unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct=nullptr);			// computes the scalar product of the i-th column of b and j-th column of bStar
+	static mpfr::mpreal lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>* const b, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct=nullptr);															// computes the scalar product of the i-th and j-th column of the matrix b
+	static mpfr::mpreal lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct = nullptr);	// computes the scalar product of the i-th column of b and j-th column of bStar
+	static mpz_class lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* const b, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct=nullptr);																// computes the scalar product of the i-th and j-th column of the matrix b
+	static mpfr::mpreal lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* const  b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct=nullptr);		// computes the scalar product of the i-th column of b and j-th column of bStar
 
 	// floating point LLL
-	static void lllBasisTestCondition(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* B, std::valarray<mpfr::mpreal>* mu, int *k, int kmax, int dim);
-	static void lllBasisRed(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* mu, int k, int l, int dim);
-	static void lllBasisSwap(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* B, std::valarray<mpfr::mpreal>* mu, int k, int kmax, int dim);
-	static void lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* b, std::valarray<mpfr::mpreal>* mu, int* k, int kmax, int dim);
-	static void lllGramRed(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* mu, int k, int l, int dim);
-	static void lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* b, std::valarray<mpfr::mpreal>* mu, int k, int kmax, int dim);
-
-	// MLLL
-	static void mlllBasisSwap(boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpfr::mpreal>* B, std::valarray<mpfr::mpreal>* mu, int k, int kmax, int dim, int nVectors);
-	static void mlllBasisRed(boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpfr::mpreal>* mu, int k, int l, int nVectors);
-	static void mlllBasisTestCondition(boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpfr::mpreal>* B, std::valarray<mpfr::mpreal>* mu, int *k, int kmax, int dim, int nVevctors);
+	static void lllBasisTestCondition(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim);
+	static void lllBasisRed(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int dim);
+	static void lllBasisSwap(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim);
+	static void lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const b, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim);
+	static void lllGramRed(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int dim);
+	static void lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const b, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim);
 
 	// integral LLL
-	static void lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpz_class>* d, std::valarray<mpz_class>* lambda, int* k, int kmax, int dim);
-	static void lllGramRed(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpz_class>* d, std::valarray<mpz_class>* lambda, int k, int l, int dim);
-	static void lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpz_class>* d, std::valarray<mpz_class>* lambda, int k, int kmax, int dim);
+	static void lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, int* const k, const int kmax, const int dim);
+	static void lllGramRed(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, const int k, const int l, const int dim);
+	static void lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, const int k, const int kmax, const int dim);
+
+	// MLLL
+	static void mlllBasisSwap(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim, const int nVectors);
+	static void mlllBasisRed(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int nVectors);
+	static void mlllBasisTestCondition(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim, const int nVevctors);
 
 	// short vectors
-	static void shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h, boost::numeric::ublas::matrix<mpfr::mpreal>* p, boost::numeric::ublas::matrix<mpfr::mpreal>* q);	// Fincke-Pohst preprocessing, returns q
-	static unsigned long shortVectors(const boost::numeric::ublas::matrix<mpfr::mpreal>* q, mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* X);	// short vectors algorithm
+	static void shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, boost::numeric::ublas::matrix<mpfr::mpreal>* const p, boost::numeric::ublas::matrix<mpfr::mpreal>* const q);	// Fincke-Pohst preprocessing, returns q
+	static unsigned long shortVectors(const boost::numeric::ublas::matrix<mpfr::mpreal>* const q, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X);	// short vectors algorithm
 
 public:
 	// linear independence
-	static bool linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* vectorSystem);	// returns true iff the vector system is linearly independent over R
-	static bool linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* vectorSystem);	// returns true iff the vector system is linearly independent over Z
+	static bool linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* const vectorSystem);	// returns true iff the vector system is linearly independent over R
+	static bool linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* const vectorSystem);	// returns true iff the vector system is linearly independent over Z
 
 	// element of
-	static bool inLinearSpanZ(const std::vector<std::valarray<mpz_class> >* b, const std::valarray<mpz_class>* v);	// returns true iff v is an element of the vector space spanned by the column vectors in b
-	static bool elementOfLattice(const boost::numeric::ublas::matrix<mpq_class>* m, const std::valarray<mpz_class>* v, unsigned int dim, boost::numeric::ublas::vector<mpq_class>* mv = nullptr); // returns true iff v is an element of the lattice given by the matrix m (m must be the inverse of a matrix of a lattice basis, possibly extended to a vector space basis), returns mv is so desired
+	static bool inLinearSpanZ(const std::vector<std::valarray<mpz_class> >* const b, const std::valarray<mpz_class>* const v);	// returns true iff v is an element of the vector space spanned by the column vectors in b
+	static bool elementOfLattice(const boost::numeric::ublas::matrix<mpq_class>* const m, const std::valarray<mpz_class>* const v, const unsigned int dim, boost::numeric::ublas::vector<mpq_class>* const mv = nullptr); // returns true iff v is an element of the lattice given by the matrix m (m must be the inverse of a matrix of a lattice basis, possibly extended to a vector space basis), returns mv is so desired
 
 	// scalar products
-	static mpz_class scalarProduct(const std::valarray<mpz_class>* x, const std::valarray<mpz_class>* y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct = nullptr);	// computes x^t * innerProduct * y
-	static mpq_class scalarProduct(const std::valarray<mpq_class>* x, const std::valarray<mpq_class>* y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct = nullptr);
+	static mpz_class scalarProduct(const std::valarray<mpz_class>* const x, const std::valarray<mpz_class>* const y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct = nullptr);	// computes x^t * innerProduct * y
+	static mpq_class scalarProduct(const std::valarray<mpq_class>* const x, const std::valarray<mpq_class>* const y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct = nullptr);
 
 	// gram schmidt
-	static void gramSchmidt(std::vector<std::valarray<mpq_class> >* basis, const boost::numeric::ublas::symmetric_matrix<mpz_class>* g = nullptr);	// gram schmidt
+	static void gramSchmidt(std::vector<std::valarray<mpq_class> >* const basis, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g = nullptr);	// gram schmidt
 
 	// rank of matrices
-	static void echelonForm(boost::numeric::ublas::matrix<mpq_class>* m, std::vector<unsigned int>* basisExtension = nullptr);	// computes row-reduced echelon form of a given matrix, also outputs the non pivot columns, if so desired
-	static void echelonFormConst(const boost::numeric::ublas::matrix<mpq_class>* m, std::vector<unsigned int>* basisExtension);		// computes basis extensions for partial basis given by the columns of m
-	static unsigned long rank(const boost::numeric::ublas::matrix<mpfr::mpreal>* m);	// computes the rank of m using gaussian elimination (over R)
-	static unsigned long rank(const boost::numeric::ublas::matrix<mpq_class>* m); // computes the rank of m using gaussian elimination (over Q)
-	static unsigned long rank(const boost::numeric::ublas::matrix<mpz_class>* m);		// computes the rank of m using gaussian elimination (over Q)
+	static void echelonForm(boost::numeric::ublas::matrix<mpq_class>* const m, std::vector<unsigned int>* const basisExtension = nullptr);	// computes row-reduced echelon form of a given matrix, also outputs the non pivot columns, if so desired
+	static void echelonFormConst(const boost::numeric::ublas::matrix<mpq_class>* const m, std::vector<unsigned int>* const basisExtension);	// computes basis extensions for partial basis given by the columns of m
+	static unsigned long rank(const boost::numeric::ublas::matrix<mpfr::mpreal>* const m);	// computes the rank of m using gaussian elimination (over R)
+	static unsigned long rank(const boost::numeric::ublas::matrix<mpq_class>* const m);		// computes the rank of m using gaussian elimination (over Q)
+	static unsigned long rank(const boost::numeric::ublas::matrix<mpz_class>* const m);		// computes the rank of m using gaussian elimination (over Q)
 
 	// inverse of matrices
-	static void inverse(const boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* a, boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* b); // computes b such that a*b=1
-	static bool inverse(const boost::numeric::ublas::matrix<mpfr::mpreal>* a, boost::numeric::ublas::matrix<mpfr::mpreal>* b);			// sets b = a^-1; uses LU-factorization
-	static bool inverse(const boost::numeric::ublas::matrix<mpq_class>* a, boost::numeric::ublas::matrix<mpq_class>* b);
+	static void inverse(const boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* const a, boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* const b); // computes b such that a*b=1
+	static bool inverse(const boost::numeric::ublas::matrix<mpfr::mpreal>* const a, boost::numeric::ublas::matrix<mpfr::mpreal>* const b);			// sets b = a^-1; uses LU-factorization
+	static bool inverse(const boost::numeric::ublas::matrix<mpq_class>* const a, boost::numeric::ublas::matrix<mpq_class>* const b);
 
 	// determinant of matrices
-	static mpfr::mpreal det(const boost::numeric::ublas::matrix<mpfr::mpreal>* m);							// computes the determinant of the matrix m using LU-factorization
-	static mpfr::mpreal det(const boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* m);
-	static mpz_class detGaussBareiss(const boost::numeric::ublas::matrix<mpz_class>* m);				// computes the determinant of the matrix m using the Gauss-Bareiss algorithm
-	static mpz_class detGaussBareiss(const boost::numeric::ublas::symmetric_matrix<mpz_class>* m);
-
-	// floating point LLL as described in [CH] Algorithm 2.6.3
-	static int lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* h = nullptr);			// returns -1 iff given vector system was linearly dependent
-	static int lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h = nullptr);	// returns -1 iff given vector system was linearly dependent
-
-	// mLLL as described in [CH] Algorithm 2.6.8
-	static unsigned int mlllBasis(boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpz_class>* h = nullptr, boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct = nullptr);		// returns the rank of the given vector system - computes basis from linearly dependent vectors
+	static mpfr::mpreal det(const boost::numeric::ublas::matrix<mpfr::mpreal>* const m);					// computes the determinant of the matrix m using LU-factorization
+	static mpfr::mpreal det(const boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const m);
+	static mpz_class detGaussBareiss(const boost::numeric::ublas::matrix<mpz_class>* const m);				// computes the determinant of the matrix m using the Gauss-Bareiss algorithm
+	static mpz_class detGaussBareiss(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const m);
 
 	// basis extensions
-	static void basisExtensionZ(boost::numeric::ublas::matrix<mpq_class>* m);	// extends the columns of m to a vector space basis
-	static void orthogonalComplement(const std::vector<std::valarray<mpq_class> >* latticeBasis, std::vector<std::valarray<mpq_class> >* orthCompl, const boost::numeric::ublas::symmetric_matrix<mpz_class>* g = nullptr);	// computes the orthogonal complement of a lattice in a vector space
+	static void basisExtensionZ(boost::numeric::ublas::matrix<mpq_class>* const m);	// extends the columns of m to a vector space basis
+	static void orthogonalComplement(const std::vector<std::valarray<mpq_class> >* const latticeBasis, std::vector<std::valarray<mpq_class> >* const orthCompl, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g = nullptr);	// computes the orthogonal complement of a lattice in a vector space
 
 	// basis from generating set as described in [HB] 3.5
-	static void basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> >* gen, std::vector<std::valarray<mpz_class> >* basis);
+	static void basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> >* const gen, std::vector<std::valarray<mpz_class> >* const basis);
+
+	// floating point LLL as described in [CH] Algorithm 2.6.3
+	static int lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h = nullptr);			// returns -1 iff given vector system was linearly dependent
+	static int lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h = nullptr);	// returns -1 iff given vector system was linearly dependent
+
+	// fp-mLLL as described in [CH] Algorithm 2.6.8
+	static unsigned int mlllBasis(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpz_class>* const h = nullptr, boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct = nullptr);		// returns the rank of the given vector system - computes basis from linearly dependent vectors
 
 	// integral LLL as described in [CH] Algorithm 2.6.7
-	static int lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpz_class>* h = nullptr); 		// returns -1 iff given vector system was linearly dependent
+	static int lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h = nullptr); 		// returns -1 iff given vector system was linearly dependent
+
 
 	// short vectors of L, that is, vectors x \in L with N^2(x) <= c - with Fincke and Pohst preprocessing (LLL reduction)
-	static unsigned long shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* g, mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* X);
-};
+	static unsigned long shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X);
+
+	};
 
 }

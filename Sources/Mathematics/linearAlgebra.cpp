@@ -18,11 +18,9 @@ namespace mathematics
 
 const float eps = std::numeric_limits<float>::epsilon();						// used as fudge variable in the fp LLL algorithm
 
-// LATTICE ALGORITHMS ///////////////////////////////////////////////////////////////////
-
-// private functions
-
-// general functions
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// Comparison //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 bool LALA::comparePairValarrayLong(const std::pair<mpz_class, std::valarray<mpz_class> >& a, const std::pair<mpz_class, std::valarray<mpz_class> >& b)
 {
 	if(a.first < b.first)
@@ -40,8 +38,10 @@ bool LALA::comparePairValarrayLong(const std::pair<mpz_class, std::valarray<mpz_
 	}
 }
 
-// scalar products
-mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal> *b, unsigned int i, unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct)
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////// Private Scalar Products//////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>* const b, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	assert(i < b->size2() && j < b->size2());
 
@@ -107,7 +107,7 @@ mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>
 	return result;
 }
 
-mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal> *b, boost::numeric::ublas::matrix<mpfr::mpreal> *bStar, unsigned int i, unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct)
+mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	assert(i < b->size2() && j < bStar->size2());
 
@@ -172,7 +172,7 @@ mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>
 	return result;
 }
 
-mpz_class LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class> *b, unsigned int i, unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct)
+mpz_class LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* const b, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	assert(i < b->size2() && j < b->size2());
 
@@ -229,7 +229,7 @@ mpz_class LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class> *b, u
 	return result;
 }
 
-mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class> *b, boost::numeric::ublas::matrix<mpfr::mpreal> *bStar, unsigned int i, unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct)
+mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	assert(i < b->size2() && j < bStar->size2());
 
@@ -293,8 +293,10 @@ mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class> *b
 	return result;
 }
 
-// rational cholesky
-void LALA::choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<mpz_class>* q, boost::numeric::ublas::triangular_matrix<mpq_class, boost::numeric::ublas::upper>* r, std::valarray<mpq_class>* d)
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// Cholesky ////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const q, boost::numeric::ublas::triangular_matrix<mpq_class, boost::numeric::ublas::upper>* const r, std::valarray<mpq_class>* const d)
 {
 	// given a symmetric positive definite matrix q (representing a quadratic form), this algorithm outputs an upper triangular matrix r and a diagonal matrix d such that
 	// q = r^t*d*r
@@ -322,8 +324,10 @@ void LALA::choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<m
 		MatrixHelper<mpq_class>::rowMultiply(r, i, 1/(*d)[i]);
 }
 
-// floating point lll
-void LALA::lllBasisTestCondition(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* B, std::valarray<mpfr::mpreal>* mu, int *k, int kmax, int dim)
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// FP-LLL //////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::lllBasisTestCondition(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim)
 {
 	// test LLL condition
 	LALA::lllBasisRed(b, h, mu, *k, *k-1, dim);
@@ -336,7 +340,7 @@ void LALA::lllBasisTestCondition(boost::numeric::ublas::matrix<mpfr::mpreal>* b,
 	}
 }
 
-void LALA::lllBasisRed(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* mu, int k, int l, int dim)
+void LALA::lllBasisRed(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int dim)
 {
 	mpfr::mpreal mukl = (*mu)[k*dim+l];
 	mpfr::mpreal aux = mpfr::abs(mukl, MPFR_RNDN);
@@ -359,7 +363,7 @@ void LALA::lllBasisRed(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::nu
 	}
 }
 
-void LALA::lllBasisSwap(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* B, std::valarray<mpfr::mpreal>* mu, int k, int kmax, int dim)
+void LALA::lllBasisSwap(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim)
 {
 	// swap h_k and h_{k-1}
 	if(h != nullptr)
@@ -398,7 +402,7 @@ void LALA::lllBasisSwap(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::n
 	}
 }
 
-void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal> *g, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* mu, int k, int l, int dim)
+void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int dim)
 {
 	mpfr::mpreal mukl = (*mu)[k*dim+l];
 	mpfr::mpreal aux = mpfr::abs(mukl, MPFR_RNDN);
@@ -421,7 +425,7 @@ void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal> *g, 
 	}
 }
 
-void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* b, std::valarray<mpfr::mpreal>* mu, int k, int kmax, int dim)
+void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const b, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim)
 {
 	// swap h_k and h_{k-1}
 	if(h != nullptr)
@@ -451,7 +455,7 @@ void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g,
 	}
 }
 
-void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h, std::valarray<mpfr::mpreal>* b, std::valarray<mpfr::mpreal>* mu, int* k, int kmax, int dim)
+void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const b, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim)
 {
 	// test LLL condition
 	LALA::lllGramRed(g,h,mu,*k,*k-1, dim);
@@ -464,8 +468,10 @@ void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpfr::mp
 	}
 }
 
-// integral lll
-void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpz_class>* d, std::valarray<mpz_class>* lambda, int* k, int kmax, int dim)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Integral LLL ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, int* const k, const int kmax, const int dim)
 {
 	// test LLL condition
 	LALA::lllGramRed(g,h,d,lambda,*k,*k-1, dim);
@@ -478,7 +484,7 @@ void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpz_clas
 	}
 }
 
-void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpz_class> *g, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpz_class>* d, std::valarray<mpz_class>* lambda, int k, int l, int dim)
+void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, const int k, const int l, const int dim)
 {
 	mpz_class lkl = (*lambda)[k*dim+l], dl = (*d)[l+1];
 	mpz_class aux(2*lkl);
@@ -500,12 +506,11 @@ void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpz_class> *g, boo
 		(*lambda)[k*dim+l] -= q * dl;
 		for(int i=0; i<=l-1; i++)
 			(*lambda)[k*dim+i] -= q*(*lambda)[l*dim+i];
-
 	}
 }
 
 
-void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpz_class>* d, std::valarray<mpz_class>* lambda, int k, int kmax, int dim)
+void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, const int k, const int kmax, const int dim)
 {
 	// swap h_k and h_{k-1}
 	if(h != nullptr)
@@ -541,9 +546,10 @@ void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, bo
 	(*d)[k] = b;
 }
 
-// mLLL
-
-void LALA::mlllBasisSwap(boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpfr::mpreal>* B, std::valarray<mpfr::mpreal>* mu, int k, int kmax, int dim, int nVectors)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Integral M-LLL /////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::mlllBasisSwap(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim, const int nVectors)
 {
 	// swap h_k and h_{k-1}
 	if(h != nullptr)
@@ -602,7 +608,7 @@ void LALA::mlllBasisSwap(boost::numeric::ublas::matrix<mpz_class>* b, boost::num
 	}
 }
 
-void LALA::mlllBasisRed(boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpfr::mpreal>* mu, int k, int l, int nVectors)
+void LALA::mlllBasisRed(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int nVectors)
 {
 	mpfr::mpreal mukl = (*mu)[k*nVectors+l];
 	mpfr::mpreal aux = mpfr::abs(mukl, MPFR_RNDN);
@@ -625,7 +631,7 @@ void LALA::mlllBasisRed(boost::numeric::ublas::matrix<mpz_class>* b, boost::nume
 	}
 }
 
-void LALA::mlllBasisTestCondition(boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* bStar, boost::numeric::ublas::matrix<mpz_class>* h, std::valarray<mpfr::mpreal>* B, std::valarray<mpfr::mpreal>* mu, int *k, int kmax, int dim, int nVectors)
+void LALA::mlllBasisTestCondition(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim, const int nVectors)
 {
 	// test LLL condition
 	LALA::mlllBasisRed(b, h, mu, *k, *k-1, nVectors);
@@ -638,7 +644,10 @@ void LALA::mlllBasisTestCondition(boost::numeric::ublas::matrix<mpz_class>* b, b
 	}
 }
 
-void LALA::shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h, boost::numeric::ublas::matrix<mpfr::mpreal>* p, boost::numeric::ublas::matrix<mpfr::mpreal>* q)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Short Vectors //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, boost::numeric::ublas::matrix<mpfr::mpreal>* const p, boost::numeric::ublas::matrix<mpfr::mpreal>* const q)
 {
 	// Fincke-Pohst preprocessing - see [CH] Algorithm 2.7.7
 
@@ -759,7 +768,7 @@ void LALA::shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix
 	}
 }
 
-unsigned long LALA::shortVectors(const boost::numeric::ublas::matrix<mpfr::mpreal>* q, mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* X)
+unsigned long LALA::shortVectors(const boost::numeric::ublas::matrix<mpfr::mpreal>* const q, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X)
 {
 	// given quadratic form q and an integer c, this algorithm outputs all vectors x with q(x) <= c
 	// see [CH] Algorithm 2.7.5
@@ -848,8 +857,87 @@ unsigned long LALA::shortVectors(const boost::numeric::ublas::matrix<mpfr::mprea
 
 // public functions
 
-// scalar product
-mpz_class LALA::scalarProduct(const std::valarray<mpz_class>* x, const std::valarray<mpz_class>* y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct)
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// Linear Independence //////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+bool LALA::linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* const vectorSystem)
+{
+	assert(vectorSystem->size() > 0);
+
+	// copy vectors into a matrix
+	unsigned int nVectors = vectorSystem->size(), dim = (*vectorSystem)[0].size();
+
+	boost::numeric::ublas::matrix<mpfr::mpreal> vectorSystemMatrix(dim, nVectors);
+	for(unsigned int i=0; i<nVectors; i++)
+		for(unsigned int j=0; j<dim; j++)
+			vectorSystemMatrix(j,i) = (*vectorSystem)[i][j].get_mpz_t();
+
+	// use gauss-bareiss for rank determination
+	return LALA::rank(&vectorSystemMatrix) == vectorSystem->size();
+}
+
+bool LALA::linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* const vectorSystem)
+{
+	// copy vectors into matrix
+	boost::numeric::ublas::matrix<mpz_class> m(vectorSystem[0].size(), vectorSystem->size());
+	for(unsigned int i=0; i<m.size2(); i++)
+		for(unsigned int j=0; j<m.size1(); j++)
+			m(j,i) = (*vectorSystem)[i][j];
+
+	// compute rank of the matrix
+	unsigned long rk = LALA::rank(&m);
+
+	if(rk < vectorSystem->size())
+		return false;
+	else
+		return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Element Of /////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+bool LALA::inLinearSpanZ(const std::vector<std::valarray<mpz_class> >* const b, const std::valarray<mpz_class>* const v)
+{
+	// create working copy and add v to the vectorSystem
+	std::vector<std::valarray<mpz_class> > vs((*b));
+	vs.push_back((*v));
+	return !LALA::linearlyIndependentZ(&vs);
+}
+
+bool LALA::elementOfLattice(const boost::numeric::ublas::matrix<mpq_class>* const m, const std::valarray<mpz_class>* const v, const unsigned int dim, boost::numeric::ublas::vector<mpq_class>* const mv)
+{
+	// see [HB] 3.4.1
+	unsigned int n = v->size();
+
+	// compute m*v
+	boost::numeric::ublas::vector<mpq_class> ublasV(n);
+	boost::numeric::ublas::matrix<mpq_class> boostM((*m));
+
+	for(unsigned int i=0; i<n; i++)
+		ublasV(i) = (*v)[i];
+
+	ublasV = boost::numeric::ublas::prod(boostM,ublasV);
+
+	if(mv != nullptr)
+		(*mv) = ublasV;
+
+	// the first dim coefficients must be integral
+	for(unsigned int i=0; i<dim; i++)
+		if(ublasV(i).get_den() != 1)
+			return false;
+
+	// all the other coefficients must be 0
+	for(unsigned int i=dim; i<n; i++)
+		if(ublasV(i) != 0)
+			return false;
+
+	return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// Public Scalar Products ////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+mpz_class LALA::scalarProduct(const std::valarray<mpz_class>* const x, const std::valarray<mpz_class>* const y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	mpz_class result = 0;
 
@@ -911,7 +999,7 @@ mpz_class LALA::scalarProduct(const std::valarray<mpz_class>* x, const std::vala
 	return result;
 }
 
-mpq_class LALA::scalarProduct(const std::valarray<mpq_class>* x, const std::valarray<mpq_class>* y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct)
+mpq_class LALA::scalarProduct(const std::valarray<mpq_class>* const x, const std::valarray<mpq_class>* const y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	mpq_class result = 0;
 
@@ -973,9 +1061,10 @@ mpq_class LALA::scalarProduct(const std::valarray<mpq_class>* x, const std::vala
 	return result;
 }
 
-
-// gram schmidt
-void LALA::gramSchmidt(std::vector<std::valarray<mpq_class> >* basis, const boost::numeric::ublas::symmetric_matrix<mpz_class>* g)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Gram-Schmidt ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::gramSchmidt(std::vector<std::valarray<mpq_class> >* const basis, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g)
 {
 	unsigned int dim = basis->size();
 
@@ -1012,81 +1101,10 @@ void LALA::gramSchmidt(std::vector<std::valarray<mpq_class> >* basis, const boos
 	(*basis) = vHut;
 }
 
-// linear independence
-bool LALA::linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* vectorSystem)
-{
-	assert(vectorSystem->size() > 0);
-
-	// copy vectors into a matrix
-	unsigned int nVectors = vectorSystem->size(), dim = (*vectorSystem)[0].size();
-
-	boost::numeric::ublas::matrix<mpfr::mpreal> vectorSystemMatrix(dim, nVectors);
-	for(unsigned int i=0; i<nVectors; i++)
-		for(unsigned int j=0; j<dim; j++)
-			vectorSystemMatrix(j,i) = (*vectorSystem)[i][j].get_mpz_t();
-
-	// use gauss-bareiss for rank determination
-	return LALA::rank(&vectorSystemMatrix) == vectorSystem->size();
-}
-
-bool LALA::linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* vectorSystem)
-{
-	// copy vectors into matrix
-	boost::numeric::ublas::matrix<mpz_class> m(vectorSystem[0].size(), vectorSystem->size());
-	for(unsigned int i=0; i<m.size2(); i++)
-		for(unsigned int j=0; j<m.size1(); j++)
-			m(j,i) = (*vectorSystem)[i][j];
-
-	// compute rank of the matrix
-	unsigned long rk = LALA::rank(&m);
-
-	if(rk < vectorSystem->size())
-		return false;
-	else
-		return true;
-}
-
-// element of linear span
-bool LALA::inLinearSpanZ(const std::vector<std::valarray<mpz_class> >* b, const std::valarray<mpz_class>* v)
-{
-	// create working copy and add v to the vectorSystem
-	std::vector<std::valarray<mpz_class> > vs((*b));
-	vs.push_back((*v));
-	return !LALA::linearlyIndependentZ(&vs);
-}
-
-bool LALA::elementOfLattice(const boost::numeric::ublas::matrix<mpq_class>* m, const std::valarray<mpz_class>* v, unsigned int dim, boost::numeric::ublas::vector<mpq_class>* mv)
-{
-	// see [HB] 3.4.1
-	unsigned int n = v->size();
-
-	// compute m*v
-	boost::numeric::ublas::vector<mpq_class> ublasV(n);
-	boost::numeric::ublas::matrix<mpq_class> boostM((*m));
-
-	for(unsigned int i=0; i<n; i++)
-		ublasV(i) = (*v)[i];
-
-	ublasV = boost::numeric::ublas::prod(boostM,ublasV);
-
-	if(mv != nullptr)
-		(*mv) = ublasV;
-
-	// the first dim coefficients must be integral
-	for(unsigned int i=0; i<dim; i++)
-		if(ublasV(i).get_den() != 1)
-			return false;
-
-	// all the other coefficients must be 0
-	for(unsigned int i=dim; i<n; i++)
-		if(ublasV(i) != 0)
-			return false;
-
-	return true;
-}
-
-// floating point LLL
-int LALA::lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeric::ublas::matrix<mpfr::mpreal>* h)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// FP-LLL /////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+int LALA::lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h)
 {
 	// the columns of b encode the base vectors b_1, ..., b_n
 	// b will be lll reduced - see [CH] Definition 2.6.1
@@ -1155,8 +1173,7 @@ int LALA::lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* b, boost::numeri
 	return 1;
 }
 
-// floating point mLLL
-unsigned int LALA::mlllBasis(boost::numeric::ublas::matrix<mpz_class>* b, boost::numeric::ublas::matrix<mpz_class>* h, boost::numeric::ublas::symmetric_matrix<mpz_class>* innerProduct)
+unsigned int LALA::mlllBasis(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpz_class>* const h, boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	// the columns of b encode a generating system
 	// b will be a lll reduced basis - see [CH] Algorithm 2.6.8
@@ -1256,7 +1273,7 @@ unsigned int LALA::mlllBasis(boost::numeric::ublas::matrix<mpz_class>* b, boost:
 	return rk;
 }
 
-int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g, boost::numeric::ublas::matrix<mpfr::mpreal>* h)
+int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h)
 {
 	// g is the gramian of a basis v_1, ..., v_n
 	// g will be lll reduced - see [CH] Definition 2.6.1
@@ -1317,8 +1334,10 @@ int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* g, boos
 	return 1;
 }
 
-// integral LLL
-int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::numeric::ublas::matrix<mpz_class>* h)
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// Integral LLL ////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h)
 {
 	// g is the gramian of a basis v_1, ..., v_n
 	// g will be lll reduced - see [CH] Definition 2.6.1
@@ -1383,8 +1402,10 @@ int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* g, boost::
 	return 1;
 }
 
-// short vectors
-unsigned long LALA::shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* g, mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class>> >* X)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Short Vectors //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+unsigned long LALA::shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class>> >* const X)
 {
 	unsigned int n = g->size1();
 
@@ -1432,8 +1453,10 @@ unsigned long LALA::shortVectors(const boost::numeric::ublas::symmetric_matrix<m
 	return nx;
 }
 
-// basis from generating set
-void LALA::basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> >* gen, std::vector<std::valarray<mpz_class> >* basis)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Basis from Generating Set //////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> >* const gen, std::vector<std::valarray<mpz_class> >* const basis)
 {
 	// algorithm to compute a lattice basis from a given generating system
 	// serial algorithm with pruning
@@ -1536,8 +1559,10 @@ void LALA::basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> 
 
 // matrix algorithms
 
-// gauss
-void LALA::echelonForm(boost::numeric::ublas::matrix<mpq_class>* m, std::vector<unsigned int>* basisExtension)
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// Gauss /////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::echelonForm(boost::numeric::ublas::matrix<mpq_class>* const m, std::vector<unsigned int>* const basisExtension)
 {
 	unsigned int nCols = m->size2(), nRows = m->size1();
 	unsigned int lead = 0;
@@ -1629,16 +1654,17 @@ void LALA::echelonForm(boost::numeric::ublas::matrix<mpq_class>* m, std::vector<
 	}
 }
 
-// gauss
-void LALA::echelonFormConst(const boost::numeric::ublas::matrix<mpq_class>* m, std::vector<unsigned int>* basisExtension)
+void LALA::echelonFormConst(const boost::numeric::ublas::matrix<mpq_class>* const m, std::vector<unsigned int>* const basisExtension)
 {
 	// create working copy
 	boost::numeric::ublas::matrix<mpq_class> copyM((*m));
 	LALA::echelonForm(&copyM, basisExtension);
 }
 
-// rank
-unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpfr::mpreal>* m)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Rank ///////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpfr::mpreal>* const m)
 {
 	unsigned int nCols = m->size2(), nRows = m->size1();
 	unsigned long rk, dim;
@@ -1703,7 +1729,7 @@ unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpfr::mpreal>* m)
 	return rk;
 }
 
-unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpq_class>* m)
+unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpq_class>* const m)
 {
 	unsigned int nCols = m->size2(), nRows = m->size1();
 	unsigned long rk, dim;
@@ -1767,14 +1793,17 @@ unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpq_class>* m)
 	return rk;
 }
 
-unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpz_class>* m)
+unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpz_class>* const m)
 {
 	// copy matrix into mpq matrix
 	boost::numeric::ublas::matrix<mpq_class> copyM((*m));
 	return LALA::rank(&copyM);
 }
 
-void LALA::basisExtensionZ(boost::numeric::ublas::matrix<mpq_class>* m)
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// Basis Extensions //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::basisExtensionZ(boost::numeric::ublas::matrix<mpq_class>* const m)
 {
 	// matrix m should have the correct dimensions (filled with 0 cols)
 	assert(m->size1() == m->size2());
@@ -1797,7 +1826,7 @@ void LALA::basisExtensionZ(boost::numeric::ublas::matrix<mpq_class>* m)
 	}
 }
 
-void LALA::orthogonalComplement(const std::vector<std::valarray<mpq_class> >* latticeBasis, std::vector<std::valarray<mpq_class> >* orthCompl, const boost::numeric::ublas::symmetric_matrix<mpz_class>* g)
+void LALA::orthogonalComplement(const std::vector<std::valarray<mpq_class> >* const latticeBasis, std::vector<std::valarray<mpq_class> >* const orthCompl, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g)
 {
 	unsigned int rk = latticeBasis->size();
 	unsigned int dim = latticeBasis->at(0).size();
@@ -1832,8 +1861,10 @@ void LALA::orthogonalComplement(const std::vector<std::valarray<mpq_class> >* la
 	(*orthCompl) = std::vector<std::valarray<mpq_class> >(complement.begin()+rk, complement.end());
 }
 
-// inversion
-void LALA::inverse(const boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* a, boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* b)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Matrix Inversion ///////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void LALA::inverse(const boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* const a, boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* const b)
 {
 	// for an upper triangular matrix A with A_ii = 1 for all i, we have: A = I + N, with N nilpotent, thus
 	// A^-1 = (I+N)^-1 = I + sum_{i=1}^n N^i, where n is the nilpotent index
@@ -1874,7 +1905,7 @@ void LALA::inverse(const boost::numeric::ublas::triangular_matrix<mpfr::mpreal, 
 		(*b)(i,i) = 1;
 }
 
-bool LALA::inverse(const boost::numeric::ublas::matrix<mpfr::mpreal>* a, boost::numeric::ublas::matrix<mpfr::mpreal>* b)
+bool LALA::inverse(const boost::numeric::ublas::matrix<mpfr::mpreal>* const a, boost::numeric::ublas::matrix<mpfr::mpreal>* const b)
 {
 	// create a working copy of the input
 	boost::numeric::ublas::matrix<mpfr::mpreal> A(*a);
@@ -1895,7 +1926,7 @@ bool LALA::inverse(const boost::numeric::ublas::matrix<mpfr::mpreal>* a, boost::
 	return true;
 }
 
-bool LALA::inverse(const boost::numeric::ublas::matrix<mpq_class>* a, boost::numeric::ublas::matrix<mpq_class>* b)
+bool LALA::inverse(const boost::numeric::ublas::matrix<mpq_class>* const a, boost::numeric::ublas::matrix<mpq_class>* const b)
 {
 	// create a working copy of the input
 	boost::numeric::ublas::matrix<mpq_class> A(*a);
@@ -1916,8 +1947,10 @@ bool LALA::inverse(const boost::numeric::ublas::matrix<mpq_class>* a, boost::num
 	return true;
 }
 
-// determinant
-mpfr::mpreal LALA::det(const boost::numeric::ublas::matrix<mpfr::mpreal>* m)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Determinant ////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+mpfr::mpreal LALA::det(const boost::numeric::ublas::matrix<mpfr::mpreal>* const m)
 {
     // create a working copy of the input
     boost::numeric::ublas::matrix<mpfr::mpreal> copyM((*m));
@@ -1938,14 +1971,14 @@ mpfr::mpreal LALA::det(const boost::numeric::ublas::matrix<mpfr::mpreal>* m)
     return det;
 }
 
-mpfr::mpreal LALA::det(const boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* m)
+mpfr::mpreal LALA::det(const boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const m)
 {
 	// create working copy
 	boost::numeric::ublas::matrix<mpfr::mpreal> copyM((*m));
     return LALA::det(&copyM);
 }
 
-mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::matrix<mpz_class>* m)
+mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::matrix<mpz_class>* const m)
 {
 	assert(m->size1() == m->size2());
 	unsigned int dim = m->size1();
@@ -2004,7 +2037,7 @@ mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::matrix<mpz_class>* 
 	return s * copyM(dim-1,dim-1);
 }
 
-mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::symmetric_matrix<mpz_class>* m)
+mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const m)
 {
 	assert(m->size1() == m->size2());
 
