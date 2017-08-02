@@ -17,7 +17,6 @@
 * @bug 	No known bugs.
 *
 * @copyright	Gilles Bellot @ TU Dortmund
-*
 ****************************************************************************************/
 
 // INCLUDES /////////////////////////////////////////////////////////////////////////////
@@ -37,13 +36,13 @@ namespace util
 	 *
 	 * Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.<br>
      * See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further information.
-	 */
+	*/
 	template<class T>
 	class Expected
 	{
 	protected:
 		/*!
-		*   @union A union to define an Expected.
+		*   @union Nameless Union to define an Expected.
 		*
 		*   There is either a valid result, or an error message stored in the exception pointer.
 		*/
@@ -277,7 +276,7 @@ namespace util
 	 *
 	 * Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.<br>
 	    * See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further information.
-	 */
+	*/
 	template<>
 	class Expected<void>
 	{

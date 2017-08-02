@@ -1,3 +1,12 @@
+/************************************************************************************//**
+* @author	Gilles Bellot
+* @file		log.cpp
+*
+* @brief	Implements the file logger.
+*
+* @copyright	Gilles Bellot @ TU Dortmund
+****************************************************************************************/
+
 // INCLUDES /////////////////////////////////////////////////////////////////////////////
 
 // bell0bytes
@@ -6,6 +15,12 @@
 namespace util
 {
 	// FUNCTIONS ////////////////////////////////////////////////////////////////////////////
+	/*!
+	 *   @brief Opens the file on the hard drive specified by the parameter filename.
+	 *
+	 *   @param filename A reference to a constant string specifying the desired file to open as output stream.
+	 *   @return bool (true if and only if the output stream was opened successfully)
+	 */
 	bool FileLogPolicy::openOutputStream(const std::string& filename)
 	{
 		// try to open the file
@@ -21,11 +36,21 @@ namespace util
 		return true;
 	}
 
+	/*!
+	*   @brief Closes the file.
+	*   @return void
+	*/
 	void FileLogPolicy::closeOutputStream()
 	{
 		outputStream.close();
 	}
 
+	/*!
+	*   @brief Writes a string to the output stream.
+	*
+	*   @param msg A reference to a constant string to write to the output stream.
+	*   @return void
+	*/
 	void FileLogPolicy::write(const std::string& msg)
 	{
 		// add the message to the stream
