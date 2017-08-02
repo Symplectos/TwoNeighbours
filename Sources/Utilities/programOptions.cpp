@@ -1,3 +1,13 @@
+/************************************************************************************//**
+ * @author	Gilles Bellot
+ * @file	programOptions.cpp
+ * @date	3/11/2015 - Dortmund - Germany
+ *
+ * @brief	Implementation of the ProgramOptions class defined in programOptions.h
+ *
+ * @copyright	Gilles Bellot @ TU Dortmund
+ ****************************************************************************************/
+
 #include "../../Headers/Utilities/programOptions.h"
 #include "../../Headers/Multi-Precision/mpreal.h"
 #include "../../Headers/Utilities/serviceLocator.h"
@@ -9,15 +19,48 @@
 
 namespace util
 {
+/*!
+ *   @brief The constructor.
+ *
+ *   @section Description
+ *
+ *   The constructor sets all program options to their default value as follows:
+ *    - verboseLevel: 0
+ *    - debugMode: false
+ *    - useCUDA: false
+ *    - outputPrec: 10
+ *    - mpfrPrec: 10
+ *
+ *	 It then creates the program options, based on the command line parameters given, by calling the createCommandLineParameters function.<br>
+ *	 If an error is encountered, the constructor throws a std::runtime_error exception.
+ *
+ *   @param argc The number of arguments given.
+ *   @param argv The actual arguments, used to create the program options.
+ */
 ProgramOptions::ProgramOptions(int argc, char** argv) : verboseLevel(0), debugMode(false), useCUDA(false), outputPrec(10), mpfrPrec(10)
 {
 	if(!this->createCommandLineParameters(argc, argv).wasSuccessful())
 		throw std::runtime_error("Unable to create program options!");
 }
 
+/*!
+ *   @brief The destructor actually has nothing to do. Shared pointer ftw!
+ */
 ProgramOptions::~ProgramOptions()
 { }
 
+/*!
+ *   @brief Creates the program options.
+ *
+ *   @section Description
+ *
+ *   Using boost::program_options, this function creates all the available options to be displayed by passing the "--help" parameter.
+ *   At program start, the program options are created and set according to the specified command line parameters.
+ *
+ *   @param argc The number of arguments given.
+ *   @param argv The actual arguments, used to create the program options.
+ *   @return Expected<void> As always, the Expected is empty if everything went smoothly, else, a nasty exception is safely stored inside the Expected.
+ */
 Expected<void> ProgramOptions::createCommandLineParameters(int argc, char** argv)
 {
 	try

@@ -82,12 +82,12 @@ public:
 ////////////////////////////// Main Function ////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /*!
-*   @brief The main entry point of the application.
-*
-*   @param argc The number of arguments given.
-*   @param argv The actual arguments, used to create the program options.
-*   @return int (0: no error; -1 error)
-*/
+ *   @brief The main entry point of the application.
+ *
+ *   @param argc The number of arguments given.
+ *   @param argv The actual arguments, used to create the program options.
+ *   @return int (0: no error; -1 error)
+ */
 int main(int argc, char** argv)
 {
 	TwoNeighbours tn;
@@ -115,14 +115,14 @@ int main(int argc, char** argv)
 ////////////////////////////// Run the Algorithm/////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /*!
-*   @brief This function runs the actual program.
-*
-*   First, the input gram matrix is read from the console or a file.<br>
-*   Then a lattice is created from the gramian and relevant properties of the lattice are computed.<br>
-*   Once all that is done, the two neighbours algorithm is started.
+ *   @brief This function runs the actual program.
+ *
+ *   First, the input gram matrix is read from the console or a file.<br>
+ *   Then a lattice is created from the gramian and relevant properties of the lattice are computed.<br>
+ *   Once all that is done, the two neighbours algorithm is started.
 
-*   @return An empty Expected<void>, or a filled one with an exception if an error occurred.
-*/
+ *   @return An empty Expected<void>, or a filled one with an exception if an error occurred.
+ */
 util::Expected<void> TwoNeighbours::run()
 {
 	// read gram matrix of starting lattice
@@ -145,22 +145,22 @@ util::Expected<void> TwoNeighbours::run()
 ////////////////////////////// Initialization ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /*!
-*   @brief The constructor of the TwoNeighbours class. The constructor sets both of its boolean members to false.
-*/
+ *   @brief The constructor of the TwoNeighbours class. The constructor sets both of its boolean members to false.
+ */
 TwoNeighbours::TwoNeighbours() : hasStarted(false), hasFileLogger(false)
 {
 
 }
 
 /*!
-*   @brief This function initialises the program.
-*
-*   It creates the file logger and the program options based on the given arguments.
-*
-*   @param argc The number of arguments given.
-*   @param argv The actual arguments given via the console.
-*   @return An empty Expected<void>, or a filled one with an exception if an error occurred.
-*/
+ *   @brief This function initialises the program.
+ *
+ *   It creates the file logger and the program options based on the given arguments.
+ *
+ *   @param argc The number of arguments given.
+ *   @param argv The actual arguments given via the console.
+ *   @return An empty Expected<void>, or a filled one with an exception if an error occurred.
+ */
 util::Expected<void> TwoNeighbours::init(int argc, char** argv)
 {
 	// register file logger service
@@ -199,12 +199,12 @@ util::Expected<void> TwoNeighbours::init(int argc, char** argv)
 ////////////////////////////// Starting Log /////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /*!
-*   @brief This function used the file logger to print a starting log.
-*
-*   Information about the CPU, the GPU and the loaded libraries are printed.
-*
-*   @return void
-*/
+ *   @brief This function used the file logger to print a starting log.
+ *
+ *   Information about the CPU, the GPU and the loaded libraries are printed.
+ *
+ *   @return void
+ */
 void TwoNeighbours::printStartingLog()
 {
 	// get CPU info and write starting message
@@ -288,20 +288,20 @@ void TwoNeighbours::printStartingLog()
 ////////////////////////////// Shutdown /////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /*!
-*   @brief The destructor destroys! But in this case, it simply does nothing.
-*/
+ *   @brief The destructor destroys! But in this case, it simply does nothing.
+ */
 TwoNeighbours::~TwoNeighbours()
 {}
 
 /*!
-*   @brief This function shuts down the application.
-*
-*   It tries to clean up everything and to free used memory.<br>
-*   It also handles exceptions: If an error is encountered, the program still tries to clean up and prints the actual error message that lead to the abortion.
-*
-*   @param result A pointer to a void Expected which stores an exception if an error was encountered. If this is NULL, then everything went smoothly.
-*   @return void
-*/
+ *   @brief This function shuts down the application.
+ *
+ *   It tries to clean up everything and to free used memory.<br>
+ *   It also handles exceptions: If an error is encountered, the program still tries to clean up and prints the actual error message that lead to the abortion.
+ *
+ *   @param result A pointer to a void Expected which stores an exception if an error was encountered. If this is NULL, then everything went smoothly.
+ *   @return void
+ */
 void TwoNeighbours::shutdown(util::Expected<void>* result)
 {
 	// check for error message
