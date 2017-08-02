@@ -57,8 +57,10 @@
 namespace mathematics
 {
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
-
-// helper functions to use BOOST uBLAS matrices
+/** \addtogroup Mathematics
+ *  @{
+ */
+//! This class basically consists of helper functions to use BOOST uBLAS matrices.
 template<class T>
 class MatrixHelper
 {
@@ -66,38 +68,38 @@ private:
 
 public:
 	// elementary column operations
-	static void colSwap(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j);				//!< swap columns i and j
-	static void colAddMultiple(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j, T t);	//!< column i = column i + t * column j
-	static void colMultiply(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const T t);					//!< col i = t * col i
-	static std::valarray<T> getColumn(const boost::numeric::ublas::matrix<T>* const m, const unsigned int i);				//!< returns the i-th column of m
-	static std::valarray<T> getColumn(const boost::numeric::ublas::symmetric_matrix<T>* const m, const unsigned int i);		//!< returns the i-th column of m
+	static void colSwap(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j);				//!< Swaps the i-th and j-th column of the matrix m.
+	static void colAddMultiple(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j, T t);	//!< Sets: \f$ column_i = column_i + t \cdot column_j\f$.
+	static void colMultiply(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const T t);					//!< Sets: \f$ col_i = t \cdot col_i\f$.
+	static std::valarray<T> getColumn(const boost::numeric::ublas::matrix<T>* const m, const unsigned int i);				//!< Returns the i-th column of the matrix m.
+	static std::valarray<T> getColumn(const boost::numeric::ublas::symmetric_matrix<T>* const m, const unsigned int i);		//!< Returns the i-th column of the matrix m.
 
 	// elementary row operations
-	static void rowAddMultiple(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m, const unsigned int i, const unsigned int j, T t);	//!< row i = row i + T * row j
-	static void rowMultiply(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m, const unsigned int i, const T t);						//!< row i *= t
-	static void rowAddMultiple(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j, const T t);										//!< row i = row i + t * row j
+	static void rowAddMultiple(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m, const unsigned int i, const unsigned int j, T t);	//!< Sets: \f$ row_i = row_i + t \cdot row_j\f$.
+	static void rowMultiply(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m, const unsigned int i, const T t);						//!< Sets: \f$ row i = t \cdot row_i\f$.
+	static void rowAddMultiple(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j, const T t);										//!< Sets: \f$ row_i = row_i + t \cdot row_j\f$.
 
 	// base change for gram matrices
-	static void baseSwap(boost::numeric::ublas::symmetric_matrix<T>* const g, unsigned int i, unsigned int j);							//!< swap base vectors i and j
-	static void baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>* const g, const unsigned int i, const unsigned int j, T t);	//!< b_i = b_i + q * b_j
+	static void baseSwap(boost::numeric::ublas::symmetric_matrix<T>* const g, unsigned int i, unsigned int j);							//!< Swaps the i-th and j-th base vector.
+	static void baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>* const g, const unsigned int i, const unsigned int j, T t);	//!< Sets: \f$b_i = b_i + q \cdot b_j\f$.
 
 	// general utility functions for base or gram matrices
-	static void baseDelZeroes(boost::numeric::ublas::matrix<T>* const b, const unsigned int rk);								//!< delete zero columns of m
-	static void setColumn(boost::numeric::ublas::matrix<T>* const b, const std::valarray<T>* const col, const unsigned int i);	//!< sets column i of m to col
+	static void baseDelZeroes(boost::numeric::ublas::matrix<T>* const b, const unsigned int rk);								//!< Deletes zero columns of m.
+	static void setColumn(boost::numeric::ublas::matrix<T>* const b, const std::valarray<T>* const col, const unsigned int i);	//!< Sets the i-th column of m to col.
 
 	// check properties
-	static bool isOrthogonal(const boost::numeric::ublas::matrix<T>* const m, const boost::numeric::ublas::symmetric_matrix<T>* const g = nullptr);	//!< returns true iff m^t*m=id or m^t*g*m=g
+	static bool isOrthogonal(const boost::numeric::ublas::matrix<T>* const m, const boost::numeric::ublas::symmetric_matrix<T>* const g = nullptr);	//!< Returns true if and only if \f$m^t \cdot m=id\f$ or \f$m^t \cdot g \cdot m=g\f$.
 
 	// compare
-	static bool areEqual(const boost::numeric::ublas::matrix<T>* const m1, const boost::numeric::ublas::matrix<T>* const m2);	//!< returns true iff m1 == m2
+	static bool areEqual(const boost::numeric::ublas::matrix<T>* const m1, const boost::numeric::ublas::matrix<T>* const m2);	//!< Returns true if and if both matrices are equal.
 
 	// input and output
-	static void printMatrix(const boost::numeric::ublas::matrix<T>* const m);											//!< print matrix in tn format
-	static void printMatrix(const boost::numeric::ublas::symmetric_matrix<T>* const m);									//!< print symmetric matrix in tn format
-	static void printMatrix(const boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m); 	//!< print upper triangular matrx in tn format
-	static void printDiagonalVector(const std::valarray<T>* const d);													//!< print diagonal vector
+	static void printMatrix(const boost::numeric::ublas::matrix<T>* const m);											//!< Prints a matrix in the old TN format.
+	static void printMatrix(const boost::numeric::ublas::symmetric_matrix<T>* const m);									//!< Prints a symmetric matrix in the old TN format.
+	static void printMatrix(const boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m); 	//!< Prints an upper triangular matrix in the old TN format.
+	static void printDiagonalVector(const std::valarray<T>* const d);													//!< Prints a diagonal vector.
 };
-
+/** @}*/
 
 // IMPLEMENTATION ///////////////////////////////////////////////////////////////////////
 

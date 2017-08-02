@@ -1,6 +1,6 @@
 #pragma once
 
-/**************************************************************************************
+/*************************************************************************************
 * Author: Gilles Bellot
 * Date:  13/09/2016 - Lenningen - Luxembourg
 *
@@ -16,15 +16,17 @@
 #include "../../Headers/Utilities/log.h"
 #include "../../Headers/Utilities/programOptions.h"
 
+
 namespace util
 {
 // CLASSES //////////////////////////////////////////////////////////////////////////////
 /** \addtogroup Utility
  *  @{
  */
-//! Registers and provides services to the entire program.
-
-//! See <a href="http://gameprogrammingpatterns.com/service-locator.html">Game Programming Patterns</a>, by R. Nystrom for further details.
+/*! \brief Registers and provides services to the entire program.
+ *
+ *  See <a href="http://gameprogrammingpatterns.com/service-locator.html">Game Programming Patterns</a>, by R. Nystrom for further details.
+*/
 class ServiceLocator
 {
 private:

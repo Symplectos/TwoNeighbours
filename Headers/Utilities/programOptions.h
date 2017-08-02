@@ -26,7 +26,9 @@ namespace util
  *  @{
  */
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
-//! The ProgramOptions define the behaviour of TwoNeighbours.
+/*! \brief The ProgramOptions define the behaviour of TwoNeighbours.
+ *
+ */
 class ProgramOptions
 {
 private:

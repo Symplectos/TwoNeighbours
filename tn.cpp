@@ -1,49 +1,38 @@
-/*
- * File:   hn.cpp
- * Author: Gilles Bellot
- * Date:   23/07/2012 - Dortmund - Germany
- * Description:
- */
 /*!
- * \mainpage TwoNeighbours is an attempt to rewrite TN and HN in modern C++
  *
- * Currently working on: Algorithms for Group Operations.
+ *  @mainpage
+ *  TwoNeighbours is an attempt to rewrite the two neighbours program (TN) by B. Hemkemeier and the hermitian neighbours program (HN) by A. Schiemann in modern C++.
+ *  @author		Gilles Bellot
+ *  @version	0.0.0.1
+ *  @pre		GMP, MPFR, BOOST and CUDA must be installed.
+ *  @bug		No known bugs.
+ *  @date		01/08/2017 - Dortmund - Germany
+ *  @section 	History
  *
- * History:
- * - 24/07/2012: program options added
- * - 25/07/2012: mpfr precision can now be set with --precision arg
- * - 22/01/2013: new timer added
- * - 22/03/2013: mpfr is now thread safe
- * - 25/04/2014: added crude console menu functionality
- * - 02/11/2015: tabula rasa
- * - 02/11/2015: added openMP support
- * - 06/10/2016: tabula rasa
- * - 07/10/2016: added file logger service
- * - 13/10/2016: program options added
- * - 01/08/2017: tabula rasa
- * - 01/08/2017: Expected class for better error handling was added (expected.h)
- * - 01/08/2017: added a service locator (serviceLocator.h)
- * - 01/08/2017: file logger service was added (log.h)
- * - 01/08/2017: program options were added (programOptions.h)
- * - 01/08/2017: support for boost matrices was added (matrix.h)
- * - 01/08/2017: linear algebra class added (linearAlgebra.h), most important algorithms: LLL and short vectors
+ * - 02/08/2017: changed comment structure to allow for automatic documentation generation by Doxygen
  * - 01/08/2017: general lattice class was added (lattice.h)
+ * - 01/08/2017: linear algebra class added (linearAlgebra.h), most important algorithms: LLL and short vectors
+ * - 01/08/2017: support for boost matrices was added (matrix.h)
+ * - 01/08/2017: program options were added (programOptions.h)
+ * - 01/08/2017: file logger service was added (log.h)
+ * - 01/08/2017: added a service locator (serviceLocator.h)
+ * - 01/08/2017: Expected class for better error handling was added (expected.h)
+ * - 01/08/2017: tabula rasa
+ *
+ * @copyright	Gilles Bellot @ TU Dortmund
  */
 
-// DOXYGEN STUFF ////////////////////////////////////////////////////////////////////////
-/** \defgroup Core
- *  The core, or main driver classes for TwoNeighbours.
- *  \defgroup Utility
- *  Utility classes are nice little helper classes to make life a tiny little bit easier.
+/*! @file tn.cpp
+ *  @brief The main driver for two neighbours.
+ *
+ *  This file contains the TwoNeighbours class which drives the entire application.
+ *
+ *  @author Gilles Bellot
+ *  @bug 	No known bugs.
+ *
  */
 
 // INCLUDES /////////////////////////////////////////////////////////////////////////////
-
-// multi-precision numbers
-#include <gmp.h>											// the GNU MP libraries
-#include <gmpxx.h>
-#include <mpfr.h>											// the GNU MPFR library
-#include "Headers/Multi-Precision/mpreal.h"					// GNU MPFR C++ wrapper by Pavel Holoborodko
 
 // boost ublas
 #include <boost/numeric/ublas/io.hpp>						// input and output for ublas objects
@@ -52,40 +41,38 @@
 // CUDA includes
 #include <cuda_runtime.h>									// cuda runtim library
 
-// bell0bytes includes
-
-// util
+// bell0bytes util
 #include "Headers/Utilities/serviceLocator.h"				// service locator
 #include "Headers/Utilities/programOptions.h"				// program options
 #include "Headers/Utilities/expected.h"						// expected error handling
 
-// mathematics
-//#include "Headers/Mathematics/matrix.h"					// matrix helper
-#include "Headers/Mathematics/linearAlgebra.h"				// linear algebra algorithms
+// bell0bytes mathematics
 #include "Headers/Mathematics/lattice.h"					// definition of lattices
 
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
-/** \addtogroup Core
- *  The core, or main driver classes for TwoNeighbours.
- *  @{
+
+/*!
+ * @brief Main driver for the two neighbours program.
+ *
+ * At initialisation, this class creates and registers all the services.<br>
+ * This class also handles exceptions and tries to clean up and print the error message if something unexpected happens.
  */
-//!Driver class.
 class TwoNeighbours
 {
 private:
-	bool hasStarted;						//!< True if and only if the application was successfuly started.
+	bool hasStarted;						//!< True if and only if the application was successfully started.
 	bool hasFileLogger;						//!< True if and only if a file logger is available.
 
-	void printStartingLog();				//!< Prints a starting log with CPU and GPU information.
-
+	void printStartingLog();				// prints a starting log with CPU and GPU information
 
 public:
 	// constructor
-	TwoNeighbours();						//!< The default constructor sets the two member booleans to false and calls the init function.
-	~TwoNeighbours();						//!< The destructor destroys.
+	TwoNeighbours();						// the default constructor sets the two member booleans to false and calls the init function
+	~TwoNeighbours();						// the destructor destroys
 
-	util::Expected<void> init(int argc, char** argv);		//!< Initializes the application; creates and registers services.
-	void shutdown(util::Expected<void>* result = NULL);		//!< Releases memory and shuts the application down. Reports error if the game was shut down by an error.
+	util::Expected<void> init(int argc, char** argv);		// initialises the application; creates and registers services
+	util::Expected<void> run();								// runs the two neighbour algorithm
+	void shutdown(util::Expected<void>* result = NULL);		// releases memory and shuts the application down, reports error if the game was shut down by an error
 
 };
 
@@ -94,7 +81,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Main Function ////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-//! The main entry point for TwoNeighbours.
+/*!
+*   @brief The main entry point of the application.
+*
+*   @param argc The number of arguments given.
+*   @param argv The actual arguments, used to create the program options.
+*   @return int (0: no error; -1 error)
+*/
 int main(int argc, char** argv)
 {
 	TwoNeighbours tn;
@@ -102,19 +95,10 @@ int main(int argc, char** argv)
 	if(initialization.wasSuccessful())
 	{
 		// run HN
-
-		// read gram matrix of starting lattice
-		boost::numeric::ublas::symmetric_matrix<mpz_class> A(1,1);
-		std::cin >> A;
-
-		// create lattice from gramian
-		mathematics::Lattice L(&A);
-
-		// print starting lattice
-		L.print(util::ServiceLocator::getProgOpts()->verboseLevel);
+		util::Expected<void> result = tn.run();
 
 		// shut down
-		tn.shutdown();
+		tn.shutdown(&result);
 
 		// return success
 		return 0;
@@ -126,15 +110,57 @@ int main(int argc, char** argv)
 		return -1;
 	}
 }
-/** @}*/
+
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// Run the Algorithm/////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/*!
+*   @brief This function runs the actual program.
+*
+*   First, the input gram matrix is read from the console or a file.<br>
+*   Then a lattice is created from the gramian and relevant properties of the lattice are computed.<br>
+*   Once all that is done, the two neighbours algorithm is started.
+
+*   @return An empty Expected<void>, or a filled one with an exception if an error occurred.
+*/
+util::Expected<void> TwoNeighbours::run()
+{
+	// read gram matrix of starting lattice
+	boost::numeric::ublas::symmetric_matrix<mpz_class> A(1,1);
+	std::cin >> A;
+
+	// create lattice from gramian
+	mathematics::Lattice L(&A);
+
+	// print starting lattice
+	L.print(util::ServiceLocator::getProgOpts()->verboseLevel);
+
+	// start the actual algorithm
+
+	// return success
+	return { };
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Initialization ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+*   @brief The constructor of the TwoNeighbours class. The constructor sets both of its boolean members to false.
+*/
 TwoNeighbours::TwoNeighbours() : hasStarted(false), hasFileLogger(false)
 {
 
 }
 
+/*!
+*   @brief This function initialises the program.
+*
+*   It creates the file logger and the program options based on the given arguments.
+*
+*   @param argc The number of arguments given.
+*   @param argv The actual arguments given via the console.
+*   @return An empty Expected<void>, or a filled one with an exception if an error occurred.
+*/
 util::Expected<void> TwoNeighbours::init(int argc, char** argv)
 {
 	// register file logger service
@@ -172,7 +198,13 @@ util::Expected<void> TwoNeighbours::init(int argc, char** argv)
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Starting Log /////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-// write start log
+/*!
+*   @brief This function used the file logger to print a starting log.
+*
+*   Information about the CPU, the GPU and the loaded libraries are printed.
+*
+*   @return void
+*/
 void TwoNeighbours::printStartingLog()
 {
 	// get CPU info and write starting message
@@ -255,9 +287,21 @@ void TwoNeighbours::printStartingLog()
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Shutdown /////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+*   @brief The destructor destroys! But in this case, it simply does nothing.
+*/
 TwoNeighbours::~TwoNeighbours()
 {}
 
+/*!
+*   @brief This function shuts down the application.
+*
+*   It tries to clean up everything and to free used memory.<br>
+*   It also handles exceptions: If an error is encountered, the program still tries to clean up and prints the actual error message that lead to the abortion.
+*
+*   @param result A pointer to a void Expected which stores an exception if an error was encountered. If this is NULL, then everything went smoothly.
+*   @return void
+*/
 void TwoNeighbours::shutdown(util::Expected<void>* result)
 {
 	// check for error message
@@ -288,5 +332,4 @@ void TwoNeighbours::shutdown(util::Expected<void>* result)
 	// no error -> clean up and shut down normally
 	util::ServiceLocator::getFileLogger()->print<util::SeverityType::info>("TwoNeighbours was successfully shut down!");
 }
-
 

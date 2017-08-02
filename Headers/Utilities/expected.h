@@ -1,11 +1,22 @@
 #pragma once
 
-/****************************************************************************************
-* Author:	Gilles Bellot
-* Date:		01/07/2017 - Dortmund - Germany
+/************************************************************************************//**
+* @author	Gilles Bellot
+* @file		expected.h
+* @date		01/07/2017 - Dortmund - Germany
 *
-* Desc:		functional error and exception handling
-*			based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++
+* @brief	Functional error and exception handling.
+*
+* @section Description
+* Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.<br>
+* See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further details.
+*
+* @section History
+*
+* @version	1.0.2.0
+* @bug 	No known bugs.
+*
+* @copyright	Gilles Bellot @ TU Dortmund
 *
 ****************************************************************************************/
 
@@ -20,34 +31,57 @@
 
 namespace util
 {
-/** \addtogroup Utility
- *  @{
- */
 	// CLASSES //////////////////////////////////////////////////////////////////////////////
-
-	//! The Expected class for advanced error and exception handling.
-
-	//! Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.
-	//! See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further information.
+	/*!
+	 * @brief The Expected class for advanced error and exception handling.
+	 *
+	 * Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.<br>
+     * See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further information.
+	 */
 	template<class T>
 	class Expected
 	{
 	protected:
+		/*!
+		*   @union A union to define an Expected.
+		*
+		*   There is either a valid result, or an error message stored in the exception pointer.
+		*/
 		union
 		{
 			T result;							//!< The expected result.
 			std::exception_ptr spam;			//!< The error message if no result could be computed.
-		};
+		};										//!< The union.
 
 		bool gotResult;							//!< True if and only if a valid result is available.
-		Expected() : gotResult(false) {}		//!< A simple protected constructor.
+
+		/*!
+		*   @brief Simple default empty constructor.
+		*/
+		Expected() : gotResult(true) {}			// a simple protected constructor
 
 	public:
 		// constructors and destructor
-		Expected(const T& r) : result(r), gotResult(true) {}		//!< Creates an Expected with a valid result.
-		Expected(T&& r) : result(std::move(r)), gotResult(true) {}	//!< The move constructor when given a valid result.
 
-		//! The copy constructor.
+		/*!
+		*   @brief Creates an Expected from a valid result.
+		*
+		*   @param r A result of type T, passed by reference.
+		*/
+		Expected(const T& r) : result(r), gotResult(true) {}
+
+		/*!
+		*   @brief "Moves" an Expected from a valid result.
+		*
+		*   @param r Address of a reference to a valid result of type T
+		*/
+		Expected(T&& r) : result(std::move(r)), gotResult(true) {}
+
+		/*!
+		*   @brief A copy constructor.
+		*
+		*   @param e A reference to the constant Expected to be copied.
+		*/
 		Expected(const Expected& e) : gotResult(e.gotResult)
 		{
 			if (gotResult)
@@ -55,7 +89,12 @@ namespace util
 			else
 				new(&spam) std::exception_ptr(e.spam);
 		}
-		//! Move constructor when given another Expected.
+
+		/*!
+		*   @brief Moves from another Expected.
+		*
+		*   @param e The address of a reference to an Expected.
+		*/
 		Expected(Expected&& e) : gotResult(e.gotResult)
 		{
 			if (gotResult)
@@ -63,9 +102,18 @@ namespace util
 			else
 				new(&spam) std::exception_ptr(std::move(e.spam));
 		}
-		~Expected() {}												//!< The destructor destroys!
 
-		//! Swaps two Expected.
+		/*!
+		*   @brief An empty destructor.
+		*/
+		~Expected() {}
+
+		/*!
+		*   @brief Swaps two Expected.
+		*
+		*   @param e The reference to the Expected to swap with.
+		*   @return void
+		*/
 		void swap(Expected& e)
 		{
 			if (gotResult)
@@ -90,10 +138,21 @@ namespace util
 		}
 
 		// creating expect from exceptions
-		template<typename E>
-		Expected<T>(E const& e) : spam(std::make_exception_ptr(e)), gotResult(false) { }	//!< Creates an Expect from a standard exception.
 
-		//! Creates an Expect from a standard exception.
+		/*!
+		*   @brief Creates an Expected from a standard exception.
+		*
+		*   @param e Reference to a constant exception of type E.
+		*/
+		template<typename E>
+		Expected<T>(E const& e) : spam(std::make_exception_ptr(e)), gotResult(false) { }
+
+		/*!
+		*   @brief Creates an Expected from a standard exception.
+		*
+		*   @param exception A reference to a constant exception.
+		*   @return Expected<T> The newly created Expected.
+		*/
 		template<class E>
 		static Expected<T> fromException(const E& exception)
 		{
@@ -101,7 +160,13 @@ namespace util
 				throw std::invalid_argument("slicing detected!\n");
 			return fromException(std::make_exception_ptr(exception));
 		}
-		//! Creates an Expect from a standard exception pointer.
+
+		/*!
+		*   @brief Creates an Expected from a standard exception pointer.
+		*
+		*   @param p A standard exception pointer.
+		*   @return Expected<T> The newly created Expected.
+		*/
 		static Expected<T> fromException(std::exception_ptr p)
 		{
 			Expected<T> e;
@@ -109,14 +174,24 @@ namespace util
 			new(&e.spam) std::exception_ptr(std::move(p));
 			return e;
 		}
-		//! Creates an Expected from the current exception.
+
+		/*!
+		*   @brief Creates an Expected from the current exception.
+		*   @return Expected<T> The newly created Expected.
+		*/
 		static Expected<T> fromException()
 		{
 			return fromException(std::current_exception());
 		}
 
 		// operator overload
-		//! Assignment operator.
+
+		/*!
+		*   @brief Copy assignment.
+		*
+		*   @param e A reference to the constant Expected to be copied.
+		*   @return Expected<T> The newly created Expected.
+		*/
 		Expected<T>& operator=(const Expected<T>& e)
 		{
 			gotResult = e.gotResult;
@@ -128,17 +203,38 @@ namespace util
 		}
 
 		// getters
-		bool isValid() const { return gotResult; }											//!< Returns true if and only if a valid result is available.
-		bool wasSuccessful() const { return gotResult; }									//!< Returns true if and only if a valid result is available.
 
-		//! Returns a valid result or rethrows the error message denying the result from being calculated.
+		/*!
+		*   @brief Returns true if and only if a valid result is available.
+		*
+		*   @return bool
+		*/
+		bool isValid() const { return gotResult; }
+
+		/*!
+		*   @brief Returns true if and only if a valid result is available.
+		*
+		*   @return bool
+		*/
+		bool wasSuccessful() const { return gotResult; }
+
+		/*!
+		*   @brief Returns a valid result or re-throws the error that denied the result from being calculated.
+		*
+		*   @return T A valid result of type T, is possible.
+		*/
 		T& get()
 		{
 			if (!gotResult)
 				std::rethrow_exception(spam);
 			return result;
 		}
-		//! Const getter.
+
+		/*!
+		*   @brief Returns a valid result or re-throws the error that denied the result from being calculated.
+		*
+		*   @return T A valid result of type T, is possible.
+		*/
 		const T& get() const
 		{
 			if (!gotResult)
@@ -147,7 +243,12 @@ namespace util
 		}
 
 		// probe for exception
-		//! Returns true if and only if an exception is stored in the Expect.
+
+		/*!
+		*   @brief Returns true if and only if an exception is stored in the Expect.
+		*
+		*   @return bool
+		*/
 		template<class E>
 		bool hasException() const
 		{
@@ -171,10 +272,12 @@ namespace util
 		friend class Expected<void>;														//!< The void Expected is a friend of all the other Expected.
 	};
 
-	//! The void Expected class for advanced error and exception handling.
-
-	//! Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.
-	//! See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further information.
+	/*!
+	 * @brief The void Expected class for advanced error and exception handling.
+	 *
+	 * Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.<br>
+	    * See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further information.
+	 */
 	template<>
 	class Expected<void>
 	{
@@ -182,10 +285,21 @@ namespace util
 
 	public:
 		// constructors and destructor
-		//! The default constructor.
+
+		/*!
+		*   @brief Construct from a reference to a constant type E.
+		*
+		*   @param e The reference to the constant type E to be constructed from.
+		*/
 		template <typename E>
 		Expected(E const& e) : spam(std::make_exception_ptr(e)) { }
-		//! Copy constructor.
+
+		/*!
+		*   @brief The copy constructor.
+		*
+		*   @param e The reference to the constant Expected to be constructed from,.
+		*   @return void
+		*/
 		template<typename T>
 		Expected(const Expected<T>& e)
 		{
@@ -193,11 +307,26 @@ namespace util
 				new(&spam) std::exception_ptr(e.spam);
 		}
 
-		Expected(Expected&& o) : spam(std::move(o.spam)) { }					//!< Move constructor.
-		Expected() : spam() {}													//!< Empty constructor.
+		/*!
+		*   @brief The move constructor.
+		*
+		*   @param e The address of a reference to a void Expected.
+		*/
+		Expected(Expected&& e) : spam(std::move(e.spam)) { }
+
+		/*!
+		*   @brief The empty constructor.
+		*/
+		Expected() : spam() {}
 
 		// operator overload
-		//! Assignment operator.
+
+		/*!
+		*   @brief The assignment operator.
+		*
+		*   @param e A reference to a const Expected to be copied from.
+		*   @return An Expected.
+		*/
 		Expected& operator=(const Expected& e)
 		{
 			if (!e.isValid())
@@ -206,10 +335,33 @@ namespace util
 		};
 
 		// getters
-		bool isValid() const { return !spam; }									//!< Returns true if and only if the computation was successful.
-		bool wasSuccessful() const { return !spam; }							//!< Returns true if and only if the computation was successful.
-		void get() const { if (!isValid()) std::rethrow_exception(spam); }		//!< Throws the error if the computation was not successful.
-		void suppress() {}														//!< Suppresses error checking.
+
+		/*!
+		*   @brief Returns true if and only if the computation was successful.
+		*
+		*   @return bool
+		*/
+		bool isValid() const { return !spam; }
+
+		/*!
+		*   @brief Returns true if and only if the computation was successful.
+		*
+		*   @return bool
+		*/
+		bool wasSuccessful() const { return !spam; }
+
+		/*!
+		*   @brief Re-throws the error if the computation was not successful.
+		*
+		*   @return void
+		*/
+		void get() const { if (!isValid()) std::rethrow_exception(spam); }
+
+		/*!
+		*   @brief Suppressed error checking.
+		*
+		*   @return void
+		*/
+		void suppress() {}
 	};
-	/** @}*/
 }
