@@ -47,6 +47,9 @@
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 
+// BOOST utility
+#include <boost/utility/swap.hpp>
+
 // c++ stuff
 #include <algorithm>
 #include <initializer_list>

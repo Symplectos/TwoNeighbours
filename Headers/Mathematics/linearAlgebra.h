@@ -55,6 +55,7 @@
  * 				- 10/03/2017: fixed an error in rankGaussBareiss
  * 				- 10/03/2017: fixed an error in rank computation
  * 				- 01/08/2017: cleaned some unused variables in the various LLL algorithms
+ * 				- 02/08/2017: added const declarations
  *
  * ToDo: 	- write a more robust fp-LLL (see Schnorr-Euchner) --- see example in /Input/dim6...
  * 			- change shortVector algorithm to compute S without inverting S^-1
@@ -78,9 +79,6 @@
 
 // boost ublas
 #include <boost/numeric/ublas/matrix.hpp>
-
-// bell0bytes includes
-#include "../../Headers/Utilities/serviceLocator.h"				// service locator
 
 namespace mathematics
 {
