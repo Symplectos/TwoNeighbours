@@ -1,6 +1,6 @@
 /************************************************************************************//**
  * @author	Gilles Bellot
- * @file		log.cpp
+ * @file	log.cpp
  *
  * @brief	Implements the file logger defined in log.h
  *

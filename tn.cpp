@@ -7,6 +7,11 @@
  *  @pre		GMP, MPFR, BOOST and CUDA must be installed.
  *  @bug		No known bugs.
  *  @date		01/08/2017 - Dortmund - Germany
+ *
+ *  @section	Current
+ *
+ *  Parallel Algorithms for Group Operations. Especially parallel partition backtracking.
+ *
  *  @section 	History
  *
  * - 02/08/2017: changed comment structure to allow for automatic documentation generation by Doxygen
@@ -160,6 +165,7 @@ TwoNeighbours::TwoNeighbours() : hasStarted(false), hasFileLogger(false)
  *   @param argc The number of arguments given.
  *   @param argv The actual arguments given via the console.
  *   @return An empty Expected<void>, or a filled one with an exception if an error occurred.
+ *
  */
 util::Expected<void> TwoNeighbours::init(int argc, char** argv)
 {

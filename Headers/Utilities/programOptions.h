@@ -28,7 +28,7 @@
 namespace util
 {
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
-/*! \brief The ProgramOptions define the behaviour of TwoNeighbours.
+/*! @brief The ProgramOptions define the behaviour of TwoNeighbours.
  *
  * @section Description
  *

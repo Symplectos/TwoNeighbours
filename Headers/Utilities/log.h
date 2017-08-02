@@ -209,6 +209,8 @@ public:
  *	If an error is encountered, the constructor throws a std::runtime_error exception.
  *
  *   @param name A reference to a constant string specifying the desired output stream on the hard disk.
+ *
+ *   @exception std::runtime_error thrown when the desired output file could not be opened.
  */
 template<typename LogPolicy>
 Logger<LogPolicy>::Logger(const std::string& name) : logLineNumber(0), threadName(), policy(), writeMutex(), logBuffer()

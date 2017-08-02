@@ -42,7 +42,7 @@ class Expected
 {
 protected:
 	/*!
-	 *   @union Nameless Union to define an Expected.
+	 *   @union
 	 *
 	 *   There is either a valid result, or an error message stored in the exception pointer.
 	 */
@@ -151,6 +151,8 @@ public:
 	 *
 	 *   @param exception A reference to a constant exception.
 	 *   @return Expected<T> The newly created Expected.
+	 *
+	 *   @exception std::invalid_argument thrown when slicing is detected.
 	 */
 	template<class E>
 	static Expected<T> fromException(const E& exception)
@@ -167,21 +169,21 @@ public:
 	 *   @return Expected<T> The newly created Expected.
 	 */
 	static Expected<T> fromException(std::exception_ptr p)
-				{
+	{
 		Expected<T> e;
 		e.gotResult = false;
 		new(&e.spam) std::exception_ptr(std::move(p));
 		return e;
-				}
+	}
 
 	/*!
 	 *   @brief Creates an Expected from the current exception.
 	 *   @return Expected<T> The newly created Expected.
 	 */
 	static Expected<T> fromException()
-				{
+	{
 		return fromException(std::current_exception());
-				}
+	}
 
 	// operator overload
 
@@ -233,6 +235,7 @@ public:
 	 *   @brief Returns a valid result or re-throws the error that denied the result from being calculated.
 	 *
 	 *   @return T A valid result of type T, is possible.
+	 *   @exception std::rethrow_exception if no valid result was found.
 	 */
 	const T& get() const
 	{
@@ -247,6 +250,7 @@ public:
 	 *   @brief Returns true if and only if an exception is stored in the Expect.
 	 *
 	 *   @return bool
+	 *   @exception std::rethrow_exception if no valid result is present.
 	 */
 	template<class E>
 	bool hasException() const
@@ -353,6 +357,7 @@ public:
 	 *   @brief Re-throws the error if the computation was not successful.
 	 *
 	 *   @return void
+	 *   @exception std::rethrow_exception if an error occured during the previous computation.
 	 */
 	void get() const { if (!isValid()) std::rethrow_exception(spam); }
 

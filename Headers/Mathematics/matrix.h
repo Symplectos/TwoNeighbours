@@ -1,42 +1,48 @@
 #pragma once
-/*
- * File:   matrix.h
- * Author: Gilles Bellot
- * Date:   13/10/2016 - Dortmund - Germany
+
+/************************************************************************************//**
+ * @author	Gilles Bellot
+ * @file	matrix.h
+ * @date	13/10/2016 - Dortmund - Germany
  *
- * Description: wrapper for BOOST uBLAS matrices
+ * @brief	Wrapper class for BOOST uBLAS matrices.
  *
- * History:	- 13/10/2016: added matrix reading (boost) and printing (human)
- * 			- 14/10/2016: added support for unit matrix
- * 			- 15/10/2016: added base change (add multiple) for matrices
- * 			- 17/10/2016: added base change (add multiple) for gramians
- * 			- 17/10/2016: added base change (swap) for matrices
- * 			- 02/11/2016: added base change (swap) for gramians
- * 			- 17/11/2016: added base change (add multiple, multiply) for triangular matrices
- * 			- 17/11/2016: added print support for triangular matrices and vectors
- * 			- 25/11/2016: added matrix multiplication and inversion for triangular matrices
- * 			- 29/11/2016: fixed an error in trig matrix multiplication and inversion
- * 			- 05/01/2017: fixed a template error
- * 			- 05/01/2017: deleted readMatrix
- * 			- 17/01/2017: added function to delete zero columns from basis matrix
- * 			- 18/01/2017: deleted makeUnit function -> replaced by boosts own assign function
- * 			- 18/01/2017: deleted mult function -> replaced by boosts own prod function
- * 			- 18/01/2017: deleted read function -> replaced by boosts own read function on std::cin
- * 			- 18/01/2017: deleted printSymmetrixMatrix function
- *			- 18/01/2017: clean up of printMatrix functions
- *			- 18/01/2017: added det function (with lu)
- *			- 18/01/2017: changed print functions to const
- *			- 18/01/2017: changed inverse function to const
- *			- 19/01/2017: added gauss bareiss for determinant computation
- *			- 19/01/2017: added gauss bareiss for rank computation
- *			- 19/01/2017: added orthogonality check
- *			- 20/01/2017: added orthoginality check with inner product
- *			- 20/01/2017: added comparison function
- *			- 21/01/2017: moved rank, det and inverse function to the linear algebra class
- *			- 01/08/2017: added const declarations
+ * @section History
+ * - 02/07/2017: added doxygen comments
+ * - 01/08/2017: added const declarations
+ * - 21/01/2017: moved rank, det and inverse function to the linear algebra class
+ * - 20/01/2017: added comparison function
+ * - 20/01/2017: added orthoginality check with inner product
+ * - 19/01/2017: added orthogonality check
+ * - 19/01/2017: added gauss bareiss for rank computation
+ * - 19/01/2017: added gauss bareiss for determinant computation
+ * - 18/01/2017: changed inverse function to const
+ * - 18/01/2017: changed print functions to const
+ * - 18/01/2017: added det function (with lu)
+ * - 18/01/2017: clean up of printMatrix functions
+ * - 18/01/2017: deleted printSymmetrixMatrix function
+ * - 18/01/2017: deleted read function -> replaced by boosts own read function on std::cin
+ * - 18/01/2017: deleted mult function -> replaced by boosts own prod function
+ * - 18/01/2017: deleted makeUnit function -> replaced by boosts own assign function
+ * - 17/01/2017: added function to delete zero columns from basis matrix
+ * - 05/01/2017: deleted readMatrix
+ * - 05/01/2017: fixed a template error
+ * - 29/11/2016: fixed an error in trig matrix multiplication and inversion
+ * - 25/11/2016: added matrix multiplication and inversion for triangular matrices
+ * - 17/11/2016: added print support for triangular matrices and vectors
+ * - 17/11/2016: added base change (add multiple, multiply) for triangular matrices
+ * - 02/11/2016: added base change (swap) for gramians
+ * - 17/10/2016: added base change (swap) for matrices
+ * - 17/10/2016: added base change (add multiple) for gramians
+ * - 15/10/2016: added base change (add multiple) for matrices
+ * - 14/10/2016: added support for unit matrix
+ * - 13/10/2016: added matrix reading (boost) and printing (human)
  *
- * ToDo: everything :(
- */
+ * @version	1.0.2.0
+ * @bug 	No known bugs.
+ *
+ * @copyright	Gilles Bellot @ TU Dortmund
+ ****************************************************************************************/
 
 // INCLUDES /////////////////////////////////////////////////////////////////////////////
 
@@ -57,10 +63,10 @@
 namespace mathematics
 {
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
-/** \addtogroup Mathematics
- *  @{
+
+/*!
+ * @brief The MatrixHelper is a static templated class full of little helper function to facilitate the use of BOOST's uBLAS matrices.
  */
-//! This class basically consists of helper functions to use BOOST uBLAS matrices.
 template<class T>
 class MatrixHelper
 {
@@ -68,11 +74,11 @@ private:
 
 public:
 	// elementary column operations
-	static void colSwap(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j);				//!< Swaps the i-th and j-th column of the matrix m.
-	static void colAddMultiple(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j, T t);	//!< Sets: \f$ column_i = column_i + t \cdot column_j\f$.
-	static void colMultiply(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const T t);					//!< Sets: \f$ col_i = t \cdot col_i\f$.
-	static std::valarray<T> getColumn(const boost::numeric::ublas::matrix<T>* const m, const unsigned int i);				//!< Returns the i-th column of the matrix m.
-	static std::valarray<T> getColumn(const boost::numeric::ublas::symmetric_matrix<T>* const m, const unsigned int i);		//!< Returns the i-th column of the matrix m.
+	static void colSwap(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j);				// swaps the i-th and j-th column of the matrix m.
+	static void colAddMultiple(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j, T t);	// sets: \f$ column_i = column_i + t \cdot column_j\f$.
+	static void colMultiply(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const T t);					// sets: \f$ col_i = t \cdot col_i\f$.
+	static std::valarray<T> getColumn(const boost::numeric::ublas::matrix<T>* const m, const unsigned int i);				// returns the i-th column of the matrix m.
+	static std::valarray<T> getColumn(const boost::numeric::ublas::symmetric_matrix<T>* const m, const unsigned int i);		// returns the i-th column of the matrix m.
 
 	// elementary row operations
 	static void rowAddMultiple(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m, const unsigned int i, const unsigned int j, T t);	//!< Sets: \f$ row_i = row_i + t \cdot row_j\f$.
@@ -104,10 +110,22 @@ public:
 // IMPLEMENTATION ///////////////////////////////////////////////////////////////////////
 
 // base change for matrices
+
+/*!
+ *   @brief Swaps two columns of a matrix.
+ *
+ *   Swaps the i-th and j-th column of the matrix m.<br>
+ *   Assume that \f$m \in M_n(K)\f$.
+ *
+ *   @param m Constant pointer to a matrix.
+ *   @param i Constant unsigned int to a column of the given matrix: \f$0 \leq i \leq n\f$.
+ *   @param j Constant unsigned int to a column of the given matrix. \f$0 \leq j \leq n\f$.
+ *   @return bool (true if and only if the output stream was opened successfully)
+ */
 template<class T>
 void MatrixHelper<T>::colSwap(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j)
 {
-	assert(i<m->size2() && j<m->size2());
+	assert(i<m->size2() && j<m->size2() && i>=0 && j>=0);
 
 	boost::numeric::ublas::matrix_column<boost::numeric::ublas::matrix<T> > columnI(*m, i);
 	boost::numeric::ublas::matrix_column<boost::numeric::ublas::matrix<T> > columnJ(*m, j);
@@ -212,20 +230,20 @@ template<class T>
 void MatrixHelper<T>::baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>* const g, const unsigned int i, const unsigned int j, T t)
 {	assert(i < g->size1() && j < g->size1());
 
-	// temporarily save needed entries
-	T tempII = (*g)(i,i);
-	T tempIJ = (*g)(i,j);
-	T tempJJ = (*g)(j,j);
+// temporarily save needed entries
+T tempII = (*g)(i,i);
+T tempIJ = (*g)(i,j);
+T tempJJ = (*g)(j,j);
 
-	// change the i-th row and column
-	boost::numeric::ublas::matrix_row<boost::numeric::ublas::symmetric_matrix<T> > rowI(*g, i);
-	boost::numeric::ublas::matrix_row<boost::numeric::ublas::symmetric_matrix<T> > rowJ(*g, j);
-	boost::numeric::ublas::matrix_column<boost::numeric::ublas::symmetric_matrix<T> > colI(*g, i);
-	for(unsigned int k=0; k<g->size1(); k++)
-		rowI(k) += rowJ(k) * t;
+// change the i-th row and column
+boost::numeric::ublas::matrix_row<boost::numeric::ublas::symmetric_matrix<T> > rowI(*g, i);
+boost::numeric::ublas::matrix_row<boost::numeric::ublas::symmetric_matrix<T> > rowJ(*g, j);
+boost::numeric::ublas::matrix_column<boost::numeric::ublas::symmetric_matrix<T> > colI(*g, i);
+for(unsigned int k=0; k<g->size1(); k++)
+	rowI(k) += rowJ(k) * t;
 
-	// change the diagonal entry
-	(*g)(i,i) = tempII + 2*t*tempIJ + t*t*tempJJ;
+// change the diagonal entry
+(*g)(i,i) = tempII + 2*t*tempIJ + t*t*tempJJ;
 }
 
 // row changes

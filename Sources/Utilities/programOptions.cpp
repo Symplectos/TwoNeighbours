@@ -36,6 +36,8 @@ namespace util
  *
  *   @param argc The number of arguments given.
  *   @param argv The actual arguments, used to create the program options.
+ *
+ *   @exception std::runtime_error thrown when the creation of the program options failed.
  */
 ProgramOptions::ProgramOptions(int argc, char** argv) : verboseLevel(0), debugMode(false), useCUDA(false), outputPrec(10), mpfrPrec(10)
 {
@@ -70,9 +72,9 @@ Expected<void> ProgramOptions::createCommandLineParameters(int argc, char** argv
 		// general program options
 		boost::program_options::options_description descMain("General options and settings");
 		descMain.add_options()("help", "show help")
-						("verboseLevel", boost::program_options::value<int>(), "sets arg (unsigned int) as verbose level - default: 0")
-			    		("debug", "debug mode")
-						("outputPrec", boost::program_options::value<int>(), "sets arg (int) as output precision - default: 10");
+								("verboseLevel", boost::program_options::value<int>(), "sets arg (unsigned int) as verbose level - default: 0")
+								("debug", "debug mode")
+								("outputPrec", boost::program_options::value<int>(), "sets arg (int) as output precision - default: 10");
 
 		boost::program_options::options_description descLib("Library options and settings");
 		descLib.add_options()	("mpfrPrec", boost::program_options::value<int>(), "sets arg (int) as the precision for mpfr - default: 10")
