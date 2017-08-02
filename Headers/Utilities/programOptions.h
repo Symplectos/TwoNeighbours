@@ -23,7 +23,6 @@
 namespace util
 {
 /** \addtogroup Utility
- *  Utility classes are nice little helper classes to make life a tiny little bit easier.
  *  @{
  */
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////

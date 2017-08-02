@@ -29,7 +29,6 @@
 namespace util
 {
 /** \addtogroup Utility
- *  Utility classes are nice little helper classes to make life a tiny little bit easier.
  *  @{
  */
 	// CLASSES //////////////////////////////////////////////////////////////////////////////
@@ -43,16 +42,14 @@ namespace util
 	//! Customizability is achieved by a purely abstract class called logging policy. A logging policy defines where messages will be printed to.
 	//! Now, for example, to create a file logger policy, it is enough to simply inherit from LogPolicyInterface and to specify a file on the hard drive to write out to.
 	//! Check <a href="https://bell0bytes.eu/thread-safe-logger/">my personal website</a> for further details.
-
-
 	class LogPolicyInterface
 	{
 	public:
-		virtual ~LogPolicyInterface() = 0;
+		virtual ~LogPolicyInterface() = 0;							//!< The virtual destructor must be overriden.
 
-		virtual bool openOutputStream(const std::string& name) = 0;
-		virtual void closeOutputStream() = 0;
-		virtual void write(const std::string& msg) = 0;
+		virtual bool openOutputStream(const std::string& name) = 0;	//!< This must be overriden to specify how to open the output stream.
+		virtual void closeOutputStream() = 0;						//!< This must be overriden to handle closing the output stream.
+		virtual void write(const std::string& msg) = 0;				//!< This must be overriden to specify how to write to the output stream.
 	};
 	inline LogPolicyInterface::~LogPolicyInterface() {}
 
@@ -60,7 +57,7 @@ namespace util
 	class FileLogPolicy : public LogPolicyInterface
 	{
 	private:
-		std::ofstream outputStream;
+		std::ofstream outputStream;										//!< The output file stream.
 
 	public:
 		FileLogPolicy() : outputStream() {};
@@ -76,7 +73,7 @@ namespace util
 	////////////////////////////////// MESSAGE TYPES ////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////
 
-	// message types
+	//! The severity types of the logged messages.
 	enum SeverityType
 	{ info = 0, debug, warning, error, config };
 

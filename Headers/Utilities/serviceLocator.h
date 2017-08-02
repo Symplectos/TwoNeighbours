@@ -20,7 +20,6 @@ namespace util
 {
 // CLASSES //////////////////////////////////////////////////////////////////////////////
 /** \addtogroup Utility
- *  Utility classes are nice little helper classes to make life a tiny little bit easier.
  *  @{
  */
 //! Registers and provides services to the entire program.

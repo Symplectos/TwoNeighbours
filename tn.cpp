@@ -7,6 +7,8 @@
 /*!
  * \mainpage TwoNeighbours is an attempt to rewrite TN and HN in modern C++
  *
+ * Currently working on: Algorithms for Group Operations.
+ *
  * History:
  * - 24/07/2012: program options added
  * - 25/07/2012: mpfr precision can now be set with --precision arg
@@ -26,9 +28,13 @@
  * - 01/08/2017: support for boost matrices was added (matrix.h)
  * - 01/08/2017: linear algebra class added (linearAlgebra.h), most important algorithms: LLL and short vectors
  * - 01/08/2017: general lattice class was added (lattice.h)
- *
- *
- * ToDo: everything :(
+ */
+
+// DOXYGEN STUFF ////////////////////////////////////////////////////////////////////////
+/** \defgroup Core
+ *  The core, or main driver classes for TwoNeighbours.
+ *  \defgroup Utility
+ *  Utility classes are nice little helper classes to make life a tiny little bit easier.
  */
 
 // INCLUDES /////////////////////////////////////////////////////////////////////////////
@@ -59,24 +65,28 @@
 #include "Headers/Mathematics/lattice.h"					// definition of lattices
 
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
-
-// classes
+/** \addtogroup Core
+ *  The core, or main driver classes for TwoNeighbours.
+ *  @{
+ */
+//!Driver class.
 class TwoNeighbours
 {
 private:
-	bool hasStarted;						//!< true iff the application was successfuly started
-	bool hasFileLogger;						//!< true iff a file logger is available
+	bool hasStarted;						//!< True if and only if the application was successfuly started.
+	bool hasFileLogger;						//!< True if and only if a file logger is available.
 
-	void printStartingLog();				//!< prints a starting log
+	void printStartingLog();				//!< Prints a starting log with CPU and GPU information.
 
 
 public:
 	// constructor
-	TwoNeighbours();
-	~TwoNeighbours();
+	TwoNeighbours();						//!< The default constructor sets the two member booleans to false and calls the init function.
+	~TwoNeighbours();						//!< The destructor destroys.
 
-	util::Expected<void> init(int argc, char** argv);		//!< initializes the application; creates and registers services
-	void shutdown(util::Expected<void>* result = NULL);		//!< release memory and shut the application down
+	util::Expected<void> init(int argc, char** argv);		//!< Initializes the application; creates and registers services.
+	void shutdown(util::Expected<void>* result = NULL);		//!< Releases memory and shuts the application down. Reports error if the game was shut down by an error.
+
 };
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////
@@ -84,6 +94,7 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Main Function ////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+//! The main entry point for TwoNeighbours.
 int main(int argc, char** argv)
 {
 	TwoNeighbours tn;
@@ -115,7 +126,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 }
-
+/** @}*/
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Initialization ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -277,4 +288,5 @@ void TwoNeighbours::shutdown(util::Expected<void>* result)
 	// no error -> clean up and shut down normally
 	util::ServiceLocator::getFileLogger()->print<util::SeverityType::info>("TwoNeighbours was successfully shut down!");
 }
+
 
