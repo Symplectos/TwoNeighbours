@@ -78,7 +78,6 @@ public:
 	util::Expected<void> init(int argc, char** argv);		// initialises the application; creates and registers services
 	util::Expected<void> run();								// runs the two neighbour algorithm
 	void shutdown(util::Expected<void>* result = NULL);		// releases memory and shuts the application down, reports error if the game was shut down by an error
-
 };
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////////////////
