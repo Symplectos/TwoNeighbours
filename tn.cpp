@@ -129,20 +129,32 @@ int main(int argc, char** argv)
  */
 util::Expected<void> TwoNeighbours::run()
 {
-	// read gram matrix of starting lattice
-	boost::numeric::ublas::symmetric_matrix<mpz_class> A(1,1);
-	std::cin >> A;
+	try
+	{
+		// read gram matrix of starting lattice
+		boost::numeric::ublas::symmetric_matrix<mpz_class> A(1,1);
+		std::cin >> A;
 
-	// create lattice from gramian
-	mathematics::Lattice L(&A);
+		// create lattice from gramian
+		mathematics::Lattice L(&A);
 
-	// print starting lattice
-	L.print(util::ServiceLocator::getProgOpts()->verboseLevel);
+		// print starting lattice
+		L.print(util::ServiceLocator::getProgOpts()->verboseLevel);
 
-	// start the actual algorithm
+		// start the actual algorithm
 
-	// return success
-	return { };
+		// return success
+		return { };
+	}
+	catch(std::runtime_error& e)
+	{
+		return e;
+	}
+	catch(std::invalid_argument& ia)
+	{
+		return ia;
+	}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -198,6 +210,56 @@ util::Expected<void> TwoNeighbours::init(int argc, char** argv)
 	// return success
 	hasStarted = true;
 	return {};
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// Shutdown /////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief The destructor destroys! But in this case, it simply does nothing.
+ */
+TwoNeighbours::~TwoNeighbours()
+{}
+
+/*!
+ *   @brief This function shuts down the application.
+ *
+ *   It tries to clean up everything and to free used memory.<br>
+ *   It also handles exceptions: If an error is encountered, the program still tries to clean up and prints the actual error message that lead to the abortion.
+ *
+ *   @param result A pointer to a void Expected which stores an exception if an error was encountered. If this is NULL, then everything went smoothly.
+ *   @return void
+ */
+void TwoNeighbours::shutdown(util::Expected<void>* result)
+{
+	// check for error message
+	if(result != NULL && !result->isValid())
+	{
+		// the application encountered an error -> try to clean up and to log the error message
+		try
+		{
+			// clean up
+
+			// throw the actual error message
+			result->get();
+		}
+		catch(std::exception& e)
+		{
+			if(hasFileLogger)
+			{
+				std::cerr << "TwoNeighbours was aborted by an exception. See the log file for details!\n";
+				std::stringstream errorMessage;
+				errorMessage << "TwoNeighbours was shut down: " << e.what();
+				util::ServiceLocator::getFileLogger()->print<util::SeverityType::error>(std::stringstream(errorMessage.str()));
+			}
+			else
+				std::cerr << "TwoNeighbours is shutting down: " << e.what() << "\n";
+			return;
+		}
+	}
+
+	// no error -> clean up and shut down normally
+	util::ServiceLocator::getFileLogger()->print<util::SeverityType::info>("TwoNeighbours was successfully shut down!");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -288,53 +350,3 @@ void TwoNeighbours::printStartingLog()
 		util::ServiceLocator::getFileLogger()->print<util::SeverityType::info>(std::stringstream(gpuStream.str()));
 	}
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// Shutdown /////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-/*!
- *   @brief The destructor destroys! But in this case, it simply does nothing.
- */
-TwoNeighbours::~TwoNeighbours()
-{}
-
-/*!
- *   @brief This function shuts down the application.
- *
- *   It tries to clean up everything and to free used memory.<br>
- *   It also handles exceptions: If an error is encountered, the program still tries to clean up and prints the actual error message that lead to the abortion.
- *
- *   @param result A pointer to a void Expected which stores an exception if an error was encountered. If this is NULL, then everything went smoothly.
- *   @return void
- */
-void TwoNeighbours::shutdown(util::Expected<void>* result)
-{
-	// check for error message
-	if(result != NULL && !result->isValid())
-	{
-		// the application encountered an error -> try to clean up and to log the error message
-		try
-		{
-			// clean up
-
-			// throw the actual error message
-			result->get();
-		}
-		catch(std::runtime_error& e)
-		{
-			if(hasFileLogger)
-			{
-				std::stringstream errorMessage;
-				errorMessage << "TwoNeighbours was shut down: " << e.what();
-				util::ServiceLocator::getFileLogger()->print<util::SeverityType::error>(std::stringstream(errorMessage.str()));
-			}
-			else
-				std::cerr << "TwoNeighbours is shutting down: " << e.what() << "\n";
-			return;
-		}
-	}
-
-	// no error -> clean up and shut down normally
-	util::ServiceLocator::getFileLogger()->print<util::SeverityType::info>("TwoNeighbours was successfully shut down!");
-}
-

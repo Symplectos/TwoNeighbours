@@ -1,3 +1,19 @@
+/************************************************************************************//**
+ * @author	Gilles Bellot
+ * @file	linearAlgebra.cpp
+ * @date	14/10/2016 - Eichlinghofen - Germany
+ *
+ * @brief	Implementation for general linear algebra and lattice algorithms.
+ *
+ * @section Bibliography
+ * - [CH] Cohen, H. --- A Course in Computational Algebraic Number Theory
+ * - [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
+  *
+ * @version	1.0.2.0
+ * @bug 	No known bugs.
+ *
+ * @copyright	Gilles Bellot @ TU Dortmund
+ ****************************************************************************************/
 #include "../../Headers/Mathematics/linearAlgebra.h"
 #include "../../Headers/Mathematics/matrix.h"
 #include "../../Headers/Utilities/serviceLocator.h"
@@ -16,12 +32,20 @@
 namespace mathematics
 {
 
-const float eps = std::numeric_limits<float>::epsilon();						// used as fudge variable in the fp LLL algorithm
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// Comparison //////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-bool LALA::comparePairValarrayLong(const std::pair<mpz_class, std::valarray<mpz_class> >& a, const std::pair<mpz_class, std::valarray<mpz_class> >& b)
+/*!
+ *   @brief Lexicographically compares two pairs consisting of a multi-precision integer and a valarray of the same type.
+ *
+ *   @param a Reference to a constant pair of a mpz_class integer and a mpz_class valarray.
+ *   @param b Reference to a constant pair of a mpz_class integer and a mpz_class valarray.
+ *
+ *   @return True if and only if the a is lexicographically smaller than b.
+ */
+bool LALA::comparePairMPZValarray(const std::pair<mpz_class, std::valarray<mpz_class> >& a, const std::pair<mpz_class, std::valarray<mpz_class> >& b)
 {
 	if(a.first < b.first)
 		return true;
@@ -41,6 +65,19 @@ bool LALA::comparePairValarrayLong(const std::pair<mpz_class, std::valarray<mpz_
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////// Private Scalar Products//////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the scalar product of two basis vectors.
+ *
+ *   @param b Constant pointer to a constant matrix of mpreals whose columns represent a basis for the underlying module.
+ *   @param i Constant integer to specify the i-th basis vector.
+ *   @param j Constant integer to specify the j-th basis vector.
+ *   @param innerProduct Constant pointer to a constant symmetric matrix of multi-precision integers specifying a scalar product. This is NULL by default (standard scalar product).
+ *
+ *   @return The value of the scalar product of the two specified basis vectors.
+ *
+ *   In the case where no inner product is specified, the loops are unrolled manually for a significant speed burst.
+ *   @todo Unroll the loops in the presence of an inner product as well. Register blocking or prefetching will probably lead to a great increase in speed.
+ */
 mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>* const b, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	assert(i < b->size2() && j < b->size2());
@@ -107,6 +144,20 @@ mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>
 	return result;
 }
 
+/*!
+ *   @brief Computes the scalar product of two basis vectors.
+ *
+ *   @param b Constant pointer to a constant matrix of mpreals whose columns represent a basis for the underlying module.
+ *   @param bStar Constant pointer to a constant matrix of mpreals whose columns represent a basis for the underlying module.
+ *   @param i Constant integer to specify the i-th basis vector in b.
+ *   @param j Constant integer to specify the j-th basis vector in bStar.
+ *   @param innerProduct Constant pointer to a constant symmetric matrix of multi-precision integers specifying a scalar product. This is NULL by default (standard scalar product).
+ *
+ *   @return The value of the scalar product of the two specified basis vectors.
+ *
+ *   In the case where no inner product is specified, the loops are unrolled manually for a significant speed burst.
+ *   @todo Unroll the loops in the presence of an inner product as well. Register blocking or prefetching will probably lead to a great increase in speed.
+ */
 mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	assert(i < b->size2() && j < bStar->size2());
@@ -172,6 +223,19 @@ mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpfr::mpreal>
 	return result;
 }
 
+/*!
+ *   @brief Computes the scalar product of two basis vectors.
+ *
+ *   @param b Constant pointer to a constant matrix of multi-precision integers whose columns represent a basis for the underlying module.
+ *   @param i Constant integer to specify the i-th basis vector.
+ *   @param j Constant integer to specify the j-th basis vector.
+ *   @param innerProduct Constant pointer to a constant symmetric matrix of multi-precision integers specifying a scalar product. This is NULL by default (standard scalar product).
+ *
+ *   @return The value of the scalar product of the two specified basis vectors.
+ *
+ *   In the case where no inner product is specified, the loops are unrolled manually for a significant speed burst.
+ *   @todo Unroll the loops in the presence of an inner product as well. Register blocking or prefetching will probably lead to a great increase in speed.
+ */
 mpz_class LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* const b, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	assert(i < b->size2() && j < b->size2());
@@ -229,6 +293,20 @@ mpz_class LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* cons
 	return result;
 }
 
+/*!
+ *   @brief Computes the scalar product of two basis vectors.
+ *
+ *   @param b Constant pointer to a constant matrix of multi-precision integers whose columns represent a basis for the underlying module.
+ *   @param bStar Constant pointer to a constant matrix of mpreals whose columns represent a basis for the underlying module.
+ *   @param i Constant integer to specify the i-th basis vector in b.
+ *   @param j Constant integer to specify the j-th basis vector in bStar.
+ *   @param innerProduct Constant pointer to a constant symmetric matrix of multi-precision integers specifying a scalar product. This is NULL by default (standard scalar product).
+ *
+ *   @return The value of the scalar product of the two specified basis vectors.
+ *
+ *   In the case where no inner product is specified, the loops are unrolled manually for a significant speed burst.
+ *   @todo Unroll the loops in the presence of an inner product as well. Register blocking or prefetching will probably lead to a great increase in speed.
+ */
 mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, const unsigned int i, const unsigned int j, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	assert(i < b->size2() && j < bStar->size2());
@@ -296,6 +374,20 @@ mpfr::mpreal LALA::lllBasisDot(const boost::numeric::ublas::matrix<mpz_class>* c
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// Cholesky ////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the rational Cholesky decomposition of a symmetric matrix.
+ *
+ *   @param[in] q Constant pointer to a constant symmetric matrix of multi-precision integers representing a quadratic form.
+ *   @param[out] r Constant pointer to an upper triangular matrix of multi-precision rationals.
+ *   @param[out] d Constant pointer to a valarray of multi-precision rationals.
+ *
+ *	 Given a symmetric positive definite matrix q, this algorithm outputs an upper triangular matrix r and a diagonal matrix d such that \f$q = r^t \cdot d \cdot r\f$.
+ *
+ *   @return void
+ *
+ *   @todo Assert that q is a quadratic form.
+ *
+ */
 void LALA::choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const q, boost::numeric::ublas::triangular_matrix<mpq_class, boost::numeric::ublas::upper>* const r, std::valarray<mpq_class>* const d)
 {
 	// given a symmetric positive definite matrix q (representing a quadratic form), this algorithm outputs an upper triangular matrix r and a diagonal matrix d such that
@@ -303,6 +395,11 @@ void LALA::choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<m
 
 	// step 0: initialize
 	unsigned int n = q->size1();
+
+	if(r->size1()!=n)
+		r->resize(n,n,false);
+	if(d->size() != n)
+		d->resize(n);
 	assert(r->size1()==n && d->size() == n);
 
 	// step 1: copy q into r
@@ -327,6 +424,23 @@ void LALA::choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<m
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// FP-LLL //////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Tests the LLL condition on given basis vectors.
+ *
+ *   @param[in, out] b Constant pointer to a matrix of mpreals whose columns specify a basis of the underlying module.
+ *   @param[in, out] bStar Constant pointer to a matrix of mpreals whose columns specify an orthogonal basis.
+ *   @param[in, out] h Constant pointer to a matrix of mpreals. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in, out] B Constant pointer to a valarray of mpreals holding the length of the basis vectors in b.
+ *   @param[in, out] mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in, out] k A constant pointer to an integer. Specifies the depth of the algorithm, or the current column to modify.
+ *	 @param[in] kmax A constant integer specifying the "deepest" basis vector that was already modified.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 This recursive function tests whether a basis fulfils the LLL condition. To do so, a reduction step is done.
+ *	 If after that reduction, the LLL condition is fulfilled, the function returns, else a swap step is done and k is reset before the function recalls itself.
+ *
+ *   @return void
+ */
 void LALA::lllBasisTestCondition(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim)
 {
 	// test LLL condition
@@ -340,6 +454,20 @@ void LALA::lllBasisTestCondition(boost::numeric::ublas::matrix<mpfr::mpreal>* co
 	}
 }
 
+/*!
+ *   @brief Length reduction in the LLL algorithm.
+ *
+ *   @param[in, out] b Constant pointer to a matrix of mpreals whose columns specify a basis of the underlying module.
+ *   @param[in, out] h Constant pointer to a matrix of mpreals. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in, out] mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in] k A constant pointer to an integer specifying the basis vector to be reduced.
+ *	 @param[in] l A constant integer specifying the basis vector to reduce with.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 Performs length reduction if necessary, i.e. sets \f$b_k := b_k - \lfloor \mu_{k,l} \rfloor \cdot b_l\f$.
+ *
+ *   @return void
+ */
 void LALA::lllBasisRed(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int dim)
 {
 	mpfr::mpreal mukl = (*mu)[k*dim+l];
@@ -363,6 +491,22 @@ void LALA::lllBasisRed(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boo
 	}
 }
 
+/*!
+ *   @brief Swap step in the LLL algorithm.
+ *
+ *   @param[in, out] b Constant pointer to a matrix of mpreals whose columns specify a basis of the underlying module.
+ *   @param[in, out] bStar Constant pointer to a matrix of mpreals whose columns specify an orthogonal basis.
+ *   @param[in, out] h Constant pointer to a matrix of mpreals. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in, out] B Constant pointer to a valarray of mpreals holding the length of the basis vectors in b.
+ *   @param[in, out] mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in] k A constant pointer to an integer specifying the basis vector to be reduced.
+ *	 @param[in] kmax A constant integer specifying the "deepest" basis vector yet modified.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 Swaps two basis vectors and updates all relevant information, such as the Gram-Schmidt coefficients.
+ *
+ *   @return void
+ */
 void LALA::lllBasisSwap(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim)
 {
 	// swap h_k and h_{k-1}
@@ -393,6 +537,7 @@ void LALA::lllBasisSwap(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, bo
 	(*B)[k-1] = BB;
 
 	mpfr::mpreal t;
+
 	// recompute gram-schmidt coefficients
 	for(int i=k+1; i<=kmax; i++)
 	{
@@ -402,6 +547,20 @@ void LALA::lllBasisSwap(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, bo
 	}
 }
 
+/*!
+ *   @brief Length reduction in the LLL algorithm.
+ *
+ *   @param[in, out] g Constant pointer to a symmetric matrix of mpreals specifying a gram matrix.
+ *   @param[in, out] h Constant pointer to a matrix of mpreals. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in, out] mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in] k A constant pointer to an integer specifying the basis vector to be reduced.
+ *	 @param[in] l A constant integer specifying the basis vector to reduce with.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 Performs length reduction if necessary, i.e. sets \f$b_k := b_k - \lfloor \mu_{k,l} \rfloor \cdot b_l\f$, where \f$b_k, b_l\f$ denote the k-th, resp. the l-th basis vector.
+ *
+ *   @return void
+ */
 void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int dim)
 {
 	mpfr::mpreal mukl = (*mu)[k*dim+l];
@@ -425,6 +584,21 @@ void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* con
 	}
 }
 
+/*!
+ *   @brief Swap step in the LLL algorithm.
+ *
+ *   @param[in, out] g Constant pointer to a symmetric matrix of mpreals. This is a gram matrix.
+ *   @param[in, out] h Constant pointer to a matrix of mpreals. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in, out] b Constant pointer to a valarray of mpreals holding the length of the basis vectors.
+ *   @param[in, out] mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in] k A constant pointer to an integer specifying the basis vector to be reduced.
+ *	 @param[in] kmax A constant integer specifying the "deepest" basis vector yet modified.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 Swaps two basis vectors and updates all relevant information, such as the Gram-Schmidt coefficients.
+ *
+ *   @return void
+ */
 void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const b, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim)
 {
 	// swap h_k and h_{k-1}
@@ -455,6 +629,22 @@ void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* co
 	}
 }
 
+/*!
+ *   @brief Tests the LLL condition on a given gram matrix.
+ *
+ *   @param[in] g Constant pointer to a symmetric matrix of mpreals defining a gram matrix.
+ *   @param[in] h Constant pointer to a matrix of mpreals. This is the basis change matrix.
+ *   @param[in] b Constant pointer to a valarray of mpreals holding the length of the basis vectors.
+ *   @param[in] mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in, out] k A constant pointer to an integer. Specifies the basis vector to be modified.
+ *	 @param[in] kmax A constant integer specifying the "deepest" basis vector yet seen.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 This recursive function tests whether a gram matrix fulfils the LLL condition. To do so, a reduction step is done.
+ *	 If after that reduction, the LLL condition is fulfilled, the function returns, else a swap step is done and k is reset before the function recalls itself.
+ *
+ *   @return void
+ */
 void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, std::valarray<mpfr::mpreal>* const b, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim)
 {
 	// test LLL condition
@@ -471,6 +661,22 @@ void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpfr::mp
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Integral LLL ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Tests the LLL condition on a given gram matrix.
+ *
+ *   @param[in] g Constant pointer to a symmetric matrix of multi-precision integers defining a gram matrix.
+ *   @param[in] h Constant pointer to a matrix of multi-precision integers. This is the basis change matrix.
+ *   @param[in] d Constant pointer to a valarray of multi-precision integers holding the sub-determinants of the gram matrix.
+ *   @param[in] lambda Constant pointer to a valarray of multi-precision integers holding the Gram-Schmidt coefficients.
+ *	 @param[in, out] k A constant pointer to an integer. Specifies the depth of the algorithm, or the vector to be modified.
+ *	 @param[in] kmax A constant integer specifying the maximal vector that has been modified already.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 This recursive function tests whether a gram matrix fulfils the LLL condition. To do so, a reduction step is done.
+ *	 If after that reduction, the LLL condition is fulfilled, the function returns, else a swap step is done and k is reset before the function recalls itself.
+ *
+ *   @return void
+ */
 void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, int* const k, const int kmax, const int dim)
 {
 	// test LLL condition
@@ -484,6 +690,21 @@ void LALA::lllGramTestCondition(boost::numeric::ublas::symmetric_matrix<mpz_clas
 	}
 }
 
+/*!
+ *   @brief Length reduction in the LLL algorithm.
+ *
+ *   @param[in, out] g Constant pointer to a symmetric matrix of mpreals specifying a gram matrix.
+ *   @param[in, out] h Constant pointer to a matrix of mpreals. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in] d Constant pointer to a valarray of multi-precision integers holding the sub-determinants of the gram matrix.
+ *   @param[in, out] lambda Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in] k A constant pointer to an integer specifying the basis vector to be reduced.
+ *	 @param[in] l A constant integer specifying the basis vector to reduce with.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 Performs length reduction if necessary, i.e. sets \f$b_k := b_k - \lfloor \mu_{k,l} \rfloor \cdot b_l\f$, where \f$b_k, b_l\f$ denote the k-th, resp. the l-th basis vector.
+ *
+ *   @return void
+ */
 void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, const int k, const int l, const int dim)
 {
 	mpz_class lkl = (*lambda)[k*dim+l], dl = (*d)[l+1];
@@ -509,7 +730,21 @@ void LALA::lllGramRed(boost::numeric::ublas::symmetric_matrix<mpz_class>* const 
 	}
 }
 
-
+/*!
+ *   @brief Swap step in the LLL algorithm.
+ *
+ *   @param[in, out] g Constant pointer to a symmetric matrix of multi-precision integers. This is a gram matrix.
+ *   @param[in, out] h Constant pointer to a matrix of multi-precision integers. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in, out] d Constant pointer to a valarray of multi-precision integers holding the sub-determinants of the gram matrix.
+ *   @param[in, out] lambda Constant pointer to a valarray of multi-precision integers holding the Gram-Schmidt coefficients.
+ *	 @param[in] k A constant pointer to an integer specifying the basis vector to be reduced.
+ *	 @param[in] kmax A constant integer specifying the "deepest" basis vector yet modified.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *
+ *	 Swaps two basis vectors and updates all relevant information, such as the Gram-Schmidt coefficients.
+ *
+ *   @return void
+ */
 void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpz_class>* const d, std::valarray<mpz_class>* const lambda, const int k, const int kmax, const int dim)
 {
 	// swap h_k and h_{k-1}
@@ -549,6 +784,23 @@ void LALA::lllGramSwap(boost::numeric::ublas::symmetric_matrix<mpz_class>* const
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Integral M-LLL /////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Swap step in the LLL algorithm.
+ *
+ *   @param[in, out] b Constant pointer to a symmetric matrix of multi-precision integers specifying a vector system of the underlying module.
+ *   @param[in, out] bStar Constant pointer to a matrix of mpreals whose columns specify an orthogonal basis.
+ *   @param[in, out] h Constant pointer to a matrix of multi-precision integers. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in, out] B Constant pointer to a valarray of mpreals holding the length of the vectors in b.
+ *   @param[in, out] mu mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in] k A constant pointer to an integer specifying the basis vector to be reduced.
+ *	 @param[in] kmax A constant integer specifying the "deepest" basis vector yet modified.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *	 @param[in] nVectors A constant integer specifying the dimension of the underlying module.
+ *
+ *	 Swaps two vectors and updates all relevant information, such as the Gram-Schmidt coefficients.
+ *
+ *   @return void
+ */
 void LALA::mlllBasisSwap(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, const int k, const int kmax, const int dim, const int nVectors)
 {
 	// swap h_k and h_{k-1}
@@ -608,6 +860,20 @@ void LALA::mlllBasisSwap(boost::numeric::ublas::matrix<mpz_class>* const b, boos
 	}
 }
 
+/*!
+ *   @brief Length reduction in the mLLL algorithm.
+ *
+ *   @param[in, out] b Constant pointer to a matrix of mpreals whose columns specify a vector system of the underlying module.
+ *   @param[in, out] h Constant pointer to a matrix of mpreals. This is the basis change matrix from the original vector system to an LLL-reduced basis.
+ *   @param[in, out] mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in] k A constant pointer to an integer specifying the basis vector to be reduced.
+ *	 @param[in] l A constant integer specifying the basis vector to reduce with.
+ *	 @param[in] nVectors A constant integer specifying the dimension of the underlying module.
+ *
+ *	 Performs length reduction if necessary, i.e. sets \f$b_k := b_k - \lfloor \mu_{k,l} \rfloor \cdot b_l\f$.
+ *
+ *   @return void
+ */
 void LALA::mlllBasisRed(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const mu, const int k, const int l, const int nVectors)
 {
 	mpfr::mpreal mukl = (*mu)[k*nVectors+l];
@@ -631,6 +897,24 @@ void LALA::mlllBasisRed(boost::numeric::ublas::matrix<mpz_class>* const b, boost
 	}
 }
 
+/*!
+ *   @brief Tests the LLL condition on given basis vectors.
+ *
+ *   @param[in] b Constant pointer to a matrix of multi-precision integers whose columns specify a basis of the underlying module.
+ *   @param[in] bStar Constant pointer to a matrix of mpreals whose columns specify an orthogonal basis.
+ *   @param[in] h Constant pointer to a matrix of multi-precision integers. This is the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in] B Constant pointer to a valarray of mpreals holding the length of the basis vectors in b.
+ *   @param[in] mu Constant pointer to a valarray of mpreals holding the Gram-Schmidt coefficients.
+ *	 @param[in, out] k A constant pointer to an integer. Specifies the current basis vector to be modified.
+ *	 @param[in] kmax A constant integer specifying the "deepest" basis vector yet modified.
+ *	 @param[in] dim A constant integer specifying the dimension of the underlying module.
+ *	 @param[in] nVectors A constant integer specifying the number of vectors in the basis.
+ *
+ *	 This recursive function tests whether a basis fulfils the LLL condition. To do so, a reduction step is done.
+ *	 If after that reduction, the LLL condition is fulfilled, the function returns, else a swap step is done and k is reset before the function recalls itself.
+ *
+ *   @return void
+ */
 void LALA::mlllBasisTestCondition(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const bStar, boost::numeric::ublas::matrix<mpz_class>* const h, std::valarray<mpfr::mpreal>* const B, std::valarray<mpfr::mpreal>* const mu, int* const k, const int kmax, const int dim, const int nVectors)
 {
 	// test LLL condition
@@ -647,6 +931,24 @@ void LALA::mlllBasisTestCondition(boost::numeric::ublas::matrix<mpz_class>* cons
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Short Vectors //////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Fincke-Pohst preprocessing for the short vectors algorithm.
+ *
+ *   @param[in] g A constant pointer to a constant symmetric matrix of multi-precision integers. This is the quadratic form.
+ *   @param[out] h A constant pointer to a matrix of mpreals; holds the reduced basis.
+ *   @param[out] p A constant pointer to a matrix of mpreals; the permutation matrix.
+ *   @param[out] q A constant pointer to a matrix of mpreals; holds the modified quadratic form.
+
+ *
+ *	Reordering of the vectors in the computation of the rational Cholesky decomposition of the Gram matrix will decrease the likelyhood that a partial short vector can not be extended.
+ *  In addition, the LLL algorithm is used to modify the quadratic form obtained from the Gram matrix of the lattice basis, which will diminish the ranges for the components of the partial short vectors.
+ *  <br>Based on [CH] Algorithm 2.7.7
+ *
+ *   @todo
+ *   - Change algorithm to compute h from the LLL algorithm without inversion.
+ *
+ *   @return void
+ */
 void LALA::shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, boost::numeric::ublas::matrix<mpfr::mpreal>* const p, boost::numeric::ublas::matrix<mpfr::mpreal>* const q)
 {
 	// Fincke-Pohst preprocessing - see [CH] Algorithm 2.7.7
@@ -673,7 +975,7 @@ void LALA::shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix
 	// compute r^-1
 	LALA::inverse(&u, &invu);
 
-	// get square roots and inverse of diagonale elements
+	// get square roots and inverse of diagonal elements
 	for(unsigned int i=0; i<n; i++)
 	{
 		tempSqrt = d[i].__get_mp();
@@ -768,7 +1070,21 @@ void LALA::shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix
 	}
 }
 
-unsigned long LALA::shortVectors(const boost::numeric::ublas::matrix<mpfr::mpreal>* const q, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X)
+/*!
+ *   @brief Enumerates all lattice vectors of a given lattice with a length smaller or equal to a given constant.
+ *
+ *   @param[in] q A constant pointer to a constant matrix of mpreals specifying a quadratic form.
+ *   @param[in] c A constant multi-precision integer.
+ *   @param[out] X A constant pointer to a vector of pairs of a multi-precision integer (length) and a valarray (short lattice vector); holds all enumerated short vectors.
+ *
+ * Given a quadratic form q and an integer c, this algorithm enumerates all vectors \f$x\f$ with \f$q(x) \leq c\f$.<br>
+ * Based on [CH] Algorithm 2.7.5
+ *
+ *   @return An Expected with an unsigned long specifying the number of enumerated short vectors, or an Expected with an exception if an error occurred.
+ *
+ *   @exception Throws a std::runtime_error if a negative bound is encountered.
+ */
+util::Expected<unsigned long> LALA::shortVectorsPrivate(const boost::numeric::ublas::matrix<mpfr::mpreal>* const q, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X)
 {
 	// given quadratic form q and an integer c, this algorithm outputs all vectors x with q(x) <= c
 	// see [CH] Algorithm 2.7.5
@@ -793,10 +1109,7 @@ unsigned long LALA::shortVectors(const boost::numeric::ublas::matrix<mpfr::mprea
 
 #ifndef NDEBUG
 			if(Z < 0)
-			{
-				util::ServiceLocator::getFileLogger()->print<util::SeverityType::error>(std::stringstream("Critical error in shortVectors: negative bound!\n"));
-				return -1;
-			}
+				return std::runtime_error("Critical error in LALA::shortVectors: Negative bound!");
 #endif
 			Z = mpfr::sqrt(Z, MPFR_RNDN);
 
@@ -856,10 +1169,18 @@ unsigned long LALA::shortVectors(const boost::numeric::ublas::matrix<mpfr::mprea
 }
 
 // public functions
-
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Linear Independence //////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Tests a vector system for linear independency over \f$\mathbb{R}\f$.
+ *
+ *   @param vectorSystem A constant pointer to a constant vector of valarrays of multi-precision integers.
+ *
+ *   @return True if and only if the given vector system is linearly independent over \f$\mathbb{R}\f$.
+ *
+ *   Uses Gauss-Bareiss for rank determination.
+ */
 bool LALA::linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* const vectorSystem)
 {
 	assert(vectorSystem->size() > 0);
@@ -876,6 +1197,13 @@ bool LALA::linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* co
 	return LALA::rank(&vectorSystemMatrix) == vectorSystem->size();
 }
 
+/*!
+ *   @brief Tests a vector system for linear independency over \f$\mathbb{Z}\f$.
+ *
+ *   @param vectorSystem A constant pointer to a constant vector of valarrays of multi-precision integers.
+ *
+ *   @return True if and only if the given vector system is linearly independent over \f$\mathbb{Z}\f$.
+ */
 bool LALA::linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* const vectorSystem)
 {
 	// copy vectors into matrix
@@ -896,6 +1224,14 @@ bool LALA::linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* co
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Element Of /////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Tests whether a given vector is in the linear span of a vector system or not.
+ *
+ *   @param b A constant pointer to a constant vector of valarrays of multi-precision integers. This is the vector system.
+ *   @param v A constant pointer to a constant valarray of multi-precision integers. This is the vector to test.
+ *
+ *   @return True if and only if \f$v \in \operatorname{Lin}\{b_1, \dots, b_n\}\f$, where \f$n\f$ denotes the number of vectors in the vector system b.
+ */
 bool LALA::inLinearSpanZ(const std::vector<std::valarray<mpz_class> >* const b, const std::valarray<mpz_class>* const v)
 {
 	// create working copy and add v to the vectorSystem
@@ -904,6 +1240,18 @@ bool LALA::inLinearSpanZ(const std::vector<std::valarray<mpz_class> >* const b, 
 	return !LALA::linearlyIndependentZ(&vs);
 }
 
+/*!
+ *   @brief Tests whether a given vector is in a given lattice or not.
+ *
+ *   @param[in] m A constant pointer to a constant matrix of multi-precision rationals. This is the inverse of the gram matrix of the lattice under question.
+ *   @param[in] v A constant pointer to a constant valarray of multi-precision integers. This is the vector to test.
+ *   @param[in] dim A constant unsigned integer specifying the dimension of the lattice.
+ *   @param[out] mv A constant pointer to a vector of multi-precision rationals. Holds \f$m \cdot v\f$, if that result is desired; else NULL may be passed.
+ *
+ *   @return True if and only if \f$v \in L\f$, where \f$L\f$ denotes the lattice with Gram matrix \f$m^{-1}\f$.
+ *
+ *   See [HB] 3.4.1 for further details.
+ */
 bool LALA::elementOfLattice(const boost::numeric::ublas::matrix<mpq_class>* const m, const std::valarray<mpz_class>* const v, const unsigned int dim, boost::numeric::ublas::vector<mpq_class>* const mv)
 {
 	// see [HB] 3.4.1
@@ -937,6 +1285,19 @@ bool LALA::elementOfLattice(const boost::numeric::ublas::matrix<mpq_class>* cons
 /////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// Public Scalar Products ////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the scalar product of two vectors.
+ *
+ *   @param x Constant pointer to a constant valarray of multi-precision integers.
+ *   @param y Constant pointer to a constant valarray of multi-precision integers.
+ *   @param innerProduct Constant pointer to a constant symmetric matrix of multi-precision integers specifying a scalar product. This is NULL by default (standard scalar product).
+ *
+ *   @return The value of the scalar product of \f$x\f$ and \f$y\f$, i.e. either \f$x^t \cdot y\f$ or \f$x^t \cdot A \cdot y\f$, where \f$A\f$ denoted the given inner product.
+ *
+ *   In the case where no inner product is specified, the loops are unrolled manually for a significant speed burst.
+ *
+ *   @todo Unroll the loops in the presence of an inner product as well. Register blocking or prefetching will probably lead to a great increase in speed.
+ */
 mpz_class LALA::scalarProduct(const std::valarray<mpz_class>* const x, const std::valarray<mpz_class>* const y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	mpz_class result = 0;
@@ -999,6 +1360,19 @@ mpz_class LALA::scalarProduct(const std::valarray<mpz_class>* const x, const std
 	return result;
 }
 
+/*!
+ *   @brief Computes the scalar product of two vectors.
+ *
+ *   @param x Constant pointer to a constant valarray of multi-precision rationals.
+ *   @param y Constant pointer to a constant valarray of multi-precision rationals.
+ *   @param innerProduct Constant pointer to a constant symmetric matrix of multi-precision integers specifying a scalar product. This is NULL by default (standard scalar product).
+ *
+ *   @return The value of the scalar product of \f$x\f$ and \f$y\f$, i.e. either \f$x^t \cdot y\f$ or \f$x^t \cdot A \cdot y\f$, where \f$A\f$ denoted the given inner product.
+ *
+ *   In the case where no inner product is specified, the loops are unrolled manually for a significant speed burst.
+ *
+ *   @todo Unroll the loops in the presence of an inner product as well. Register blocking or prefetching will probably lead to a great increase in speed.
+ */
 mpq_class LALA::scalarProduct(const std::valarray<mpq_class>* const x, const std::valarray<mpq_class>* const y, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	mpq_class result = 0;
@@ -1064,6 +1438,16 @@ mpq_class LALA::scalarProduct(const std::valarray<mpq_class>* const x, const std
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Gram-Schmidt ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Performs Gram-Schmidt-Orthogonalization.
+ *
+ *   @param basis Constant pointer to vector of valarrays: the given basis to orthogonalize.
+ *   @param g Constant pointer to a constant symmetric matrix specifying a scalar product. This is NULL by default (standard scalar product).
+ *
+ *   @return void
+ *
+ *   Computes an orthogonal basis w.r.t. standard euclidean basis or g, starting with the given basis.
+ */
 void LALA::gramSchmidt(std::vector<std::valarray<mpq_class> >* const basis, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g)
 {
 	unsigned int dim = basis->size();
@@ -1104,7 +1488,18 @@ void LALA::gramSchmidt(std::vector<std::valarray<mpq_class> >* const basis, cons
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// FP-LLL /////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-int LALA::lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h)
+/*!
+ *   @brief Floating point LLL.
+ *
+ *   @param[in, out] b Constant pointer to a matrix of mpfreals. The input is the basis to reduce and the output is the LLL-reduced basis.
+ *   @param[out] h Constant pointer to a matrix of mpreals. If not a null pointer, this will be the basis change matrix from the original basis to the LLL-reduced basis.
+ *
+ *   @return A void Expected, or a void Expected with a std::runtime_error exception if the given vector system was not a basis.
+ *
+ *   After the function returns, b will be lll reduced and h holds the coordinates of the new LLL-reduced basis in terms of the old one.
+ *   See [CH] Definition 2.6.1 for further details.
+ */
+util::Expected<void> LALA::lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h)
 {
 	// the columns of b encode the base vectors b_1, ..., b_n
 	// b will be lll reduced - see [CH] Definition 2.6.1
@@ -1156,8 +1551,7 @@ int LALA::lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::
 			if(B[k] == 0)
 			{
 				// linear dependency
-				util::ServiceLocator::getFileLogger()->print<util::SeverityType::error>(std::stringstream("Critical error in LLL: given vector system is linearly dependent!\n"));
-				return -1;
+				return std::runtime_error("Critical error in LLL: given vector system is linearly dependent!");
 			}
 		}
 
@@ -1170,9 +1564,22 @@ int LALA::lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::
 		k++;
 	}
 
-	return 1;
+	// return success
+	return { };
 }
 
+/*!
+ *   @brief Integral modified LLL.
+ *
+ *   @param[in, out] b Constant pointer to a matrix of multi-precision integers, whose columns are, as input, the basis to reduce and, as output, the LLL-reduced basis.
+ *   @param[out] h Constant pointer to a matrix of multi-precision integers. If not a null pointer, this will be the basis change matrix from the original basis to the LLL-reduced basis.
+ *   @param[in] innerProduct A constant pointer to a constant symmetric matrix of multi-precision integers specifying a scalar product. This is NULL by default (standard scalar product).
+ *
+ *   @return An unsigned int: the rank of the given vector system.
+ *
+ *	 The columns of b encode a generating system. b will be a LLL-reduced basis. See [CH] Algorithm 2.6.8 for further details.
+ *	 If so desired, h will be the transformation matrix, i.e. h holds the coordinates of the new basis in terms of the old one.
+ */
 unsigned int LALA::mlllBasis(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpz_class>* const h, boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct)
 {
 	// the columns of b encode a generating system
@@ -1273,7 +1680,18 @@ unsigned int LALA::mlllBasis(boost::numeric::ublas::matrix<mpz_class>* const b, 
 	return rk;
 }
 
-int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h)
+/*!
+ *   @brief Floating point LLL.
+ *
+ *   @param[in, out] g Constant pointer to a symmetric matrix of mpfreals. The input is a Gram matrix and the output is the LLL-reduced Gram matrix.
+ *   @param[out] h Constant pointer to a matrix of mpreals. If not a null pointer, this will be the basis change matrix from the original basis to the LLL-reduced basis.
+ *
+ *   @return A void Expected, or a void Expected with a std::runtime_error exception if the given vector system was not a basis.
+ *
+ *  g is the gramian of a basis \f$v_1, \dots, v_n\f$. g will be LLL-reduced. See [CH] Definition 2.6.1 for further details.<br>
+ *  If so desired, h will be the transformation matrix, i.e. h holds the coordinates of the new basis in terms of the old one.
+ */
+util::Expected<void> LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h)
 {
 	// g is the gramian of a basis v_1, ..., v_n
 	// g will be lll reduced - see [CH] Definition 2.6.1
@@ -1317,8 +1735,7 @@ int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g
 			else
 			{
 				// linear dependency
-				util::ServiceLocator::getFileLogger()->print<util::SeverityType::error>(std::stringstream("Critical error in LLL: given vector system is linearly dependent!\n"));
-				return -1;
+				return std::runtime_error("Critical error in LLL: given vector system is linearly dependent!");
 			}
 		}
 
@@ -1331,13 +1748,25 @@ int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g
 		k++;
 	}
 
-	return 1;
+	// return success
+	return { };
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// Integral LLL ////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h)
+/*!
+ *   @brief Integral LLL.
+ *
+ *   @param[in, out] g Constant pointer to a symmetric matrix of multi-precision integers. The input is a Gram matrix and the output is the LLL-reduced Gram matrix.
+ *   @param[out] h Constant pointer to a matrix of multi-precision integers. If not a null pointer, this will be the basis change matrix from the original basis to the LLL-reduced basis.
+ *
+ *   @return A void Expected, or a void Expected with a std::runtime_error exception if the given vector system was not a basis.
+ *
+ *	 g is the gramian of a basis \f$v_1, \dots, v_n\f$. g will be LLL-reduced - see [CH] Definition 2.6.1 for further information.<br>
+ *	 If so desired, h will be the transformation matrix, i.e. h holds the coordinates of the new basis in terms of the old one.
+ */
+util::Expected<void> LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h)
 {
 	// g is the gramian of a basis v_1, ..., v_n
 	// g will be lll reduced - see [CH] Definition 2.6.1
@@ -1382,8 +1811,7 @@ int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, b
 					if(u==0)
 					{
 						// sub-determinant zero => linear dependency
-						util::ServiceLocator::getFileLogger()->print<util::SeverityType::error>(std::stringstream("Critical error in LLL: given vector system is linearly dependent!\n"));
-						return -1;
+						return std::runtime_error("Critical error in LLL: given vector system is linearly dependent!");
 					}
 					d[k+1]=u;				// sub-determinant
 				}
@@ -1399,25 +1827,47 @@ int LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, b
 		k++;
 	}
 
-	return 1;
+	// return success
+	return { };
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Short Vectors //////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-unsigned long LALA::shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class>> >* const X)
+/*!
+ *   @brief Enumerates all vector in a given lattice with a shorter length than a given constant.
+ *
+ *   @param[in] g Constant pointer to a constant symmetric matrix of multi-precision integers specifying a positive definite quadratic form.
+ *   @param[in] c Constant positive multi-precision integer.
+ *   @param[out] X Constant pointer to a vector of pairs of multi-precision integers and valarrays of the same type, holding all enumerated vectors. The first entry is the length of the vector, the second the vector itself.
+ *
+ *   @return An Expected with an unsigned long, the number of short vectors enumerated by the algorithm, a std::runtime_error exception an error was encountered during the computation or a std::invalid_argument exception if c is zero or negative.
+ *
+ *	 This algorithm outputs all non-zero vectors \f$x \in \mathbb{Z}\f$ such that \f$q(x) < c\f$ and the corresponding values of \f$q(x)\f$.
+ *
+ *   @todo Check for positive definiteness.
+ */
+util::Expected<unsigned long> LALA::shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class>> >* const X)
 {
 	unsigned int n = g->size1();
+
+	if(c <= 0)
+		return std::invalid_argument("Invalid argument in LALA::shortVectors: c <= 0");
 
 	// Fincke-Pohst preprocessing - see [CH] Algorithm 2.7.7
 	boost::numeric::ublas::matrix<mpfr::mpreal> q, h, p;
 	LALA::shortVectorsFinckePohst(g, &h, &p, &q);
 
 	// short vector algorithm - see [CH] Algorithm 2.7.5
-	unsigned long nx = LALA::shortVectors(&q, c, X);
+	unsigned long nx = 0;
+	try{ nx = LALA::shortVectorsPrivate(&q, c, X).get(); }
+	catch(std::runtime_error& e)
+	{
+		return e;
+	}
 
 	// sort the list, norm the list, i.e. first nonzero entry should be positive and re-transform the vectors with h and p
-	std::sort(X->begin(), X->end(), LALA::comparePairValarrayLong);
+	std::sort(X->begin(), X->end(), LALA::comparePairMPZValarray);
 	for(unsigned int i=0; i<X->size(); i++)
 	{
 		// copy solution vector into a boost vector
@@ -1456,6 +1906,17 @@ unsigned long LALA::shortVectors(const boost::numeric::ublas::symmetric_matrix<m
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Basis from Generating Set //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Constructs a lattice basis from a generating set.
+ *
+ *   @param[in] gen Constant pointer to a constant vector of valarrays with multi-precision integers specifying a generating system for a lattice.
+ *   @param[out] basis Constant pointer to a vector of valarrays of multi-precision integers. This will out the basis constructed from the generating set.
+ *
+ *   @return void
+ *
+ *	This algorithm computes a lattice basis from a given generating system. <br>
+ *	This is a serial algorithm with pruning. See [HB] chapter 3.5 for further information.
+ */
 void LALA::basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> >* const gen, std::vector<std::valarray<mpz_class> >* const basis)
 {
 	// algorithm to compute a lattice basis from a given generating system
@@ -1562,6 +2023,14 @@ void LALA::basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> 
 /////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// Gauss /////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the echelon form of a matrix.
+ *
+ *   @param[in, out] m A constant pointer to a matrix with multi-precision rationals whose columns encode a basis for the underlying module. This will be changed to column-echelon form.
+ *   @param[out] basisExtension Constant pointer to a vector unsigned ints, specifying standard basis vectors useable for a basis extensions. Default: NULL, no basis extension is computed.
+ *
+ *   @return void
+ */
 void LALA::echelonForm(boost::numeric::ublas::matrix<mpq_class>* const m, std::vector<unsigned int>* const basisExtension)
 {
 	unsigned int nCols = m->size2(), nRows = m->size1();
@@ -1654,6 +2123,14 @@ void LALA::echelonForm(boost::numeric::ublas::matrix<mpq_class>* const m, std::v
 	}
 }
 
+/*!
+ *   @brief Computes the echelon form of a matrix.
+ *
+ *   @param[in] m A constant pointer to a constant matrix with multi-precision rationals whose columns encode a basis for the underlying module. This will be changed to column-echelon form.
+ *   @param[out] basisExtension Constant pointer to a vector unsigned ints, specifying standard basis vectors useable for a basis extensions. Default: NULL, no basis extension is computed.
+ *
+ *   @return void
+ */
 void LALA::echelonFormConst(const boost::numeric::ublas::matrix<mpq_class>* const m, std::vector<unsigned int>* const basisExtension)
 {
 	// create working copy
@@ -1664,6 +2141,13 @@ void LALA::echelonFormConst(const boost::numeric::ublas::matrix<mpq_class>* cons
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Rank ///////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the rank of a matrix.
+ *
+ *   @param m A constant pointer to a constant matrix with mpreals.
+ *
+ *   @return An unsigned long specifying the rank of the given matrix.
+ */
 unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpfr::mpreal>* const m)
 {
 	unsigned int nCols = m->size2(), nRows = m->size1();
@@ -1724,11 +2208,17 @@ unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpfr::mpreal>* cons
 				mpfr::mpreal t = rowI(k) / pivot;
 				MatrixHelper<mpfr::mpreal>::rowAddMultiple(&copyM, i, k, -t);
 			}
-
 		}
 	return rk;
 }
 
+/*!
+ *   @brief Computes the rank of a matrix.
+ *
+ *   @param m A constant pointer to a constant matrix with multi-precision rational entries.
+ *
+ *   @return An unsigned long specifying the rank of the given matrix.
+ */
 unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpq_class>* const m)
 {
 	unsigned int nCols = m->size2(), nRows = m->size1();
@@ -1793,6 +2283,13 @@ unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpq_class>* const m
 	return rk;
 }
 
+/*!
+ *   @brief Computes the rank of a matrix.
+ *
+ *   @param m A constant pointer to a constant matrix of multi-precision integers.
+ *
+ *   @return An unsigned long specifying the rank of the given matrix.
+ */
 unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpz_class>* const m)
 {
 	// copy matrix into mpq matrix
@@ -1803,6 +2300,15 @@ unsigned long LALA::rank(const boost::numeric::ublas::matrix<mpz_class>* const m
 /////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// Basis Extensions //////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes a basis extensions for a given basis.
+ *
+ *   @param[in,out] m A constant pointer to a matrix with multi-precision rational entries. A possible basis extension is appended to its columns.
+ *
+ *   @return void
+ *
+ *   The matrix m should have the correct dimensions (filled with 0 cols).
+ */
 void LALA::basisExtensionZ(boost::numeric::ublas::matrix<mpq_class>* const m)
 {
 	// matrix m should have the correct dimensions (filled with 0 cols)
@@ -1826,6 +2332,15 @@ void LALA::basisExtensionZ(boost::numeric::ublas::matrix<mpq_class>* const m)
 	}
 }
 
+/*!
+ *   @brief Computes the orthogonal complement of a submodule.
+ *
+ *   @param[in] latticeBasis A constant pointer to a constant vector of valarrays with multi-precision rational entries specifying a lattice basis.
+ *   @param[out] orthCompl A constant pointer to a vector of valarrays with multi-precision rational entries holding the orthogonal complement of the given lattice basis.
+ *   @param[in] g The scaler product to use. Default: NULL (standard scalar product).
+ *
+ *   @return void
+ */
 void LALA::orthogonalComplement(const std::vector<std::valarray<mpq_class> >* const latticeBasis, std::vector<std::valarray<mpq_class> >* const orthCompl, const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g)
 {
 	unsigned int rk = latticeBasis->size();
@@ -1864,6 +2379,19 @@ void LALA::orthogonalComplement(const std::vector<std::valarray<mpq_class> >* co
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Matrix Inversion ///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the inverse of a given upper triangular matrix.
+ *
+ *   @param[in] a A constant pointer to a constant upper triangular matrix of mpreals specifying the matrix to be inverted.
+ *   @param[out] b A constant pointer to an upper triangular matrix of mpreals. This will be the inverted matrix when the function returns.
+ *
+ *   @return void
+ *
+ *   @section Note
+ *
+ * For an upper triangular matrix \f$A\f$ with \f$A_{ii} = 1\f$ for all \f$i\f$, we have:
+ * \f$A = I + N\f$, with \f$N\f$ nilpotent, thus \f$A^{-1} = (I+N)^{-1} = I + \sum\limits_{i=1}^n N^i\f$, where \f$n\f$ is the nilpotent index of \f$A\f$.
+ */
 void LALA::inverse(const boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* const a, boost::numeric::ublas::triangular_matrix<mpfr::mpreal, boost::numeric::ublas::upper>* const b)
 {
 	// for an upper triangular matrix A with A_ii = 1 for all i, we have: A = I + N, with N nilpotent, thus
@@ -1905,6 +2433,16 @@ void LALA::inverse(const boost::numeric::ublas::triangular_matrix<mpfr::mpreal, 
 		(*b)(i,i) = 1;
 }
 
+/*!
+ *   @brief Computes the inverse of a given matrix.
+ *
+ *   @param[in] a A constant pointer to a constant matrix of mpreals specifying the matrix to be inverted.
+ *   @param[out] b A constant pointer to a matrix of mpreals. This will be the inverted matrix when the function returns.
+ *
+ *   @return True if and only if the input matrix was regular.
+ *
+ *   This algorithm uses LU factorization to compute the inverse of the given matrix.
+ */
 bool LALA::inverse(const boost::numeric::ublas::matrix<mpfr::mpreal>* const a, boost::numeric::ublas::matrix<mpfr::mpreal>* const b)
 {
 	// create a working copy of the input
@@ -1926,6 +2464,16 @@ bool LALA::inverse(const boost::numeric::ublas::matrix<mpfr::mpreal>* const a, b
 	return true;
 }
 
+/*!
+ *   @brief Computes the inverse of a given matrix.
+ *
+ *   @param[in] a A constant pointer to a constant matrix of multi-precision rationals specifying the matrix to be inverted.
+ *   @param[out] b A constant pointer to a matrix of multi-precision rationals. This will be the inverted matrix when the function returns.
+ *
+ *   @return True if and only if the input matrix was regular.
+ *
+ *   This algorithm uses LU factorization to compute the inverse of the given matrix.
+ */
 bool LALA::inverse(const boost::numeric::ublas::matrix<mpq_class>* const a, boost::numeric::ublas::matrix<mpq_class>* const b)
 {
 	// create a working copy of the input
@@ -1950,6 +2498,15 @@ bool LALA::inverse(const boost::numeric::ublas::matrix<mpq_class>* const a, boos
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Determinant ////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the determinant of a given matrix.
+ *
+ *   @param[in] m A constant pointer to a constant matrix of mpreals specifying the matrix whose determinant to calculate.
+ *
+ *   @return The determinant of the matrix stored in an mpreal.
+ *
+ *   This algorithm uses LU factorization to compute the determinant of the given matrix.
+ */
 mpfr::mpreal LALA::det(const boost::numeric::ublas::matrix<mpfr::mpreal>* const m)
 {
     // create a working copy of the input
@@ -1971,6 +2528,15 @@ mpfr::mpreal LALA::det(const boost::numeric::ublas::matrix<mpfr::mpreal>* const 
     return det;
 }
 
+/*!
+ *   @brief Computes the determinant of a given matrix.
+ *
+ *   @param[in] m A constant pointer to a constant symmetric matrix of mpreals specifying the matrix whose determinant to calculate.
+ *
+ *   @return The determinant of the matrix stored in an mpreal.
+ *
+ *   This algorithm uses LU factorization to compute the determinant of the given matrix.
+ */
 mpfr::mpreal LALA::det(const boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const m)
 {
 	// create working copy
@@ -1978,6 +2544,15 @@ mpfr::mpreal LALA::det(const boost::numeric::ublas::symmetric_matrix<mpfr::mprea
     return LALA::det(&copyM);
 }
 
+/*!
+ *   @brief Computes the determinant of a given matrix.
+ *
+ *   @param[in] m A constant pointer to a constant matrix of multi-precision integers specifying the matrix whose determinant to calculate.
+ *
+ *   @return The determinant of the matrix stored in a multi-precision integer.
+ *
+ *   This algorithm uses Gauss-Bareiss to compute the determinant.
+ */
 mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::matrix<mpz_class>* const m)
 {
 	assert(m->size1() == m->size2());
@@ -2037,6 +2612,15 @@ mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::matrix<mpz_class>* 
 	return s * copyM(dim-1,dim-1);
 }
 
+/*!
+ *   @brief Computes the determinant of a given matrix.
+ *
+ *   @param[in] m A constant pointer to a constant symmetric matrix of multi-precision integers specifying the matrix whose determinant to calculate.
+ *
+ *   @return The determinant of the matrix stored in a multi-precision integer.
+ *
+ *   This algorithm uses Gauss-Bareiss to compute the determinant.
+ */
 mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const m)
 {
 	assert(m->size1() == m->size2());
@@ -2049,6 +2633,5 @@ mpz_class LALA::detGaussBareiss(const boost::numeric::ublas::symmetric_matrix<mp
 
 	return LALA::detGaussBareiss(&copyM);
 }
-
 
 }

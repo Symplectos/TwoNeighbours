@@ -38,6 +38,10 @@
  * - 14/10/2016: added support for unit matrix
  * - 13/10/2016: added matrix reading (boost) and printing (human)
  *
+ * @todo
+ * - Write an algorithm to create matrices \f$\in GL_n\f$ or \f$SL_n\f$.
+ * - Write a function to test bilinear forms for regularity and positive definiteness.
+ *
  * @version	1.0.2.0
  * @bug 	No known bugs.
  *
@@ -126,7 +130,7 @@ public:
 template<class T>
 void MatrixHelper<T>::colSwap(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j)
 {
-	assert(i<m->size2() && j<m->size2() && i>=0 && j>=0);
+	assert(i<m->size2() && j<m->size2());
 
 	boost::numeric::ublas::matrix_column<boost::numeric::ublas::matrix<T> > columnI(*m, i);
 	boost::numeric::ublas::matrix_column<boost::numeric::ublas::matrix<T> > columnJ(*m, j);
@@ -152,7 +156,7 @@ void MatrixHelper<T>::colSwap(boost::numeric::ublas::matrix<T>* const m, const u
 template<class T>
 void MatrixHelper<T>::colAddMultiple(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j, const T t)
 {
-	assert(i < m->size2() && j < m->size2() && i>=0 && j>=0);
+	assert(i < m->size2() && j < m->size2());
 
 	// get the columns in question
 	boost::numeric::ublas::matrix_column<boost::numeric::ublas::matrix<T> > columnI(*m, i);
@@ -180,7 +184,7 @@ void MatrixHelper<T>::colAddMultiple(boost::numeric::ublas::matrix<T>* const m, 
 template<class T>
 void MatrixHelper<T>::colMultiply(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const T t)
 {
-	assert(i < m->size2() && i>=0);
+	assert(i < m->size2());
 
 	// get the column in question
 	boost::numeric::ublas::matrix_column<boost::numeric::ublas::matrix<T> > columnI(*m, i);
@@ -209,7 +213,7 @@ void MatrixHelper<T>::colMultiply(boost::numeric::ublas::matrix<T>* const m, con
 template<class T>
 void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m, const unsigned int i, const unsigned int j, const T t)
 {
-	assert(i < m->size1() && j < m->size1() && i>=0 && j>=0);
+	assert(i < m->size1() && j < m->size1());
 	unsigned int n = m->size1();
 
 	// add multiple
@@ -244,7 +248,7 @@ template<class T>
 void MatrixHelper<T>::rowMultiply(boost::numeric::ublas::triangular_matrix<T, boost::numeric::ublas::upper>* const m, const unsigned int i, const T t)
 {
 	unsigned int n = m->size1();
-	assert(i < n && i>=0);
+	assert(i < n);
 
 	for(unsigned int k=i; k<n; k++)
 		(*m)(i,k) *= t;
@@ -269,7 +273,7 @@ template<class T>
 void MatrixHelper<T>::baseSwap(boost::numeric::ublas::symmetric_matrix<T>* const g, unsigned int i, unsigned int j)
 {
 	unsigned int dim = g->size1();
-	assert(i<dim && j<dim && i>=0 && j>=0);
+	assert(i<dim && j<dim);
 
 	if (i > j)
 		std::swap(i, j);
@@ -315,7 +319,7 @@ void MatrixHelper<T>::baseSwap(boost::numeric::ublas::symmetric_matrix<T>* const
  */
 template<class T>
 void MatrixHelper<T>::baseAddMultiple(boost::numeric::ublas::symmetric_matrix<T>* const g, const unsigned int i, const unsigned int j, T t)
-{	assert(i < g->size1() && j < g->size1() && i>=0 && j>=0);
+{	assert(i < g->size1() && j < g->size1());
 
 // temporarily save needed entries
 T tempII = (*g)(i,i);
@@ -352,7 +356,7 @@ for(unsigned int k=0; k<g->size1(); k++)
 template<class T>
 void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::matrix<T>* const m, const unsigned int i, const unsigned int j, T t)
 {
-	assert(i < m->size1() && j < m->size1() && i>=0 && j>=0);
+	assert(i < m->size1() && j < m->size1());
 
 	// get columns
 	boost::numeric::ublas::matrix_row<boost::numeric::ublas::matrix<T> > rowI((*m), i);
@@ -380,7 +384,7 @@ template<class T>
 void MatrixHelper<T>::baseDelZeroes(boost::numeric::ublas::matrix<T>* const b, const unsigned int rk)
 {
 	// delete zero columns - expects the first n-rk columns to be zero!
-	assert(rk <= b->size2() && rk>=0);
+	assert(rk <= b->size2());
 
 	if(rk == b->size2())
 		return;
@@ -413,7 +417,7 @@ template<class T>
 void MatrixHelper<T>::setColumn(boost::numeric::ublas::matrix<T>* const b, const std::valarray<T>* const col, const unsigned int i)
 {
 	// set column i of b to col
-	assert(i < b->size2() && i>=0);
+	assert(i < b->size2());
 	boost::numeric::ublas::matrix_column<boost::numeric::ublas::matrix<T> > colI(*b, i);
 	for(unsigned int j=0; j<b->size1(); j++)
 		colI(j) = (*col)[j];
@@ -474,7 +478,7 @@ bool MatrixHelper<T>::isOrthogonal(const boost::numeric::ublas::matrix<T>* const
 template<class T>
 std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::matrix<T>* const m, const unsigned int i)
 {
-	assert(i<m->size2() && i>=0);
+	assert(i<m->size2());
 
 	// get column
 	boost::numeric::ublas::matrix_column<const boost::numeric::ublas::matrix<T> > columnI(*m, i);
@@ -500,7 +504,7 @@ std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::matrix<
 template<class T>
 std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::symmetric_matrix<T>* const m, const unsigned int i)
 {
-	assert(i<m->size2() && i>=0);
+	assert(i<m->size2());
 
 	// get column
 	boost::numeric::ublas::matrix_column<const boost::numeric::ublas::symmetric_matrix<T> > columnI(*m, i);

@@ -31,7 +31,11 @@ Lattice::Lattice(const boost::numeric::ublas::symmetric_matrix<mpz_class>* gram)
 		if(highestDiagonalEntry < this->gram(i,i))
 			highestDiagonalEntry = this->gram(i,i);
 
-	nShVecs = LALA::shortVectors(&this->gram, highestDiagonalEntry, &shVecs);
+	try{ nShVecs = LALA::shortVectors(&this->gram, highestDiagonalEntry, &shVecs).get(); }
+	catch(std::runtime_error& e)
+	{
+		throw e;
+	}
 
 	// compute decomposition
 	this->constructDecomposition();

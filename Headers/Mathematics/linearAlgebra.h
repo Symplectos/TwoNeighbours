@@ -1,70 +1,76 @@
 #pragma once
 
-/*
- * File:   linearAlgebra.h
- * Author: Gilles Bellot
- * Date:   14/10/2016 - Eichlinghofen - Germany
+/************************************************************************************//**
+ * @author	Gilles Bellot
+ * @file	linearAlgebra.h
+ * @date	14/10/2016 - Eichlinghofen - Germany
  *
- * Description: general linear algebra algorithms
+ * @brief	General algorithms for linear algebra and lattices.
  *
- * Bibliography: - [CH] Cohen, H. --- A Course in Computational Algebraic Number Theory
- * 				 - [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
+ * @section Bibliography
+ * - [CH] Cohen, H. --- A Course in Computational Algebraic Number Theory
+ * - [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
  *
- * History:
- * 				- 02/11/2016: added swap and red sub-agorithms for integral LLL
- * 				- 03/11/2016: added recursive LLL condition test
- * 				- 14/11/2016: fixed a loop error in the LLL algorithm
- * 				- 17/11/2016: added rational cholesky decomposition
- * 				- 17/11/2016: changed lll to use valarrays (less aliasing)
- * 				- 17/11/2016: changed cholesky to use valarrays
- * 				- 05/01/2017: added fixed point LLL
- * 				- 05/01/2017: changed lll to lllGram
- * 				- 05/01/2017: lllBasis added
- * 				- 06/01/2017: cleaned LLL algorithms a little bit
- * 				- 06/01/2017: added short vectors algorithm with Fincke-Pohst preprocessing
- * 				- 13/01/2017: added mLLL for integral generating system (floating points used) - not tested yet
- * 				- 17/01/2017: fixed several asserts in dot product functions
- * 				- 17/01/2017: fixed iterations in mLLL
- * 				- 17/01/2017: added fudge variable to the short vectors algorithm (needs more testing) - set to 10^(-10) for now
- * 				- 17/01/2017: changed short vector algorithm to use mpz_class instead of longs (needs speed testing)
- * 				- 18/01/2017: deleted QFA class -> cholesky added to LALA
- * 				- 18/01/2017: added non-euclidean scalar products
- * 				- 18/01/2017: added linear dependency test for vectors \in Z^n over R
- * 				- 19/01/2017: fixed an error in linear dependency over R algorithm - now uses gauss-bareiss
- * 				- 19/01/2017: unrolled the scalar product
- * 				- 21/01/2017: adopted the det, inverse and rank functions from the MatrixHelper class
- * 				- 21/01/2017: unrolled the lllDot functions
- * 				- 06/02/2017: added integral echelon form algorithm
- * 				- 06/02/2017: added rank computation over the ring of integers
- * 				- 06/02/2017: added test for linear independence over Z
- * 				- 06/02/2017: added test to check whether a vector lies in the linear span of a given vector system
- * 				- 06/02/2017: added algorithm to compute a basis from a generating set based on [HB]
- * 				- 21/02/2017: added elementOf, see [HC] 3.4.1
- * 				- 27/02/2017: deleted rankZ and echelonForm
- * 				- 27/02/2017: fixed an error in elementOfLattice
- * 				- 27/02/2017: added basis extension algorithm
- * 				- 27/02/2017: added naive algorithm for row reduced algorithm form
- * 				- 27/02/2017: added a serial algorithm with pruning to compute basis from a generating set, see [HB] chapter 3.5
- * 				- 28/02/2017: extended elementOfLattice algorithm to return mv
- * 				- 28/02/2017: made basis extension algorithm public
- * 				- 28/02/2017: added naive gram-schmidt algorithm
- * 				- 28/02/2017: added scalar product for mpq
- * 				- 28/02/2017: added computation of orthogonal complement
- * 				- 28/02/2017: fixed a stupid error in scalar product computation
- * 				- 28/02/2017: fixed an error in gram schmidt
- * 				- 10/03/2017: fixed an error in rankGaussBareiss
- * 				- 10/03/2017: fixed an error in rank computation
- * 				- 01/08/2017: cleaned some unused variables in the various LLL algorithms
- * 				- 02/08/2017: added const declarations
+ * @section History
+ * - 04/08/2017: lllGram and lllBasis now use the Expected idiom for exception handling
+ * - 04/08/2017: shortVectors now uses the Expected idiom for exception handling
+ * - 04/08/2017: added doxygen style comments
+ * - 02/08/2017: added const declarations
+ * - 01/08/2017: cleaned some unused variables in the various LLL algorithms
+ * - 10/03/2017: fixed an error in rank computation
+ * - 10/03/2017: fixed an error in rankGaussBareiss
+ * - 28/02/2017: fixed an error in gram schmidt
+ * - 28/02/2017: fixed a stupid error in scalar product computation
+ * - 28/02/2017: added computation of orthogonal complement
+ * - 28/02/2017: added scalar product for mpq
+ * - 28/02/2017: added naive gram-schmidt algorithm
+ * - 28/02/2017: made basis extension algorithm public
+ * - 28/02/2017: extended elementOfLattice algorithm to return mv
+ * - 27/02/2017: added a serial algorithm with pruning to compute basis from a generating set, see [HB] chapter 3.5
+ * - 27/02/2017: added naive algorithm for row reduced algorithm form
+ * - 27/02/2017: added basis extension algorithm
+ * - 27/02/2017: fixed an error in elementOfLattice
+ * - 27/02/2017: deleted rankZ and echelonForm
+ * - 21/02/2017: added elementOf, see [HC] 3.4.1
+ * - 06/02/2017: added algorithm to compute a basis from a generating set based on [HB]
+ * - 06/02/2017: added test to check whether a vector lies in the linear span of a given vector system
+ * - 06/02/2017: added test for linear independence over Z
+ * - 06/02/2017: added rank computation over the ring of integers
+ * - 06/02/2017: added integral echelon form algorithm
+ * - 21/01/2017: unrolled the lllDot functions
+ * - 21/01/2017: adopted the det, inverse and rank functions from the MatrixHelper class
+ * - 19/01/2017: unrolled the scalar product
+ * - 19/01/2017: fixed an error in linear dependency over R algorithm - now uses gauss-bareiss
+ * - 18/01/2017: added linear dependency test for vectors in Z^n over R
+ * - 18/01/2017: added non-euclidean scalar products
+ * - 18/01/2017: deleted QFA class -> cholesky added to LALA
+ * - 17/01/2017: changed short vector algorithm to use mpz_class instead of longs (needs speed testing)
+ * - 17/01/2017: added fudge variable to the short vectors algorithm (needs more testing) - set to 10^(-10) for now
+ * - 17/01/2017: fixed iterations in mLLL
+ * - 17/01/2017: fixed several asserts in dot product functions
+ * - 13/01/2017: added mLLL for integral generating system (floating points used) - not tested yet
+ * - 06/01/2017: added short vectors algorithm with Fincke-Pohst preprocessing
+ * - 06/01/2017: cleaned LLL algorithms a little bit
+ * - 05/01/2017: lllBasis added
+ * - 05/01/2017: changed lll to lllGram
+ * - 05/01/2017: added fixed point LLL
+ * - 17/11/2016: changed cholesky to use valarrays
+ * - 17/11/2016: changed lll to use valarrays (less aliasing)
+ * - 17/11/2016: added rational cholesky decomposition
+ * - 14/11/2016: fixed a loop error in the LLL algorithm
+ * - 03/11/2016: added recursive LLL condition test
+ * - 02/11/2016: added swap and red sub-agorithms for integral LLL
  *
- * ToDo: 	- write a more robust fp-LLL (see Schnorr-Euchner) --- see example in /Input/dim6...
- * 			- change shortVector algorithm to compute S without inverting S^-1
- * 			- clean up and speed up shortVector routine
- * 			- write non multi-precision version of algorithms
- * 			- write a parallel basis construction algorithm for very large generating sets
- * 			- clean up the basis construction algorithm
- * 			- improve gram-schmidt
- */
+ * @todo
+ *  - write a more robust fp-LLL (see Schnorr-Euchner) --- see example in /Input/dim6 ...
+ *  - add a BKZ algorithm
+ *  - write a parallel basis construction algorithm for very large generating sets
+ *
+ * @version	1.0.2.0
+ * @bug 	No known bugs.
+ *
+ * @copyright	Gilles Bellot @ TU Dortmund
+ ****************************************************************************************/
 
 // INCLUDES /////////////////////////////////////////////////////////////////////////////
 
@@ -80,19 +86,25 @@
 // boost ublas
 #include <boost/numeric/ublas/matrix.hpp>
 
+// bell0bytes util
+#include "../../Headers/Utilities/expected.h"
+
 namespace mathematics
 {
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
 
 // (L)inear (A)lgebra and (L)attice (A)lgorithms
+/*!
+ * @brief This static class holds (L)inear (A)lgebra and (L)attice (A)lgorithms.
+ */
 class LALA
 {
 private:
-	// fudge variable
-	static constexpr double SHVEC_ELLIPSOID_EPSILON = 0.0000000001;
+	static constexpr double SHVEC_ELLIPSOID_EPSILON = 0.0000000001;		//!< A fudge variable used in the computation of short vectors.
+	static constexpr float eps = std::numeric_limits<float>::epsilon();	//!< The difference between 1.0 and the next representable value of float type. Used as fudge variable in the fp LLL algorithm.
 
 	// general functions
-	static bool comparePairValarrayLong(const std::pair<mpz_class, std::valarray<mpz_class> >& a, const std::pair<mpz_class, std::valarray<mpz_class> >& b);
+	static bool comparePairMPZValarray(const std::pair<mpz_class, std::valarray<mpz_class> >& a, const std::pair<mpz_class, std::valarray<mpz_class> >& b);
 
 	// rational cholesky decomposition for positive definite forms
 	static void choleskyDecomposition(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::triangular_matrix<mpq_class, boost::numeric::ublas::upper>* const r, std::valarray<mpq_class>* const d);
@@ -123,7 +135,7 @@ private:
 
 	// short vectors
 	static void shortVectorsFinckePohst(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h, boost::numeric::ublas::matrix<mpfr::mpreal>* const p, boost::numeric::ublas::matrix<mpfr::mpreal>* const q);	// Fincke-Pohst preprocessing, returns q
-	static unsigned long shortVectors(const boost::numeric::ublas::matrix<mpfr::mpreal>* const q, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X);	// short vectors algorithm
+	static util::Expected<unsigned long> shortVectorsPrivate(const boost::numeric::ublas::matrix<mpfr::mpreal>* const q, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X);	// short vectors algorithm
 
 public:
 	// linear independence
@@ -167,19 +179,18 @@ public:
 	static void basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> >* const gen, std::vector<std::valarray<mpz_class> >* const basis);
 
 	// floating point LLL as described in [CH] Algorithm 2.6.3
-	static int lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h = nullptr);			// returns -1 iff given vector system was linearly dependent
-	static int lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h = nullptr);	// returns -1 iff given vector system was linearly dependent
+	static util::Expected<void> lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h = nullptr);			// returns -1 iff given vector system was linearly dependent
+	static util::Expected<void> lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h = nullptr);	// returns -1 iff given vector system was linearly dependent
 
 	// fp-mLLL as described in [CH] Algorithm 2.6.8
 	static unsigned int mlllBasis(boost::numeric::ublas::matrix<mpz_class>* const b, boost::numeric::ublas::matrix<mpz_class>* const h = nullptr, boost::numeric::ublas::symmetric_matrix<mpz_class>* const innerProduct = nullptr);		// returns the rank of the given vector system - computes basis from linearly dependent vectors
 
 	// integral LLL as described in [CH] Algorithm 2.6.7
-	static int lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h = nullptr); 		// returns -1 iff given vector system was linearly dependent
+	static util::Expected<void> lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h = nullptr); 		// returns -1 iff given vector system was linearly dependent
 
 
 	// short vectors of L, that is, vectors x \in L with N^2(x) <= c - with Fincke and Pohst preprocessing (LLL reduction)
-	static unsigned long shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X);
-
+	static util::Expected<unsigned long> shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X);
 	};
 
 }
