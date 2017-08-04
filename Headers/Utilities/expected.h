@@ -7,11 +7,11 @@
  *
  * @brief	Functional error and exception handling.
  *
- * @section Description
+ * @section expectedDescription Description
  * Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.<br>
  * See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further details.
  *
- * @section History
+ * @section expectedHistory History
  *
  * @version	1.0.2.0
  * @bug 	No known bugs.
@@ -45,8 +45,6 @@ class Expected
 {
 protected:
 	/*!
-	 *   @union
-	 *
 	 *   There is either a valid result, or an error message stored in the exception pointer.
 	 */
 	union

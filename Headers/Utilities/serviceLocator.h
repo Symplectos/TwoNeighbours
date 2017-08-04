@@ -7,12 +7,12 @@
  *
  * @brief	A service locator.
  *
- * @section Description
+ * @section serviceLocatorDescription Description
  *
  * Registers and provides services to the entire program.
  * See <a href="http://gameprogrammingpatterns.com/service-locator.html">Game Programming Patterns</a>, by R. Nystrom for further details.
  *
- * @section History
+ * @section serviceLocatoHistory History
  *
  *  - 13/10/16: program options service added
  *  - 07/10/16: added file logging service

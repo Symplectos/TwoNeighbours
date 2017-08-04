@@ -7,11 +7,11 @@
  *
  * @brief	General algorithms for linear algebra and lattices.
  *
- * @section Bibliography
+ * @section linearAlgebraBibliography Bibliography
  * - [CH] Cohen, H. --- A Course in Computational Algebraic Number Theory
  * - [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
  *
- * @section History
+ * @section linearAlgebraHistory History
  * - 04/08/2017: lllGram and lllBasis now use the Expected idiom for exception handling
  * - 04/08/2017: shortVectors now uses the Expected idiom for exception handling
  * - 04/08/2017: added doxygen style comments

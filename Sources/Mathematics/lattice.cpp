@@ -5,13 +5,6 @@
  *
  * @brief	Implementation of the algorithms to work with lattices over \f$\mathbb{Z}\f$.
  *
- * @section Bibliography
- *  - [SRLC] Scharlau, R. --- Lattices and Codes
- *	- [SRQF] Scharlau, R. --- Quadratic Forms
- *	- [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
- *	- [HR] Haviv, I. and Regev, O. --- On the Lattice Isomorphism Problem
- *	- [KM] Kneser, M. --- Quadratische Formen
- *
  * @version	1.0.2.0
  * @bug 	No known bugs.
  *
@@ -41,7 +34,6 @@ namespace mathematics
  *
  *   @param[in] gram A constant pointer to a constant symmetric matrix of multi-precision integers.
  *
- *   @section Description
  *   For now this constructor stores the Gram matrix, computes the determinant and the dual of the lattice.<br>
  *   The short vectors up to the highest diagonal entry of the Gram matrix are computed.<br>
  *   The successive minima are computed.<br>

@@ -22,8 +22,6 @@ namespace util
 /*!
  *   @brief The constructor.
  *
- *   @section Description
- *
  *   The constructor sets all program options to their default value as follows:
  *    - verboseLevel: 0
  *    - debugMode: false
@@ -53,8 +51,6 @@ ProgramOptions::~ProgramOptions()
 
 /*!
  *   @brief Creates the program options.
- *
- *   @section Description
  *
  *   Using boost::program_options, this function creates all the available options to be displayed by passing the "--help" parameter.
  *   At program start, the program options are created and set according to the specified command line parameters.

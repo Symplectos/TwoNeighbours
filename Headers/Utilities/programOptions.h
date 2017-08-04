@@ -7,7 +7,7 @@
  *
  * @brief	Program options created from command line parameters with the help of BOOST.
  *
- * @section History
+ * @section programOptionsHistory History
  *
  *  - 13/03/17: changed verbose to int
  *  - 21/01/17: added option to enable verbose mode

@@ -7,7 +7,7 @@
  *
  * @brief	A thread-safe event logger.
  *
- * @section Description
+ * @section logDescription Description
  *
  * To be able to easier debug a program, a robust, yet lightweight, event logger, such that every class in the engine can provide a trace of its execution in a log file, is needed.
  * Obviously such a logging system must be very resilient, as like the captain of a sinking ship, it must stay "on board" until the very end. It should also be able to write out warnings of different severity levels (warning, debug, errors, ...) to various output channels.
@@ -16,7 +16,7 @@
  *
  * Check <a href="https://bell0bytes.eu/thread-safe-logger/">my personal website</a> for further details.
  *
- * @section History
+ * @section logHistory History
  *
  *  - 02/07/2017: added overloaded print function to take a string
  *  - 01/07/2017: fixed a memory leak
@@ -130,8 +130,6 @@ class Logger;
 
 /*!
  *   @brief The logging daemon.
- *
- *   @section Description
  *
  *   To output the contents of a stream buffer, the logger class uses a daemon: The running thread is locked and as long as the daemon is alive, it outputs the elements of the stream buffer.
  *   To start, the timed_mutex, timedMutex (a timed_mutex protects shared data from being simultaneously accessed by multiple threads) of the Logger class is locked by using the unique_lock with defer_lock, that is, the mutex is not immediately locked on construction, but it will be locked soon.

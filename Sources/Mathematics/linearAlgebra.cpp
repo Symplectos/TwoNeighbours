@@ -5,10 +5,6 @@
  *
  * @brief	Implementation for general linear algebra and lattice algorithms.
  *
- * @section Bibliography
- * - [CH] Cohen, H. --- A Course in Computational Algebraic Number Theory
- * - [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
-  *
  * @version	1.0.2.0
  * @bug 	No known bugs.
  *

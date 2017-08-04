@@ -7,7 +7,7 @@
  *
  * @brief	Wrapper class for BOOST uBLAS matrices.
  *
- * @section History
+ * @section matrixHistory History
  * - 02/07/2017: added doxygen comments
  * - 01/08/2017: added const declarations
  * - 21/01/2017: moved rank, det and inverse function to the linear algebra class
@@ -117,8 +117,6 @@ public:
 /*!
  *   @brief Swaps two columns of a matrix.
  *
- *	 @section Description
- *
  *   @param m Constant pointer to a matrix of type T.
  *   @param i Constant unsigned int specifying a column of the given matrix: \f$0 \leq i \leq n\f$.
  *   @param j Constant unsigned int specifying a column of the given matrix. \f$0 \leq j \leq n\f$.
@@ -140,8 +138,6 @@ void MatrixHelper<T>::colSwap(boost::numeric::ublas::matrix<T>* const m, const u
 
 /*!
  *   @brief Adds a multiple of a column to another column.
- *
- *	 @section Description
  *
  *   @param m Constant pointer to a matrix of type T.
  *   @param i Constant unsigned int specifying a column of the given matrix: \f$0 \leq i \leq n\f$.
@@ -170,8 +166,6 @@ void MatrixHelper<T>::colAddMultiple(boost::numeric::ublas::matrix<T>* const m, 
 /*!
  *   @brief Multiplies a column of a matrix by a constant.
  *
- *	 @section Description
- *
  *   @param m Constant pointer to a matrix of type T.
  *   @param i Constant unsigned int specifying a column of the given matrix: \f$0 \leq i \leq n\f$.
  *   @param t Constant element of type T.
@@ -197,8 +191,6 @@ void MatrixHelper<T>::colMultiply(boost::numeric::ublas::matrix<T>* const m, con
 // base change for triangular matrices
 /*!
  *   @brief Adds a multiple of a row to another row.
- *
- *	 @section Description
  *
  *   @param m Constant pointer to an upper triangular matrix of type T.
  *   @param i Constant unsigned int specifying a row of the given matrix: \f$0 \leq i \leq n\f$.
@@ -233,8 +225,6 @@ void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::triangular_matrix<T,
 /*!
  *   @brief Multiplies a row of a matrix by a constant.
  *
- *	 @section Description
- *
  *   @param m Constant pointer to an upper triangular matrix of type T.
  *   @param i Constant unsigned int specifying a row of the given matrix: \f$0 \leq i \leq n\f$.
  *   @param t Constant element of type T.
@@ -258,8 +248,6 @@ void MatrixHelper<T>::rowMultiply(boost::numeric::ublas::triangular_matrix<T, bo
 // base change for gram matrices
 /*!
  *   @brief Swaps two basis vectors.
- *
- *	 @section Description
  *
  *   @param g Constant pointer to a symmetric matrix of type T.
  *   @param i Constant unsigned int specifying the i-th basis vector of the underlying module: \f$0 \leq i \leq n\f$.
@@ -305,8 +293,6 @@ void MatrixHelper<T>::baseSwap(boost::numeric::ublas::symmetric_matrix<T>* const
 /*!
  *   @brief Adds a multiple of a basis vector to another basis vector.
  *
- *	 @section Description
- *
  *   @param g Constant pointer to a symmetric matrix of type T.
  *   @param i Constant unsigned int specifying the i-th basis vector of the underlying module: \f$0 \leq i \leq n\f$.
  *   @param j Constant unsigned int specifying the j-th basis vector of the underlying module: \f$0 \leq j \leq n\f$.
@@ -341,8 +327,6 @@ for(unsigned int k=0; k<g->size1(); k++)
 /*!
  *   @brief Adds a multiple of a row to another row.
  *
- *	 @section Description
- *
  *   @param m Constant pointer to a matrix of type T.
  *   @param i Constant unsigned int specifying a row of the given matrix: \f$0 \leq i \leq n\f$.
  *   @param j Constant unsigned int specifying a row of the given matrix: \f$0 \leq j \leq n\f$.
@@ -370,8 +354,6 @@ void MatrixHelper<T>::rowAddMultiple(boost::numeric::ublas::matrix<T>* const m, 
 // general utility functions for base and gram matrices
 /*!
  *   @brief Deletes columns which are filled with only 0s.
- *
- *	 @section Description
  *
  *   @param b Constant pointer to a matrix of type T.
  *   @param rk Constant unsigned int specifying the rank of the matrix: \f$0 \leq i \leq n\f$.
@@ -403,13 +385,11 @@ void MatrixHelper<T>::baseDelZeroes(boost::numeric::ublas::matrix<T>* const b, c
 /*!
  *   @brief Sets a specific column of a matrix to a given column.
  *
- *	 @section Description
- *
  *   @param b Constant pointer to a matrix of type T.
  *   @param col Constant pointer to a constant valarray of type T defining the new column to be set.
  *   @param i Constant unsigned int specifying the column of the matrix to be changed: \f$0 \leq i \leq n\f$.
  *
- *   Sets the i-th column of the given matrix b to col. \f$n is the number of columns of b.\f$
+ *   Sets the i-th column of the given matrix b to col, \f$n\f$ is the number of columns of b.
  *
  *   @return void
  */
@@ -426,8 +406,6 @@ void MatrixHelper<T>::setColumn(boost::numeric::ublas::matrix<T>* const b, const
 // check properties
 /*!
  *   @brief Checks for orthogonality.
- *
- *	 @section Description
  *
  *   @param m Constant pointer to a constant matrix of type T.
  *   @param g Constant pointer to a constant symmetric matrix of type T.
@@ -468,8 +446,6 @@ bool MatrixHelper<T>::isOrthogonal(const boost::numeric::ublas::matrix<T>* const
 /*!
  *   @brief Retrieves a column of a matrix.
  *
- *	 @section Description
- *
  *   @param m Constant pointer to a constant matrix of type T.
  *   @param i Constant unsigned int specifying a column of the given matrix: \f$0 \leq i \leq n\f$, where \f$n\f$ denotes the number of columns of the given matrix.
  *
@@ -493,8 +469,6 @@ std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::matrix<
 
 /*!
  *   @brief Retrieves a column of a matrix.
- *
- *	 @section Description
  *
  *   @param m Constant pointer to a constant symmetric matrix of type T.
  *   @param i Constant unsigned int specifying a column of the given matrix: \f$0 \leq i \leq n\f$, where \f$n\f$ denotes the number of columns of the given matrix.
@@ -521,8 +495,6 @@ std::valarray<T> MatrixHelper<T>::getColumn(const boost::numeric::ublas::symmetr
 /*!
  *   @brief Checks for equality.
  *
- *	 @section Description
- *
  *   @param m1 Constant pointer to a constant matrix of type T.
  *   @param m2 Constant pointer to a constant matrix of type T.
  *
@@ -546,8 +518,6 @@ bool MatrixHelper<T>::areEqual(const boost::numeric::ublas::matrix<T>* const m1,
 /*!
  *   @brief Prints a matrix in the old TN format.
  *
- *	 @section Description
- *
  *   @param m Constant pointer to a constant matrix of type T.
  *
  *   @return void
@@ -565,8 +535,6 @@ void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::matrix<T>* const 
 
 /*!
  *   @brief Prints a matrix in the old TN format.
- *
- *	 @section Description
  *
  *   @param m Constant pointer to a constant symmetric matrix of type T.
  *
@@ -586,8 +554,6 @@ void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::symmetric_matrix<
 /*!
  *   @brief Prints a matrix in the old TN format.
  *
- *	 @section Description
- *
  *   @param m Constant pointer to a constant upper triangular matrix of type T.
  *
  *   @return void
@@ -606,8 +572,6 @@ void MatrixHelper<T>::printMatrix(const boost::numeric::ublas::triangular_matrix
 
 /*!
  *   @brief Prints a vector.
- *
- *	 @section Description
  *
  *   @param d Constant pointer to a constant valarray of type T.
  *
