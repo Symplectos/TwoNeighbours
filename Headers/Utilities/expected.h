@@ -28,6 +28,9 @@
 // atomic
 #include <atomic>
 
+/*!
+ *   @brief This namespace holds utility functions.
+ */
 namespace util
 {
 // CLASSES //////////////////////////////////////////////////////////////////////////////

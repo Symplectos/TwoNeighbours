@@ -1,3 +1,23 @@
+/************************************************************************************//**
+ * @author	Gilles Bellot
+ * @file	lattice.cpp
+ * @date	09/01/2017 - Dortmund - Germany
+ *
+ * @brief	Implementation of the algorithms to work with lattices over \f$\mathbb{Z}\f$.
+ *
+ * @section Bibliography
+ *  - [SRLC] Scharlau, R. --- Lattices and Codes
+ *	- [SRQF] Scharlau, R. --- Quadratic Forms
+ *	- [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
+ *	- [HR] Haviv, I. and Regev, O. --- On the Lattice Isomorphism Problem
+ *	- [KM] Kneser, M. --- Quadratische Formen
+ *
+ * @version	1.0.2.0
+ * @bug 	No known bugs.
+ *
+ * @copyright	Gilles Bellot @ TU Dortmund
+ ****************************************************************************************/
+
 // INCLUDES /////////////////////////////////////////////////////////////////////////////
 
 // c++ includes
@@ -13,8 +33,23 @@
 namespace mathematics
 {
 
-// constructors
-Lattice::Lattice(const boost::numeric::ublas::symmetric_matrix<mpz_class>* gram) : gram((*gram))
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Constructor ////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Constructs a lattice from a given Gram matrix.
+ *
+ *   @param[in] gram A constant pointer to a constant symmetric matrix of multi-precision integers.
+ *
+ *   @section Description
+ *   For now this constructor stores the Gram matrix, computes the determinant and the dual of the lattice.<br>
+ *   The short vectors up to the highest diagonal entry of the Gram matrix are computed.<br>
+ *   The successive minima are computed.<br>
+ *   A decomposition is computed.<br>
+ *
+ *   @exception Throws a std::runtime_error if the computation of the short vectors failed.
+ */
+Lattice::Lattice(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const gram) : gram((*gram))
 {
 	// LLL reduce the gramian
 	LALA::lllGram(&this->gram);
@@ -46,7 +81,12 @@ Lattice::Lattice(const boost::numeric::ublas::symmetric_matrix<mpz_class>* gram)
 	// compute automorphism group
 }
 
-
+/*!
+ *   @brief Copy constructor.
+ *
+ *   @param[in] L A reference to a constant lattice to copy from.
+ *
+ */
 Lattice::Lattice(const Lattice& L)
 {
 	this->gram = L.gram;
@@ -57,7 +97,9 @@ Lattice::Lattice(const Lattice& L)
 	this->sucMin = L.sucMin;
 }
 
-// destructor
+/*!
+ *   @brief The destructor destroys!
+ */
 Lattice::~Lattice()
 {
 	this->gram.clear();
@@ -67,7 +109,16 @@ Lattice::~Lattice()
 	this->determinant = 0;
 }
 
+
 // private functions
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Dual ///////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the dual of the lattice.
+ *
+ *   @return void
+ */
 void Lattice::dual()
 {
 	// copy gram into mpq matrix
@@ -87,6 +138,16 @@ void Lattice::dual()
 	LALA::lllGram(&dualGram);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// Successive Minima ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the successive minima of the lattice.
+ *
+ *   @todo Clean up.
+ *
+ *   @return void
+ */
 void Lattice::successiveMinima()
 {
 	unsigned int dim = this->gram.size1();
@@ -154,7 +215,18 @@ void Lattice::successiveMinima()
 		}
 	}
 }
-
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Decomposition //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Computes the decomposition of the lattice.
+ *
+ *   See [HB] chapter 3.
+ *
+ *   @todo Clean up.
+ *
+ *   @return void
+ */
 void Lattice::constructDecomposition()
 {
 	// see [HB] chapter 3
@@ -405,8 +477,17 @@ void Lattice::constructDecomposition()
 
 // public functions
 
-// elements
-bool Lattice::contains(std::valarray<mpz_class>* v)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Element Of /////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Tests whether a given vector is an element of the lattice or not.
+ *
+ *   @param v A constant pointer to a constant valarray of multi-precision integers specifying the vector to test.
+ *
+ *   @return True if and only if \f$G^{-1} \cdot v\f$ is integral or not.
+ */
+bool Lattice::contains(const std::valarray<mpz_class>* const v) const
 {
 	// check whether G^-1 * v is integral or not
 
@@ -430,8 +511,23 @@ bool Lattice::contains(std::valarray<mpz_class>* v)
 	return true;
 }
 
-// utilities
-void Lattice::print(unsigned int flags)
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Print //////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/*!
+ *   @brief Prints information about the lattice.
+ *
+ *   @param flags Those flags specify how much information to print.
+ *
+ *   @return void
+ *
+ *   @section Flags
+ *   - 0: print only the Gram matrix and the determinant
+ *   - 1: in addition, print the number of short vectors
+ *   - 2: in addition, print the actual short vectors, the successive minima and the decomposition
+ *   - 3: in addition, print the dual and its determinant
+ */
+void Lattice::print(const unsigned int flags) const
 {
 	unsigned int n = this->gram.size1();
 

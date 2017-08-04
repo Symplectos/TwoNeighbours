@@ -16,7 +16,6 @@
  ****************************************************************************************/
 #include "../../Headers/Mathematics/linearAlgebra.h"
 #include "../../Headers/Mathematics/matrix.h"
-#include "../../Headers/Utilities/serviceLocator.h"
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/symmetric.hpp>
