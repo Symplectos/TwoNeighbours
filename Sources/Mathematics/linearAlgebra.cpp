@@ -1174,6 +1174,7 @@ util::Expected<unsigned long> LALA::shortVectorsPrivate(const boost::numeric::ub
  *
  *   @return True if and only if the given vector system is linearly independent over \f$\mathbb{R}\f$.
  *
+ *   Given a vector system \f$v_1, \dots, v_k \in \mathbb{Z}\f$, this method returns true if and only if the system is linearly independent over \f$\mathbb{R}\f$.<br>
  *   Uses Gauss-Bareiss for rank determination.
  */
 bool LALA::linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* const vectorSystem)
@@ -1198,6 +1199,9 @@ bool LALA::linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* co
  *   @param vectorSystem A constant pointer to a constant vector of valarrays of multi-precision integers.
  *
  *   @return True if and only if the given vector system is linearly independent over \f$\mathbb{Z}\f$.
+ *
+ *   Given a vector system \f$v_1, \dots, v_k \in \mathbb{Z}\f$, this method checks whether the system is linearly independent over \f$\mathbb{Z}\f$ by rank comparison.
+ *
  */
 bool LALA::linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* const vectorSystem)
 {
@@ -1225,7 +1229,10 @@ bool LALA::linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* co
  *   @param b A constant pointer to a constant vector of valarrays of multi-precision integers. This is the vector system.
  *   @param v A constant pointer to a constant valarray of multi-precision integers. This is the vector to test.
  *
- *   @return True if and only if \f$v \in \operatorname{Lin}\{b_1, \dots, b_n\}\f$, where \f$n\f$ denotes the number of vectors in the vector system b.
+ *   @return True if and only if \f$v \in Lin_{\mathbb{Z}}\{b_1, \dots, b_n\}\f$, where \f$n\f$ denotes the number of vectors in the vector system b.
+ *
+ *   Uses a standard linear independency argument.
+ *
  */
 bool LALA::inLinearSpanZ(const std::vector<std::valarray<mpz_class> >* const b, const std::valarray<mpz_class>* const v)
 {
@@ -1245,7 +1252,10 @@ bool LALA::inLinearSpanZ(const std::vector<std::valarray<mpz_class> >* const b, 
  *
  *   @return True if and only if \f$v \in L\f$, where \f$L\f$ denotes the lattice with Gram matrix \f$m^{-1}\f$.
  *
- *   See [HB] 3.4.1 for further details.
+ *	 ### Mathematical Details
+ *   Assume \f$L\f$ to be a lattice of dimension \f$k\f$ in a vector space \f$V\f$. Extend a lattice basis to a basis of all of \f$V\f$.
+ *   Given a matrix \f$ A \f$ decoding such a basis, this algorithm returns true if and only if \f$v\f$ is an element of the lattice, that is, if the first \f$k\f$ coefficients of \f$A^{-1} \cdot v\f$ are integers and the rest \f$0\f$.
+ *   <br>See [HB] 3.4.1 for further details.
  */
 bool LALA::elementOfLattice(const boost::numeric::ublas::matrix<mpq_class>* const m, const std::valarray<mpz_class>* const v, const unsigned int dim, boost::numeric::ublas::vector<mpq_class>* const mv)
 {
@@ -1491,8 +1501,9 @@ void LALA::gramSchmidt(std::vector<std::valarray<mpq_class> >* const basis, cons
  *
  *   @return A void Expected, or a void Expected with a std::runtime_error exception if the given vector system was not a basis.
  *
- *   After the function returns, b will be lll reduced and h holds the coordinates of the new LLL-reduced basis in terms of the old one.
- *   See [CH] Definition 2.6.1 for further details.
+ *   Given a matrix over \f$\mathbb{R}\f$ whose columns represent the base vectors of a lattice, this functions returns an LLL-reduced basis for the given lattice as well as, optionally, a change of basis matrix.
+ *   <br>See [HC1] Section 2.6.1 for a definition of an LLL-reduced basis and [HC1] Algorithm 2.6.3 for a description of the algorithm.
+ *   <br>After the function returns, b will be lll reduced and h holds the coordinates of the new LLL-reduced basis in terms of the old one.
  */
 util::Expected<void> LALA::lllBasis(boost::numeric::ublas::matrix<mpfr::mpreal>* const b, boost::numeric::ublas::matrix<mpfr::mpreal>* const h)
 {
@@ -1683,8 +1694,8 @@ unsigned int LALA::mlllBasis(boost::numeric::ublas::matrix<mpz_class>* const b, 
  *
  *   @return A void Expected, or a void Expected with a std::runtime_error exception if the given vector system was not a basis.
  *
- *  g is the gramian of a basis \f$v_1, \dots, v_n\f$. g will be LLL-reduced. See [CH] Definition 2.6.1 for further details.<br>
- *  If so desired, h will be the transformation matrix, i.e. h holds the coordinates of the new basis in terms of the old one.
+ *  g is the Gram matrix of a basis \f$v_1, \dots, v_n\f$. g will be LLL-reduced. See [CH] Definition 2.6.1 for further details.<br>
+ *  If so desired, h will be the transformation matrix, i.e. h holds the coordinates of the new basis in terms of the old one.<br>
  */
 util::Expected<void> LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr::mpreal>* const g, boost::numeric::ublas::matrix<mpfr::mpreal>* const h)
 {
@@ -1758,8 +1769,9 @@ util::Expected<void> LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpfr:
  *
  *   @return A void Expected, or a void Expected with a std::runtime_error exception if the given vector system was not a basis.
  *
- *	 g is the gramian of a basis \f$v_1, \dots, v_n\f$. g will be LLL-reduced - see [CH] Definition 2.6.1 for further information.<br>
+ *	 g is the Gram matrix of a basis \f$v_1, \dots, v_n\f$. g will be LLL-reduced - see [CH] Definition 2.6.1 for further information.<br>
  *	 If so desired, h will be the transformation matrix, i.e. h holds the coordinates of the new basis in terms of the old one.
+ *	 <br>See [HC1] Algorithm 2.6.7 for a description of the algorithm in the integral case.
  */
 util::Expected<void> LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h)
 {
@@ -1830,7 +1842,7 @@ util::Expected<void> LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_c
 //////////////////////////////// Short Vectors //////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /*!
- *   @brief Enumerates all vector in a given lattice with a shorter length than a given constant.
+ *   @brief Enumerates all vector in a given lattice with a shorter or equal length than a given constant.
  *
  *   @param[in] g Constant pointer to a constant symmetric matrix of multi-precision integers specifying a positive definite quadratic form.
  *   @param[in] c Constant positive multi-precision integer.
@@ -1839,6 +1851,7 @@ util::Expected<void> LALA::lllGram(boost::numeric::ublas::symmetric_matrix<mpz_c
  *   @return An Expected with an unsigned long, the number of short vectors enumerated by the algorithm, a std::runtime_error exception an error was encountered during the computation or a std::invalid_argument exception if c is zero or negative.
  *
  *	 This algorithm outputs all non-zero vectors \f$x \in \mathbb{Z}\f$ such that \f$q(x) < c\f$ and the corresponding values of \f$q(x)\f$.
+ *	 <br>Uses preprocessing ideas of **Fincke and Pohst** (LLL-reduction on the rows of the "Cholesky"-matrix) as described in [CH1] Section 2.7.3.
  *
  *   @todo Check for positive definiteness.
  */
@@ -2019,7 +2032,7 @@ void LALA::basisFromGeneratingSystem(const std::vector<std::valarray<mpz_class> 
 ///////////////////////////////////// Gauss /////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /*!
- *   @brief Computes the echelon form of a matrix.
+ *   @brief Computes the row-reduced echelon form of a matrix.
  *
  *   @param[in, out] m A constant pointer to a matrix with multi-precision rationals whose columns encode a basis for the underlying module. This will be changed to column-echelon form.
  *   @param[out] basisExtension Constant pointer to a vector unsigned ints, specifying standard basis vectors useable for a basis extensions. Default: NULL, no basis extension is computed.
@@ -2119,7 +2132,7 @@ void LALA::echelonForm(boost::numeric::ublas::matrix<mpq_class>* const m, std::v
 }
 
 /*!
- *   @brief Computes the echelon form of a matrix.
+ *   @brief Computes the row-reduced echelon form of a matrix.
  *
  *   @param[in] m A constant pointer to a constant matrix with multi-precision rationals whose columns encode a basis for the underlying module. This will be changed to column-echelon form.
  *   @param[out] basisExtension Constant pointer to a vector unsigned ints, specifying standard basis vectors useable for a basis extensions. Default: NULL, no basis extension is computed.

@@ -5,9 +5,9 @@
  * @file	matrix.h
  * @date	13/10/2016 - Dortmund - Germany
  *
- * @brief	Wrapper class for BOOST uBLAS matrices.
+ * @brief	Defines and implements a static templated wrapper class for BOOST uBLAS matrices.
  *
- * @section matrixHistory History
+ * ### History
  * - 02/07/2017: added doxygen comments
  * - 01/08/2017: added const declarations
  * - 21/01/2017: moved rank, det and inverse function to the linear algebra class

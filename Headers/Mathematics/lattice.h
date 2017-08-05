@@ -7,14 +7,16 @@
  *
  * @brief	Algorithms to work with lattices over \f$\mathbb{Z}\f$.
  *
- * @section latticeBibliography Bibliography
+ * ### Bibliography
  *  - [SRLC] Scharlau, R. --- Lattices and Codes
  *	- [SRQF] Scharlau, R. --- Quadratic Forms
  *	- [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
  *	- [HR] Haviv, I. and Regev, O. --- On the Lattice Isomorphism Problem
  *	- [KM] Kneser, M. --- Quadratische Formen
+ *  - [HV1] Hemkemeier, B. and Vallentin, F. --- On the Decomposition of Lattices
+ *  - [HV2] Hemkemeier, B. and Vallentin, F. --- Incremental Algorithms for Lattice Problems
  *
- * @section latticeHistory History
+ * ### History
  * - 04/08/2017: added doxygen comments and consts
  * - 13/03/2017: fixed an error in decomp
  * - 10/03/2017: fixed an error in sucmin
@@ -62,7 +64,7 @@ namespace mathematics
 /*!
  * @brief A class to work with lattices.
  *
- * This class holds all information needed to work with lattices.
+ * This class holds all information needed to work with lattices over \f$\mathbb{Z}\f$.
  * This is work in progress.
  */
 class Lattice

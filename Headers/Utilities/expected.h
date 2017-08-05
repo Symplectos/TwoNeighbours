@@ -9,7 +9,7 @@
  *
  * @section expectedDescription Description
  * Based on the talk: C++ and Beyond 2012: Andrei Alexandrescu - Systematic Error Handling in C++.<br>
- * See <a href="https://bell0bytes.eu/expected/">my personal website</a> for further details.
+ * See [my personal website](https://bell0bytes.eu/expected) for further details.
  *
  * @section expectedHistory History
  *

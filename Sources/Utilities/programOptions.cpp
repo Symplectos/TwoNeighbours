@@ -128,7 +128,7 @@ Expected<void> ProgramOptions::createCommandLineParameters(int argc, char** argv
 		return std::runtime_error("Unable to create program options!");
 	}
 
-	// return suceess
+	// return success
 	return {};
 }
 }

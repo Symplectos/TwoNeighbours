@@ -7,12 +7,12 @@
  *
  * @brief	A service locator.
  *
- * @section serviceLocatorDescription Description
+ * ### Description
  *
- * Registers and provides services to the entire program.
+ * A service locator is a decoupling pattern to provide a global point of access to a service without coupling to the concrete class that implements it.<br>
  * See <a href="http://gameprogrammingpatterns.com/service-locator.html">Game Programming Patterns</a>, by R. Nystrom for further details.
  *
- * @section serviceLocatoHistory History
+ * ### History
  *
  *  - 13/10/16: program options service added
  *  - 07/10/16: added file logging service
@@ -35,7 +35,15 @@ namespace util
 // CLASSES //////////////////////////////////////////////////////////////////////////////
 /*! \brief Registers and provides services to the entire program.
  *
+ *  At the moment, and this is clearly work in progress, when the TwoNeighbours starts, the service locator is created and the program options, defined in programOptions.h,
+ *  are read from the console parameters and registered as a service. In addition a file logger, defined in log.h, is registered as a service.
  *  See <a href="http://gameprogrammingpatterns.com/service-locator.html">Game Programming Patterns</a>, by R. Nystrom for further details.
+ *
+ *  ## Example
+ *  Here is an example of how to use the service locator class:
+ *  ServiceLocator::getFileLogger()->print("Critical error! Not enough papers published!");
+ *
+
  */
 class ServiceLocator
 {

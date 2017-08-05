@@ -7,11 +7,11 @@
  *
  * @brief	General algorithms for linear algebra and lattices.
  *
- * @section linearAlgebraBibliography Bibliography
+ * ### Bibliography
  * - [CH] Cohen, H. --- A Course in Computational Algebraic Number Theory
  * - [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
  *
- * @section linearAlgebraHistory History
+ * ### History
  * - 04/08/2017: lllGram and lllBasis now use the Expected idiom for exception handling
  * - 04/08/2017: shortVectors now uses the Expected idiom for exception handling
  * - 04/08/2017: added doxygen style comments
@@ -96,6 +96,11 @@ namespace mathematics
 // (L)inear (A)lgebra and (L)attice (A)lgorithms
 /*!
  * @brief This static class holds (L)inear (A)lgebra and (L)attice (A)lgorithms.
+ *
+ * ### Notes
+ * - C++'s std::valarrays are usually used to encode vectors in the mathematical sense, whereas std::vectors are used as containers.
+ * - Multi-precision integers and rationals are stored in instances of the mpz_class, resp. mpq_class.
+ * - Multi-precision floats are handled by Pavel Holoborodko's mpfr::mpreal.
  */
 class LALA
 {

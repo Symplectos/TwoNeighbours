@@ -7,7 +7,9 @@
  *
  * @brief	Program options created from command line parameters with the help of BOOST.
  *
- * @section programOptionsHistory History
+ * TwoNeighbours supports various options to change both the general behaviour and certain parameters of mathematical algorithms.
+ *
+ * ### History
  *
  *  - 13/03/17: changed verbose to int
  *  - 21/01/17: added option to enable verbose mode
@@ -30,9 +32,10 @@ namespace util
 // DEFINITIONS //////////////////////////////////////////////////////////////////////////
 /*! @brief The ProgramOptions define the behaviour of TwoNeighbours.
  *
- * @section Description
+ * ### Description
  *
  * The program options are created from the command line parameters by the BOOST program options library.
+ * <br> The class is then registered to the service locator (serviceLocator.h). This is obviously work in progress.<br>
  *
  * The following options are currently available:
  *  - verboseLevel: an int to control the verbose level of the entire application

@@ -7,16 +7,24 @@
  *
  * @brief	A thread-safe event logger.
  *
- * @section logDescription Description
+ * ### Description
  *
- * To be able to easier debug a program, a robust, yet lightweight, event logger, such that every class in the engine can provide a trace of its execution in a log file, is needed.
- * Obviously such a logging system must be very resilient, as like the captain of a sinking ship, it must stay "on board" until the very end. It should also be able to write out warnings of different severity levels (warning, debug, errors, ...) to various output channels.
- * Customizability is achieved by a purely abstract class called logging policy. A logging policy defines where messages will be printed to.
- * Now, for example, to create a file logger policy, it is enough to simply inherit from LogPolicyInterface and to specify a file on the hard drive to write out to.
+ * For easier debugging, a robust, yet lightweight, event logger is implemented.<br>
+ * The logger is capable of writing out warnings of different severity levels to different output streams defined as log policies.
+ * A log policy is an implementation of the virtual abstract class **LogPolicyInterface**, which basically is an interface to open and close streams and to write to them.
  *
- * Check <a href="https://bell0bytes.eu/thread-safe-logger/">my personal website</a> for further details.
+ * So far the only implemented interface is the **FileLogPolicy** interface which takes a constant string as input, opens a file with the given name on the hard drive (or creates it) and writes to that file.
  *
- * @section logHistory History
+ * The implemented severity levels so far are
+ * - 0: info
+ * - 1: debug
+ * - 2: warning
+ * - 3: error
+ * - 4: config
+ *
+ * Check [my personal website](https://bell0bytes.eu/thread-safe-logger) for further details.
+ *
+ * ### History
  *
  *  - 02/07/2017: added overloaded print function to take a string
  *  - 01/07/2017: fixed a memory leak
@@ -88,7 +96,7 @@ inline LogPolicyInterface::~LogPolicyInterface() {}
 /*!
  * @brief The FileLogPolicy class is derived from the LogPolicyInterface and acts as an interface to write to files on the hard drive.
  *
- * Check <a href="https://bell0bytes.eu/thread-safe-logger/">my personal website</a> for further details.
+ * Check [my personal website](https://bell0bytes.eu/thread-safe-logger) for further details.
  */
 class FileLogPolicy : public LogPolicyInterface
 {

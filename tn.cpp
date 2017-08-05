@@ -1,5 +1,4 @@
 /*!
- *
  *  @mainpage
  *  TwoNeighbours is an attempt to rewrite the two neighbours program (TN) by B. Hemkemeier and the hermitian neighbours program (HN) by A. Schiemann in modern C++.
  *  @author		Gilles Bellot
@@ -8,7 +7,7 @@
  *  @bug		No known bugs.
  *  @date		01/08/2017 - Dortmund - Germany
  *
- *  @section	Current
+ *  @section Current Currently Working On
  *
  *  Parallel Algorithms for Group Operations. Especially parallel partition backtracking.
  *
@@ -23,6 +22,29 @@
  * - 01/08/2017: added a service locator (serviceLocator.h)
  * - 01/08/2017: Expected class for better error handling was added (expected.h)
  * - 01/08/2017: tabula rasa
+ *
+ *  @section Bibliography
+ *
+ * ### Construction of Lattices
+ * - [CH1] Cohen H. --- A Course in Computational Algebraic Number Theory
+ * - [HB] Hemkemeier, B. --- [Algorithmische Konstruktion von Gittern](https://eldorado.tu-dortmund.de/handle/2003/2311)
+ * - [HV1] Hemkemeier, B. and Vallentin F. --- On the Decomposition of Lattices
+ * - [HV2] Hemkemeier, B. and Vallentin F. --- Incremental Algorithms for Lattice Problems
+ * - [SE]  Schnorr C. P. and Euchner M. --- [Lattice Basis Reduction: Improved Practical Algorithms and Solving Subset Sum Problems](http://link.springer.com/article/10.1007/BF01581144)
+ *
+ * ### Lattices over Imaginary Quadratic Number Fields
+ * - [BG] Bellot, G. --- Algorithmen für Isometrie von Gittern
+ * - [GL] Gerstein, L. J. --- Integral Decomposition of Hermitian Forms
+ * - [JM] Jürgens, M. --- Nicht-Existenz und Konstruktion extremaler Gitter
+ * - [JR] Jacobowitz, R. --- Hermitian Forms over Local Fields
+ * - [SA] Schiemann, A. --- Classification of Hermitian Forms with the Neighbour Method
+ *
+ *   ### The Lattice Isometry Problem
+ * - [BG] Bellot, G. --- Algorithmen für Isometrie von Gittern
+ * - [LJ1] Leon, J. S. --- Permutation Group Algorithms Based on Partitions
+ * - [LJ2] Leon, J. S. --- Partitions, Refinements, and Permutation Group Computation
+ * - [PS] Plesken W. and Souvignier, B. --- Computing Isometries of Lattices
+ * - [RH] Regev O. and Haviv I. --- [On the Lattice Isomorphism Problem](https://arxiv.org/abs/1311.0366)
  *
  * @copyright	Gilles Bellot @ TU Dortmund
  */

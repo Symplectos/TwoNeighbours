@@ -139,6 +139,8 @@ void Lattice::dual()
  *   @todo Clean up.
  *
  *   @return void
+ *
+ *   This function computes the successive minima of the lattice, see [HV2] for further details.
  */
 void Lattice::successiveMinima()
 {
