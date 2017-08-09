@@ -505,6 +505,49 @@ bool Lattice::contains(const std::valarray<mpz_class>* const v) const
 	return true;
 }
 
+/*!
+ *   @brief Search for a specific vector in the list of suitable short vectors of L.
+ *
+ *   @param v A constant pointer to a valarray of multi-precision integers specifying the vector to find.
+ *   @param indicesOfSuitableShortVectors The integers in this vector specify the indices of the suitable short vectors in shVecs.
+ *
+ *   @return The index of v in shVecs, or a std::runtime_exception if the vector was not found.
+ *
+ *  The return value \f$i\f$ is positive, if \f$v\f$> is the \f$i\f$-th short vector of L.
+ *  The return value is negative, if it is the negative of that vector; in that case, v is set to -v as well.
+ *  <br>Uses quicksort.
+ */
+util::Expected<int> Lattice::find(boost::numeric::ublas::vector<mpz_class>* const v, const std::vector<unsigned int>* const indicesOfSuitableShortVectors) const
+{
+		unsigned int dim = v->size(), low=0, high=indicesOfSuitableShortVectors->size()-1, search=0, i=0;
+		int sign = 1, cmp;
+
+		for(i=0; i<dim && (*v)(i) == 0; i++);
+
+		if(i < dim && (*v)(i) < 0)
+		{
+			sign = -1;
+			for(i=0; i<dim; i++)
+				(*v)(i) *= -1;
+		}
+		while(low <= high)
+		{
+			search = low + (high-low)/2;
+			cmp = LALA::compare(v, &shVecs[indicesOfSuitableShortVectors->at(search)].second);
+			if(cmp == 1)
+				// v is in the upper half
+				low = search + 1;
+			else if(cmp == -1)
+				// v is in the lower half
+				high = search - 1;
+			else
+				// found v
+				return sign * search;
+		}
+
+		// if low > high, v was not found
+		return sign * indicesOfSuitableShortVectors->size()+low;
+}
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Print //////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////

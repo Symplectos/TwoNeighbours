@@ -12,6 +12,7 @@
  * - [HB] Hemkemeier, B. --- Algorithmische Konstruktion von Gittern
  *
  * ### History
+ * - 08/08/2017: added comparison functions for boost vectors
  * - 04/08/2017: lllGram and lllBasis now use the Expected idiom for exception handling
  * - 04/08/2017: shortVectors now uses the Expected idiom for exception handling
  * - 04/08/2017: added doxygen style comments
@@ -143,6 +144,10 @@ private:
 	static util::Expected<unsigned long> shortVectorsPrivate(const boost::numeric::ublas::matrix<mpfr::mpreal>* const q, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X);	// short vectors algorithm
 
 public:
+	// compare functions
+	static int compare(const boost::numeric::ublas::vector<mpz_class>* const v, const boost::numeric::ublas::vector<mpz_class>* const w);
+	static int compare(const boost::numeric::ublas::vector<mpz_class>* const v, const std::valarray<mpz_class>* const w);
+
 	// linear independence
 	static bool linearlyIndependentR(const std::vector<std::valarray<mpz_class> >* const vectorSystem);	// returns true iff the vector system is linearly independent over R
 	static bool linearlyIndependentZ(const std::vector<std::valarray<mpz_class> >* const vectorSystem);	// returns true iff the vector system is linearly independent over Z
@@ -192,7 +197,6 @@ public:
 
 	// integral LLL as described in [CH] Algorithm 2.6.7
 	static util::Expected<void> lllGram(boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, boost::numeric::ublas::matrix<mpz_class>* const h = nullptr); 		// returns -1 iff given vector system was linearly dependent
-
 
 	// short vectors of L, that is, vectors x \in L with N^2(x) <= c - with Fincke and Pohst preprocessing (LLL reduction)
 	static util::Expected<unsigned long> shortVectors(const boost::numeric::ublas::symmetric_matrix<mpz_class>* const g, const mpz_class c, std::vector<std::pair<mpz_class, std::valarray<mpz_class> > >* const X);

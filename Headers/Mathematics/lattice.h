@@ -91,15 +91,18 @@ public:
 	Lattice(const Lattice&);														// copy constructor
 	~Lattice();
 
-
 	unsigned long getNumberOfShortVectors() const {return this->nShVecs;}	//!< Gets the number of short vectors @return The amount of short vectors.
 	std::vector<std::pair<mpz_class, std::valarray<mpz_class> > > getShortVectors() const {return this->shVecs;} //!< Gets the short vectors @return A vector of pairs of multi-precision integers and valarrays of the same type containg the short vectors and their lenghts.
 
 	// elements
 	bool contains (const std::valarray<mpz_class>* const v) const;				// returns true if and only if v is an element of the lattice
+	util::Expected<int> find(boost::numeric::ublas::vector<mpz_class>* const v, const std::vector<unsigned int>* const indicesOfSuitableShortVectors) const;	// find the vector v in the list of suitable short vectors
 
 	// utilities
 	void print(const unsigned int flags = 0) const;
+
+	// friend classes
+	friend class GroupOperation;
 };
 
 }

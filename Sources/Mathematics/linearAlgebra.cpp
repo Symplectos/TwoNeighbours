@@ -57,6 +57,50 @@ bool LALA::comparePairMPZValarray(const std::pair<mpz_class, std::valarray<mpz_c
 	}
 }
 
+/*!
+ *   @brief Lexicographically compares two boost vectors.
+ *
+ *   @param v Constant pointer to a constant boost vector of multi-precision integers.
+ *	 @param w Constant pointer to a constant boost vector of multi-precision integers.
+ *
+ *   @return -1 if v < w; 0 if v = w; 1 if v > w
+ */
+int LALA::compare(const boost::numeric::ublas::vector<mpz_class>* const v, const boost::numeric::ublas::vector<mpz_class>* const w)
+{
+	assert(v->size() == w->size());
+	unsigned int dim = v->size();
+	unsigned int i=0;
+	for(i=0; i<dim && (*v)(i) == (*w)(i); i++);
+	if(i==dim)
+		return 0;
+	else if((*v)[i] > (*w)[i])
+		return 1;
+	else
+		return -1;
+}
+
+/*!
+ *   @brief Lexicographically compares two boost vectors.
+ *
+ *   @param v Constant pointer to a constant boost vector of multi-precision integers.
+ *	 @param w Constant pointer to a constant valarray of multi-precision integers.
+ *
+ *   @return -1 if v < w; 0 if v = w; 1 if v > w
+ */
+int LALA::compare(const boost::numeric::ublas::vector<mpz_class>* const v, const std::valarray<mpz_class>* const w)
+{
+	assert(v->size() == w->size());
+	unsigned int dim = v->size();
+	unsigned int i=0;
+	for(i=0; i<dim && (*v)(i) == (*w)[i]; i++);
+	if(i==dim)
+		return 0;
+	else if((*v)[i] > (*w)[i])
+		return 1;
+	else
+		return -1;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////// Private Scalar Products//////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////

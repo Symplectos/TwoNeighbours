@@ -68,6 +68,7 @@
 // CUDA includes
 #include <cuda_runtime.h>									// cuda runtim library
 
+#include "Headers/Mathematics/groupOperation.h"
 // bell0bytes util
 #include "Headers/Utilities/serviceLocator.h"				// service locator
 #include "Headers/Utilities/programOptions.h"				// program options
